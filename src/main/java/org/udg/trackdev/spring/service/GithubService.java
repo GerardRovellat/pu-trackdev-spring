@@ -8,7 +8,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.udg.trackdev.spring.entity.GithubInfo;
 import org.udg.trackdev.spring.repository.GithubInfoRepository;
-import org.udg.trackdev.spring.utils.GithubConstants;
+import org.udg.trackdev.spring.utils.GithubApiConstants;
 
 @Service
 public class GithubService extends BaseServiceUUID<GithubInfo, GithubInfoRepository>{
@@ -26,7 +26,7 @@ public class GithubService extends BaseServiceUUID<GithubInfo, GithubInfoReposit
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
         try{
             return restTemplate.exchange(
-                    GithubConstants.GITHUB_API_USER_URL,
+                    GithubApiConstants.GITHUB_API_USER_URL,
                     org.springframework.http.HttpMethod.GET,
                     requestEntity,
                     GithubInfo.class

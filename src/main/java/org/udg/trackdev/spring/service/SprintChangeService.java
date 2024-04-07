@@ -8,7 +8,7 @@ import org.udg.trackdev.spring.repository.SprintChangeRepository;
 public class SprintChangeService extends BaseServiceLong<SprintChange, SprintChangeRepository> {
 
     public void store(SprintChange sprintChange) {
-        repo().save(sprintChange);
+        repository().save(sprintChange);
     }
 
 }

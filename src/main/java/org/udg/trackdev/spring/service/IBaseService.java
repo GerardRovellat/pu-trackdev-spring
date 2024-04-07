@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface IBaseService<T> {
     List<T> search(Specification<T> specification);
-    List<T> findAll();
+    List<T> getAll();
 }

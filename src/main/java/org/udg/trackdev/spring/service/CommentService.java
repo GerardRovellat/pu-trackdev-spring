@@ -18,7 +18,7 @@ public class CommentService extends BaseServiceLong<Comment, CommentRepository>{
     }
 
     public Collection<Comment> getComments(Long taskId) {
-        return repo().findByTaskId(taskId);
+        return repo.findByTaskId(taskId);
     }
 
 }

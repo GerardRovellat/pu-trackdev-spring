@@ -1,5 +1,6 @@
 package org.udg.trackdev.spring.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.udg.trackdev.spring.controller.exceptions.EntityNotFound;
@@ -27,10 +28,10 @@ public class BaseServiceUUID<T extends BaseEntityUUID, Repo extends BaseReposito
         return repo.findAll(specification);
     }
 
-    public List<T> findAll() {
+    public List<T> getAll() {
         return repo.findAll();
     }
 
-    protected Repo repo() { return repo; }
+    //protected Repo repo() { return repo; }
 
 }

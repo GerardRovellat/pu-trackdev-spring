@@ -48,7 +48,7 @@ public class ProjectController extends BaseController {
     public Collection<Project> getProjects(Principal principal) {
         String userId = super.getUserId(principal);
         if(accessChecker.checkCanViewAllProjects(userId)){
-            return service.findAll();
+            return service.getAll();
         }
         else{
             return userService.get(userId).getProjects();

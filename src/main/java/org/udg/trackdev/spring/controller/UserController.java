@@ -74,7 +74,7 @@ public class UserController extends BaseController {
         if (!accessChecker.isUserAdmin(userService.get(principal.getName()))){
             throw new SecurityException(ErrorConstants.EMPTY);
         }
-        return userService.findAll();
+        return userService.getAll();
     }
 
     @Operation(summary = "Register user", description = "Register user, only admins can do this")

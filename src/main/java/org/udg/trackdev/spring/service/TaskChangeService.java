@@ -8,6 +8,6 @@ import org.udg.trackdev.spring.repository.TaskChangeRepository;
 public class TaskChangeService extends BaseServiceLong<TaskChange, TaskChangeRepository> {
 
     public void store(TaskChange taskChange) {
-        repo().save(taskChange);
+        repository().save(taskChange);
     }
 }

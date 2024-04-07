@@ -1,7 +1,6 @@
 package org.udg.trackdev.spring.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,7 @@ import org.udg.trackdev.spring.entity.Sprint;
 import org.udg.trackdev.spring.entity.SprintStatus;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.entity.sprintchanges.*;
-import org.udg.trackdev.spring.model.MergePatchSprint;
+import org.udg.trackdev.spring.dto.request.SprintRequestDTO;
 import org.udg.trackdev.spring.repository.SprintRepository;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 
@@ -22,11 +21,10 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class SprintService extends BaseServiceLong<Sprint, SprintRepository> {
 
     private static final int SPRINT_STATUS_CHANGE_RATE = 1000 * 2; //1 second
-
-    private static final Logger logger = LoggerFactory.getLogger(SprintService.class);
 
     @Autowired
     AccessChecker accessChecker;
@@ -44,48 +42,44 @@ public class SprintService extends BaseServiceLong<Sprint, SprintRepository> {
         sprint.setStartDate(startDate);
         sprint.setEndDate(endDate);
         sprint.setProject(project);
-        this.repo().save(sprint);
+        this.repo.save(sprint);
         return sprint;
     }
 
     @Transactional
-    public Sprint editSprint(Long sprintId, MergePatchSprint editSprint, String userId) {
+    public Sprint editSprint(Long sprintId, SprintRequestDTO editSprint, String userId) {
         Sprint sprint = get(sprintId);
         User user = userService.get(userId);
         List<SprintChange> changes = new ArrayList<>();
         if(editSprint.name != null) {
-            String name = editSprint.name.orElseThrow(
-                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
+            String name = editSprint.name;
             if(!name.equals(sprint.getName())) {
                 sprint.setName(name);
                 changes.add(new SprintNameChange(user.getEmail(),sprintId,name));
             }
         }
         if(editSprint.startDate != null) {
-            Date startDate = editSprint.startDate.orElseThrow(
-                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
+            Date startDate = editSprint.startDate;
             if(!startDate.equals(sprint.getStartDate())) {
                 sprint.setStartDate(startDate);
                 changes.add(new SprintStartDateChange(user.getEmail(),sprintId,startDate));
             }
         }
         if(editSprint.endDate != null) {
-            Date endDate = editSprint.endDate.orElseThrow(
-                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
+            Date endDate = editSprint.endDate;
             if(!endDate.equals(sprint.getEndDate())) {
                 sprint.setEndDate(endDate);
                 changes.add(new SprintEndDateChange(user.getEmail(),sprintId,endDate));
             }
         }
         if(editSprint.status != null) {
-            SprintStatus status = editSprint.status.orElseThrow(
-                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
+            SprintStatus status = editSprint.status;
             if(status != sprint.getStatus()) {
                 sprint.setStatus(status);
                 changes.add(new SprintStatusChange(user.getEmail(),sprintId,status));
             }
         }
-        repo().save(sprint);
+        repo.save(sprint);
         for (SprintChange change : changes) {
             sprintChangeService.store(change);
         }
@@ -95,7 +89,7 @@ public class SprintService extends BaseServiceLong<Sprint, SprintRepository> {
     @Transactional
     public void deleteSprint(Long sprintId) {
         Sprint sprint = get(sprintId);
-        repo().delete(sprint);
+        repo.delete(sprint);
     }
 
 
@@ -104,36 +98,36 @@ public class SprintService extends BaseServiceLong<Sprint, SprintRepository> {
     }
 
     @Transactional
-    @Scheduled(fixedRate = SPRINT_STATUS_CHANGE_RATE)
+    @Scheduled(cron = "0 0 0 * * *")
     public void triggerSprintStatusChange() {
-        logger.info("--- Start triggering sprint status change");
-        Collection<Sprint> sprintsToClose = repo().sprintsToClose();
+        log.info("--- Start triggering sprint status change");
+        Collection<Sprint> sprintsToClose = repo.sprintsToClose();
         if (sprintsToClose.size() > 0) {
-            logger.info("-- Sprints to CLOSE status: " + sprintsToClose.size());
+            log.info("-- Sprints to CLOSE status: " + sprintsToClose.size());
             for (Sprint sprint : sprintsToClose) {
                 sprint.setStatus(SprintStatus.CLOSED);
             }
             repo.saveAll(sprintsToClose);
-            logger.info("-- Sprints to CLOSED status changed");
+            log.info("-- Sprints to CLOSED status changed");
         }
-        Collection<Sprint> sprintsToDraft = repo().sprintsToDraft();
+        Collection<Sprint> sprintsToDraft = repo.sprintsToDraft();
         if(sprintsToDraft.size() > 0) {
-            logger.info("-- Sprints to DRAFT status: " + sprintsToDraft.size());
+            log.info("-- Sprints to DRAFT status: " + sprintsToDraft.size());
             for(Sprint sprint : sprintsToDraft) {
                 sprint.setStatus(SprintStatus.DRAFT);
             }
             repo.saveAll(sprintsToDraft);
-            logger.info("-- Sprints to DRAFT status changed");
+            log.info("-- Sprints to DRAFT status changed");
         }
-        Collection<Sprint> sprintsToActive = repo().sprintsToActive();
+        Collection<Sprint> sprintsToActive = repo.sprintsToActive();
         if(sprintsToActive.size() > 0) {
-            logger.info("-- Sprints to ACTIVE status: " + sprintsToActive.size());
+            log.info("-- Sprints to ACTIVE status: " + sprintsToActive.size());
             for (Sprint sprint : sprintsToActive) {
                 sprint.setStatus(SprintStatus.ACTIVE);
             }
             repo.saveAll(sprintsToActive);
-            logger.info("-- Sprints to ACTIVE status changed");
+            log.info("-- Sprints to ACTIVE status changed");
         }
-        logger.info("--- Done triggering sprint status change");
+        log.info("--- Done triggering sprint status change");
     }
 }

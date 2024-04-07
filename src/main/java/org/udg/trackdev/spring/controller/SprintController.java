@@ -4,14 +4,17 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
+import org.udg.trackdev.spring.dto.response.SprintResponseDTO;
 import org.udg.trackdev.spring.entity.Sprint;
 import org.udg.trackdev.spring.entity.sprintchanges.SprintChange;
 import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-import org.udg.trackdev.spring.model.MergePatchSprint;
+import org.udg.trackdev.spring.facade.SprintFacade;
+import org.udg.trackdev.spring.dto.request.SprintRequestDTO;
 import org.udg.trackdev.spring.service.AccessChecker;
 import org.udg.trackdev.spring.service.SprintChangeService;
 import org.udg.trackdev.spring.service.SprintService;
@@ -24,48 +27,33 @@ import java.util.List;
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "7. Sprints")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/sprints")
 public class SprintController extends CrudController<Sprint, SprintService> {
-    @Autowired
-    AccessChecker accessChecker;
 
-    @Autowired
-    SprintChangeService sprintChangeService;
+    private final SprintFacade facade;
 
     @Operation(summary = "Get all sprints", description = "Get all sprints")
     @GetMapping
-    @JsonView(EntityLevelViews.Basic.class)
-    public List<Sprint> getSprints(Principal principal) {
-        String userId = super.getUserId(principal);
-        accessChecker.checkCanViewAllProjects(userId);
-        return service.findAll();
+    public List<SprintResponseDTO> getAllSprints(Principal principal) {
+        return facade.getAllSprints(principal);
     }
 
     @Operation(summary = "Get specific sprint", description = "Get specific sprint")
     @GetMapping(path = "/{id}")
-    @JsonView(EntityLevelViews.Basic.class)
-    public Sprint getSprint(Principal principal, @PathVariable("id") Long id) {
-        String userId = super.getUserId(principal);
-        Sprint sprint = service.get(id);
-        accessChecker.checkCanViewProject(sprint.getProject(), userId);
-        return sprint;
+    public SprintResponseDTO getSprint(Principal principal, @PathVariable("id") Long id) {
+        return facade.getSprint(principal, id);
     }
 
     @Operation(summary = "Edit specific sprint", description = "Edit specific sprint")
     @PatchMapping(path = "/{id}")
-    @JsonView(EntityLevelViews.Basic.class)
-    public Sprint editSprint(Principal principal,
-                         @PathVariable(name = "id") Long id,
-                         @Valid @RequestBody MergePatchSprint sprintRequest) {
-        if (sprintRequest.name != null){
-            if (sprintRequest.name.get().isEmpty() || sprintRequest.name.get().length() > Sprint.NAME_LENGTH) {
-                throw new ControllerException(ErrorConstants.INVALID_SPRINT_NAME_LENGTH);
-            }
-        }
-        String userId = super.getUserId(principal);
-        return service.editSprint(id, sprintRequest, userId);
+    public SprintResponseDTO editSprint(@Valid @RequestBody SprintRequestDTO request,
+                             @PathVariable(name = "id") Long id, Principal principal) {
+        return facade.editSprint(request, id, principal);
+
     }
 
+    //TODO: Refactor this method
     @Operation(summary = "Get history of logs of the sprint", description = "Get history of logs of the sprint")
     @GetMapping(path = "/{id}/history")
     @JsonView(EntityLevelViews.Basic.class)
@@ -78,11 +66,8 @@ public class SprintController extends CrudController<Sprint, SprintService> {
 
     @Operation(summary = "Delete specific sprint", description = "Delete specific sprint")
     @DeleteMapping(path = "/{id}")
-    public void deleteSprint(Principal principal, @PathVariable("id") Long id) {
-        String userId = super.getUserId(principal);
-        Sprint sprint = service.get(id);
-        accessChecker.checkCanViewProject(sprint.getProject(), userId);
-        service.deleteSprint(id);
+    public void deleteSprint(@PathVariable("id") Long id, Principal principal) {
+        facade.deleteSprint(id, principal);
     }
 
 }

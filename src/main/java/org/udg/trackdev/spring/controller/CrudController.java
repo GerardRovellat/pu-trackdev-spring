@@ -17,7 +17,7 @@ public class CrudController<T, Service extends IBaseService<T>> extends BaseCont
 
     public List<T> search(String search) {
         if (search == null)
-            return service.findAll();
+            return service.getAll();
         Specification<T> specification = this.buildSpecificationFromSearch(search);
         return service.search(specification);
     }

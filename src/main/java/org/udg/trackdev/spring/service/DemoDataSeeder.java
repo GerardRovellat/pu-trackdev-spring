@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.udg.trackdev.spring.configuration.UserType;
 import org.udg.trackdev.spring.entity.*;
-import org.udg.trackdev.spring.model.MergePatchSprint;
+import org.udg.trackdev.spring.dto.request.SprintRequestDTO;
 import org.udg.trackdev.spring.model.MergePatchTask;
 
 import java.time.LocalDate;
@@ -343,13 +343,13 @@ public class DemoDataSeeder {
     }
 
     private void saveOpenSprint(User sprintCreator, Sprint sprint) {
-        MergePatchSprint sprintChange = new MergePatchSprint();
+        SprintRequestDTO sprintChange = new SprintRequestDTO();
         sprintChange.status = Optional.of(SprintStatus.ACTIVE);
         sprintService.editSprint(sprint.getId(), sprintChange, sprintCreator.getId());
     }
 
     private void saveCloseSprint(User sprintCreator, Sprint sprint) {
-        MergePatchSprint sprintChange = new MergePatchSprint();
+        SprintRequestDTO sprintChange = new SprintRequestDTO();
         sprintChange.status = Optional.of(SprintStatus.CLOSED);
         sprintService.editSprint(sprint.getId(), sprintChange, sprintCreator.getId());
     }

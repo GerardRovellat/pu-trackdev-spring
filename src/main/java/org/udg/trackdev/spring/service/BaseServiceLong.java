@@ -1,7 +1,6 @@
 package org.udg.trackdev.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.udg.trackdev.spring.controller.exceptions.EntityNotFound;
 import org.udg.trackdev.spring.entity.BaseEntityLong;
@@ -28,11 +27,7 @@ public class BaseServiceLong<T extends BaseEntityLong, Repo extends BaseReposito
         return repo.findAll(specification);
     }
 
-    public List<T> search(final Specification<T> specification, Sort sort) {
-        return repo.findAll(specification, sort);
-    }
-
-    public List<T> findAll() {
+    public List<T> getAll() {
         return repo.findAll();
     }
 

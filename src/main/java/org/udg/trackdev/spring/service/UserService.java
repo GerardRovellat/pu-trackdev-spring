@@ -51,7 +51,11 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
     }
 
     public boolean matchRecoveryCode(User user, String code) {
-        return global.getPasswordEncoder().matches(code, user.getRecoveryCode());
+        if (global.getPasswordEncoder().matches(code, user.getRecoveryCode())){
+            return true;
+        } else {
+            throw new ServiceException(ErrorConstants.RECOVERY_CODE_NOT_MATCH);
+        }
     }
 
     @Transactional
@@ -143,6 +147,7 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
     public void changePassword(User user, String newpassword) {
         user.setPassword(global.getPasswordEncoder().encode(newpassword));
         user.setChangePassword(false);
+        if(null != user.getRecoveryCode()) user.setRecoveryCode(null);
         repo().save(user);
     }
 

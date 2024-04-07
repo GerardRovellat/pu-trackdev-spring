@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import org.udg.trackdev.spring.entity.Course;
 import org.udg.trackdev.spring.entity.Project;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.entity.views.EntityLevelViews;
+import org.udg.trackdev.spring.facade.CourseFacade;
 import org.udg.trackdev.spring.model.IdObjectLong;
 import org.udg.trackdev.spring.service.AccessChecker;
 import org.udg.trackdev.spring.service.CourseService;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "4. Courses")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/courses")
 public class CourseController extends BaseController {
 
@@ -48,6 +51,8 @@ public class CourseController extends BaseController {
 
     @Autowired
     AccessChecker accessChecker;
+
+    private final CourseFacade facade;
 
     @Operation(summary = "Get all courses", description = "Get all courses")
     @GetMapping
