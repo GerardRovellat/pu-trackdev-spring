@@ -54,7 +54,7 @@ public class SprintController extends CrudController<Sprint, SprintService> {
     }
 
     //TODO: Refactor this method
-    @Operation(summary = "Get history of logs of the sprint", description = "Get history of logs of the sprint")
+    /**@Operation(summary = "Get history of logs of the sprint", description = "Get history of logs of the sprint")
     @GetMapping(path = "/{id}/history")
     @JsonView(EntityLevelViews.Basic.class)
     public List<SprintChange> getHistory(Principal principal, @PathVariable("id") Long id,
@@ -62,7 +62,7 @@ public class SprintController extends CrudController<Sprint, SprintService> {
         String refinedSearch = super.scopedSearch("entityId:"+ id, search);
         Specification<SprintChange> specification = super.buildSpecificationFromSearch(refinedSearch);
         return sprintChangeService.search(specification);
-    }
+    }**/
 
     @Operation(summary = "Delete specific sprint", description = "Delete specific sprint")
     @DeleteMapping(path = "/{id}")

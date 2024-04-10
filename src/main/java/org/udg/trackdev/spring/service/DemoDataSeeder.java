@@ -344,13 +344,13 @@ public class DemoDataSeeder {
 
     private void saveOpenSprint(User sprintCreator, Sprint sprint) {
         SprintRequestDTO sprintChange = new SprintRequestDTO();
-        sprintChange.status = Optional.of(SprintStatus.ACTIVE);
+        sprintChange.status = SprintStatus.ACTIVE;
         sprintService.editSprint(sprint.getId(), sprintChange, sprintCreator.getId());
     }
 
     private void saveCloseSprint(User sprintCreator, Sprint sprint) {
         SprintRequestDTO sprintChange = new SprintRequestDTO();
-        sprintChange.status = Optional.of(SprintStatus.CLOSED);
+        sprintChange.status = SprintStatus.CLOSED;
         sprintService.editSprint(sprint.getId(), sprintChange, sprintCreator.getId());
     }
 

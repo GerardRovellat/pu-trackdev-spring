@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -18,7 +16,5 @@ public class SubjectResponseDTO {
     private String ownerId;
 
     private String acronym;
-
-    private List<CourseResponseDTO> courses;
 
 }

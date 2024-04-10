@@ -32,6 +32,6 @@ public class BaseServiceUUID<T extends BaseEntityUUID, Repo extends BaseReposito
         return repo.findAll();
     }
 
-    //protected Repo repo() { return repo; }
+    protected Repo repo() { return repo; }
 
 }

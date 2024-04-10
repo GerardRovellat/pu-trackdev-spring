@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +12,12 @@ import org.udg.trackdev.spring.configuration.UserType;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
 import org.udg.trackdev.spring.dto.request.CourseRequestDTO;
 import org.udg.trackdev.spring.dto.request.SubjectRequestDTO;
-import org.udg.trackdev.spring.dto.response.SubjectResponseDTO;
+import org.udg.trackdev.spring.dto.response.SubjectCompleteResponseDTO;
 import org.udg.trackdev.spring.entity.Subject;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.entity.views.EntityLevelViews;
 import org.udg.trackdev.spring.facade.SubjectFacade;
-import org.udg.trackdev.spring.service.AccessChecker;
-import org.udg.trackdev.spring.service.CourseService;
 import org.udg.trackdev.spring.service.SubjectService;
-import org.udg.trackdev.spring.service.UserService;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 import org.udg.trackdev.spring.utils.ValidatorHelper;
 
@@ -41,7 +37,7 @@ public class SubjectController extends CrudController<Subject, SubjectService> {
     private final ValidatorHelper validatorHelper = new ValidatorHelper();
 
     //TODO: Refactor this method
-    @Operation(summary = "Get all subjects", description = "Get all subjects")
+    /**@Operation(summary = "Get all subjects", description = "Get all subjects")
     @GetMapping
     @JsonView(EntityLevelViews.SubjectComplete.class)
     public List<Subject> search(Principal principal, @RequestParam(value = "search", required = false) String search) {
@@ -54,11 +50,11 @@ public class SubjectController extends CrudController<Subject, SubjectService> {
             String refinedSearch = super.scopedSearch("ownerId:" + userId, search);
             return super.search(refinedSearch);
         }
-    }
+    }**/
 
     @Operation(summary = "Get specific subject", description = "Get specific subject")
     @GetMapping(path = "/{id}")
-    public SubjectResponseDTO getSubject(@PathVariable("id") Long id, Principal principal) {
+    public SubjectCompleteResponseDTO getSubject(@PathVariable("id") Long id, Principal principal) {
         return facade.getSubject(id, principal);
     }
 
@@ -70,8 +66,8 @@ public class SubjectController extends CrudController<Subject, SubjectService> {
 
     @Operation(summary = "Edit specific subject", description = "Edit specific subject")
     @PatchMapping(path = "/{id}")
-    public SubjectResponseDTO editSubject(@Valid @RequestBody SubjectRequestDTO request, @PathVariable("id") Long id,
-                               Principal principal, BindingResult validation) {
+    public SubjectCompleteResponseDTO editSubject(@Valid @RequestBody SubjectRequestDTO request, @PathVariable("id") Long id,
+                                                  Principal principal, BindingResult validation) {
         validatorHelper.validateRequest(validation);
         return facade.editSubject(request, id, principal);
     }

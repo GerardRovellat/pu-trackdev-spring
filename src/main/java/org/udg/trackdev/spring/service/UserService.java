@@ -69,7 +69,7 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
             user.setChangePassword(true);
             user.setEnabled(true);
             user.addRole(roleService.get(UserType.STUDENT));
-            repo().save(user);
+            repo.save(user);
 
             emailSenderService.sendRegisterEmail(username,email,tempPassword);
 
@@ -82,7 +82,7 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
     }
 
     public User get(String id) {
-        Optional<User> uo = repo().findById(id);
+        Optional<User> uo = repo.findById(id);
         if (uo.isPresent())
             return uo.get();
         else
@@ -90,7 +90,7 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
     }
 
     public User getByUsername(String username) {
-        Optional<User> user = repo().findByUsername(username);
+        Optional<User> user = repo.findByUsername(username);
         if(user.isEmpty()) {
             throw new EntityNotFound(String.format(ErrorConstants.USER_NOT_FOUND, username));
         }
@@ -98,7 +98,7 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
     }
 
     public User getByEmail(String email) {
-        User user = repo().findByEmail(email);
+        User user = repo.findByEmail(email);
         if(user == null) {
             throw new EntityNotFound(String.format(ErrorConstants.USER_NOT_FOUND, email));
         }
@@ -106,7 +106,7 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
     }
 
     public Boolean existsEmail(String email) {
-        return repo().existsByEmail(email);
+        return repo.existsByEmail(email);
     }
 
     @Transactional
@@ -121,13 +121,13 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
             Role role = roleService.get(ut);
             user.addRole(role);
         }
-        repo().save(user);
+        repo.save(user);
 
         return user;
     }
 
     private void checkIfExists(String email) {
-        if (repo().existsByEmail(email))
+        if (repo.existsByEmail(email))
             throw new ServiceException(ErrorConstants.USER_ALREADY_EXIST + email);
     }
 
@@ -148,7 +148,7 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
         user.setPassword(global.getPasswordEncoder().encode(newpassword));
         user.setChangePassword(false);
         if(null != user.getRecoveryCode()) user.setRecoveryCode(null);
-        repo().save(user);
+        repo.save(user);
     }
 
     @Transactional
@@ -189,7 +189,7 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
             user.setGithubAvatar(null);
             user.setGithubHtmlUrl(null);
         }
-        repo().save(user);
+        repo.save(user);
         return user;
     }
 

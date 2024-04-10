@@ -8,6 +8,7 @@ import org.udg.trackdev.spring.entity.Subject;
 import org.udg.trackdev.spring.repository.CourseRepository;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class CourseService extends BaseServiceLong<Course, CourseRepository> {
@@ -21,7 +22,7 @@ public class CourseService extends BaseServiceLong<Course, CourseRepository> {
     @Autowired
     AccessChecker accessChecker;
 
-    public Collection<Course> getAll(){
+    public List<Course> getAll(){
         return repo.findAll();
     }
 

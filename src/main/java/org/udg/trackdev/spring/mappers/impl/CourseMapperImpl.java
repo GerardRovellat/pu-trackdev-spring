@@ -22,7 +22,7 @@ public class CourseMapperImpl implements CourseMapper {
         return CourseCompleteResponseDTO.builder()
                 .startYear(course.getStartYear())
                 .githubOrganization(course.getGithubOrganization())
-                .subject(course.getSubject())
+                .subject(null)
                 .build();
     }
 

@@ -15,6 +15,6 @@ public class CourseCompleteResponseDTO {
 
     private String githubOrganization;
 
-    private SubjectResponseDTO subject;
+    private SubjectCompleteResponseDTO subject;
 
 }
