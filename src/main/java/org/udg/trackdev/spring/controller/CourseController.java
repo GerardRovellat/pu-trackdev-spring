@@ -11,6 +11,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.configuration.UserType;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
+import org.udg.trackdev.spring.dto.request.CreateProjectRequestDTO;
+import org.udg.trackdev.spring.dto.request.EditCourseRequestDTO;
+import org.udg.trackdev.spring.dto.response.CourseCompleteResponseDTO;
+import org.udg.trackdev.spring.dto.response.ProjectResponseDTO;
 import org.udg.trackdev.spring.entity.Course;
 import org.udg.trackdev.spring.entity.Project;
 import org.udg.trackdev.spring.entity.User;
@@ -22,6 +26,7 @@ import org.udg.trackdev.spring.service.CourseService;
 import org.udg.trackdev.spring.service.ProjectService;
 import org.udg.trackdev.spring.service.UserService;
 import org.udg.trackdev.spring.utils.ErrorConstants;
+import org.udg.trackdev.spring.utils.ValidatorHelper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
@@ -40,114 +45,51 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/courses")
 public class CourseController extends BaseController {
 
-    @Autowired
-    CourseService service;
-
-    @Autowired
-    ProjectService projectService;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    AccessChecker accessChecker;
-
     private final CourseFacade facade;
 
     @Operation(summary = "Get all courses", description = "Get all courses")
     @GetMapping
-    @JsonView(EntityLevelViews.CourseComplete.class)
-    public Collection<Course> getCourses(Principal principal) {
-        String userId = super.getUserId(principal);
-        User user = userService.get(userId);
-        if (user.isUserType(UserType.ADMIN))
-            return service.getAll();
-        else
-            throw new IllegalArgumentException(ErrorConstants.UNKNOWN_ROLE + user.getRoles());
+    public Collection<CourseCompleteResponseDTO> getCourses(Principal principal) {
+        return facade.getAllCourses(principal);
     }
 
     @Operation(summary = "Get specific course", description = "Get specific course")
     @GetMapping(path = "/{courseId}")
-    @JsonView(EntityLevelViews.CourseComplete.class)
-    public Course getCourse(Principal principal, @PathVariable("courseId") Long courseId) {
-        String userId = super.getUserId(principal);
-        Course course = service.get(courseId);
-        accessChecker.checkCanViewCourse(course, userId);
-        return course;
+    public CourseCompleteResponseDTO getCourse(@PathVariable("courseId") Long courseId, Principal principal) {
+        return facade.getCourse(courseId, principal);
     }
 
     @Operation(summary = "Edit specific course", description = "Edit specific course")
     @PatchMapping(path = "/{courseId}")
-    @JsonView(EntityLevelViews.CourseComplete.class)
-    public Course editCourse(Principal principal,
-                             @PathVariable("courseId") Long courseId,
-                             @Valid @RequestBody EditCourse courseRequest,
-                             BindingResult result) {
-        if (result.hasErrors()) {
+    public CourseCompleteResponseDTO editCourse(@Valid @RequestBody EditCourseRequestDTO request,
+                             @PathVariable("courseId") Long courseId, Principal principal, BindingResult validation) {
+        if (validation.hasErrors()) {
             throw new ControllerException(ErrorConstants.INVALID_COURSE_START_YEAR);
         }
-        String userId = super.getUserId(principal);
-        return service.editCourse(courseId, courseRequest.startYear, courseRequest.subjectId,
-                courseRequest.githubOrganization, userId);
+        return facade.editCourse(request, courseId, principal);
     }
 
     @Operation(summary = "Delete specific course", description = "Delete specific course")
     @DeleteMapping(path = "/{courseId}")
-    public ResponseEntity<Void> deleteCourse(Principal principal,
-                                       @PathVariable("courseId") Long courseId) {
-        String userId = super.getUserId(principal);
-        service.deleteCourse(courseId, userId);
+    public ResponseEntity<Void> deleteCourse(@PathVariable("courseId") Long courseId, Principal principal) {
+        facade.deleteCourse(courseId, principal);
         return okNoContent();
     }
 
     @Operation(summary = "Get projects enrolled to specific course", description = "Get projects enrolled to specific course")
     @GetMapping(path = "/{courseId}/projects")
-    @JsonView(EntityLevelViews.Basic.class)
-    public Collection<Project> getProjects(Principal principal,
-                                           @PathVariable("courseId") Long courseId) {
-        String userId = super.getUserId(principal);
-        Course course = service.get(courseId);
-        Collection<Project> projects;
-        if(accessChecker.canViewCourseAllProjects(course, userId)) {
-            projects = course.getProjects();
-        } else {
-            projects = course.getProjects().stream()
-                    .filter(group -> group.isMember(userId))
-                    .collect(Collectors.toCollection(ArrayList::new));
-        }
-        return projects;
+    public Collection<ProjectResponseDTO> getProjects(@PathVariable("courseId") Long courseId, Principal principal) {
+        return facade.getProjects(courseId, principal);
     }
 
     @Operation(summary = "Create project enrolled to specific course", description = "Create project enrolled to specific course")
     @PostMapping(path = "/{courseId}/projects")
-    public IdObjectLong createProject(Principal principal,
-                                      @PathVariable("courseId") Long courseId,
-                                      @Valid @RequestBody NewProject projectRequest,
-                                      BindingResult result) {
-        if (result.hasErrors()) {
+    public Long createProject(@Valid @RequestBody CreateProjectRequestDTO request, @PathVariable("courseId") Long courseId,
+                              Principal principal, BindingResult validation) {
+        if (validation.hasErrors()) {
             throw new ControllerException(ErrorConstants.INVALID_PRJ_NAME_LENGTH);
         }
-        String userId = super.getUserId(principal);
-        Project createdProject = projectService.createProject(projectRequest.name, projectRequest.members, courseId, userId);
-        return new IdObjectLong(createdProject.getId());
+        return facade.createProject(request,courseId,principal);
     }
 
-
-    static class NewProject {
-        @NotBlank
-        @Size(
-                min = Project.MIN_NAME_LENGTH,
-                max = Project.NAME_LENGTH
-        )
-        public String name;
-        public Collection<String> members;
-    }
-
-    static class EditCourse {
-        @Min(value = Course.MIN_START_YEAR)
-        @Max(value = Course.MAX_START_YEAR)
-        public Integer startYear;
-        public Long subjectId;
-        public String githubOrganization;
-    }
 }

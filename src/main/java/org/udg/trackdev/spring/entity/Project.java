@@ -2,6 +2,10 @@ package org.udg.trackdev.spring.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.udg.trackdev.spring.entity.views.EntityLevelViews;
 import org.udg.trackdev.spring.serializer.JsonHierarchyViewSerializer;
 
@@ -15,7 +19,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "projects")
+@Table(name = "PROJECTS")
+@Data
+@Builder
+@AllArgsConstructor
 public class Project extends BaseEntityLong {
 
    //-- CONSTANTS

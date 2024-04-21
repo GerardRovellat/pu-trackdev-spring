@@ -48,6 +48,13 @@ public class AccessChecker {
 
     // COURSES
 
+    public void checkCanViewAllCourses(String userId) {
+        if(userService.get(userId).isUserType(UserType.ADMIN)) {
+            return;
+        }
+        throw new ServiceException(ErrorConstants.UNAUTHORIZED);
+    }
+
     public void checkCanManageCourse(Course course, String userId) {
         checkCanManageSubject(course.getSubject(), userId);
     }

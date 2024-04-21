@@ -12,22 +12,9 @@ import java.security.Principal;
  */
 public class BaseController {
 
-  static String OK_MESSAGE = "\"ok\"";
-
-  MappingJacksonValue toResponse(Object pojo, Class<?> view) {
-    final MappingJacksonValue result = new MappingJacksonValue(pojo);
-    result.setSerializationView(view);
-    return result;
-  }
-
   protected String getUserId(Principal principal) {
     checkLoggedIn(principal);
     return principal.getName();
-  }
-
-  void checkNotLoggedIn(Principal principal) {
-    if(principal != null)
-      throw new ControllerException(ErrorConstants.USER_SHOULD_NOT_LOGEDIN);
   }
 
   void checkLoggedIn(Principal principal) {

@@ -4,17 +4,21 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
+import org.udg.trackdev.spring.dto.response.ProjectCompleteResponseDTO;
+import org.udg.trackdev.spring.dto.response.ProjectWithUserResponseDTO;
 import org.udg.trackdev.spring.entity.Project;
 import org.udg.trackdev.spring.entity.Sprint;
 import org.udg.trackdev.spring.entity.Task;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.entity.views.EntityLevelViews;
+import org.udg.trackdev.spring.facade.ProjectFacade;
 import org.udg.trackdev.spring.service.AccessChecker;
 import org.udg.trackdev.spring.service.ProjectService;
 import org.udg.trackdev.spring.service.UserService;
@@ -31,6 +35,7 @@ import java.util.stream.Collectors;
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "5. Projects")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/projects")
 public class ProjectController extends BaseController {
     @Autowired
@@ -42,28 +47,24 @@ public class ProjectController extends BaseController {
     @Autowired
     AccessChecker accessChecker;
 
+    private final ProjectFacade facade;
+
     @Operation(summary = "Get all projects", description = "Get all projects")
     @GetMapping
     @JsonView(EntityLevelViews.ProjectWithUser.class)
-    public Collection<Project> getProjects(Principal principal) {
-        String userId = super.getUserId(principal);
-        if(accessChecker.checkCanViewAllProjects(userId)){
-            return service.getAll();
-        }
-        else{
-            return userService.get(userId).getProjects();
-        }
+    public Collection<ProjectWithUserResponseDTO> getProjects(Principal principal) {
+        return facade.getAllProjects(principal);
     }
 
     @Operation(summary = "Get specific project", description = "Get specific project")
     @GetMapping(path = "/{projectId}")
-    @JsonView(EntityLevelViews.ProjectComplete.class)
-    public Project getProject(Principal principal, @PathVariable(name = "projectId") Long projectId) {
-        String userId = super.getUserId(principal);
+    public ProjectCompleteResponseDTO getProject(@PathVariable(name = "projectId") Long projectId, Principal principal) {
+        /**String userId = super.getUserId(principal);
         Project project = service.get(projectId);
         accessChecker.checkCanViewProject(project, userId);
         userService.setCurrentProject(userService.get(userId), project);
-        return project;
+        return project;**/
+        return facade.getProject(projectId, principal);
     }
 
     @Operation(summary = "Edit specific project", description = "Edit specific project")

@@ -1,6 +1,6 @@
 package org.udg.trackdev.spring.facade;
 
-import org.udg.trackdev.spring.dto.request.CourseRequestDTO;
+import org.udg.trackdev.spring.dto.request.CreateCourseRequestDTO;
 import org.udg.trackdev.spring.dto.request.SubjectRequestDTO;
 import org.udg.trackdev.spring.dto.response.SubjectCompleteResponseDTO;
 
@@ -16,6 +16,6 @@ public interface SubjectFacade {
 
     void deleteSubject(Long id, Principal principal);
 
-    Long createCourseOnSubject(Long subjectId, CourseRequestDTO request, Principal principal);
+    Long createCourseOnSubject(Long subjectId, CreateCourseRequestDTO request, Principal principal);
 
 }

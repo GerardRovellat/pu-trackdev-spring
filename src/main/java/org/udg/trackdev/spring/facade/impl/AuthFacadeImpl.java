@@ -10,6 +10,7 @@ import org.udg.trackdev.spring.dto.request.RecoveryPasswordRequestDTO;
 import org.udg.trackdev.spring.dto.response.LoginResponseDTO;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.AuthFacade;
+import org.udg.trackdev.spring.mappers.EntityMapper;
 import org.udg.trackdev.spring.service.AuthService;
 import org.udg.trackdev.spring.service.EmailSenderService;
 import org.udg.trackdev.spring.service.UserService;
@@ -34,6 +35,8 @@ public class AuthFacadeImpl implements AuthFacade {
 
     private final EmailSenderService emailService;
 
+    private final EntityMapper mapper;
+
     @Override
     public LoginResponseDTO login(HttpServletRequest httpRequest, HttpServletResponse httpResponse, LoginRequestDTO request) {
         User loggedInUser = userService.matchPassword(request.getEmail(), request.getPassword());
@@ -41,7 +44,7 @@ public class AuthFacadeImpl implements AuthFacade {
         String cookieTokenValue = Base64.getEncoder().withoutPadding().encodeToString(token.getBytes());
         cookieManager.addSessionCookie(httpRequest, httpResponse, Constants.COOKIE_NAME, cookieTokenValue);
         userService.setLastLogin(loggedInUser);
-        return LoginResponseDTO.builder().email(request.getEmail()).token(token).build();
+        return LoginResponseDTO.builder().userdata(mapper.userEntityToDTO(loggedInUser)).token(token).build();
     }
 
     @Override

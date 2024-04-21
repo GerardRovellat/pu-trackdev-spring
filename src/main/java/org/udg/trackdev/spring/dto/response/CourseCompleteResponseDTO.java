@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CourseCompleteResponseDTO {
 
+    private Long id;
+
     private Integer startYear;
 
     private String githubOrganization;

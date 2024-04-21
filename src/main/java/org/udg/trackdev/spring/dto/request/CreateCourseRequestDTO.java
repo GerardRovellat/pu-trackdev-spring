@@ -14,7 +14,7 @@ import javax.validation.constraints.Min;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseRequestDTO {
+public class CreateCourseRequestDTO {
 
     @Min(value = Course.MIN_START_YEAR, message = ErrorConstants.INVALID_COURSE_START_YEAR)
     @Max(value = Course.MAX_START_YEAR, message = ErrorConstants.INVALID_COURSE_START_YEAR)
