@@ -51,7 +51,6 @@ public class ProjectController extends BaseController {
 
     @Operation(summary = "Get all projects", description = "Get all projects")
     @GetMapping
-    @JsonView(EntityLevelViews.ProjectWithUser.class)
     public Collection<ProjectWithUserResponseDTO> getProjects(Principal principal) {
         return facade.getAllProjects(principal);
     }

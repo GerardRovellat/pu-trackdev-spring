@@ -1,11 +1,11 @@
-package org.udg.trackdev.spring.dto.response;
+package org.udg.trackdev.spring.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.dto.TaskDTO;
-import org.udg.trackdev.spring.dto.UserDTO;
+import org.udg.trackdev.spring.dto.response.SprintResponseDTO;
+import org.udg.trackdev.spring.dto.response.TaskResponseDTO;
 import org.udg.trackdev.spring.entity.TaskStatus;
 import org.udg.trackdev.spring.entity.TaskType;
 
@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskResponseDTO {
+public class TaskDTO {
 
     private String name;
 
@@ -37,8 +37,6 @@ public class TaskResponseDTO {
     private Integer estimationPoints;
 
     private Integer rank;
-
-    private Collection<TaskDTO> childTasks;
 
     private Collection<SprintResponseDTO> activeSprints;
 
