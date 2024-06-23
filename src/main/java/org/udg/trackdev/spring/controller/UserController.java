@@ -10,10 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
+import org.udg.trackdev.spring.dto.UserDTO;
+import org.udg.trackdev.spring.dto.request.EditUserRequestDTO;
+import org.udg.trackdev.spring.dto.request.RegisterUserRequestDTO;
+import org.udg.trackdev.spring.dto.response.UserWithoutProjectMembersResponseDTO;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.entity.views.EntityLevelViews;
+import org.udg.trackdev.spring.facade.UserFacade;
 import org.udg.trackdev.spring.service.AccessChecker;
 import org.udg.trackdev.spring.service.UserService;
+import org.udg.trackdev.spring.utils.Constants;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 
 import javax.validation.Valid;
@@ -34,6 +40,9 @@ import java.util.stream.Collectors;
 public class UserController extends BaseController {
 
     @Autowired
+    private UserFacade facade;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -47,10 +56,8 @@ public class UserController extends BaseController {
      */
     @Operation(summary = "Get user by id", description = "Get user by id")
     @GetMapping(path = "/uuid/{id}")
-    @JsonView(EntityLevelViews.UserWithoutProjectMembers.class)
-    public User getPublic(Principal principal, @PathVariable("id") String id) {
-        super.checkLoggedIn(principal);
-        return userService.get(id);
+    public UserDTO getPublic(@PathVariable("id") String id, Principal principal) {
+        return facade.getUser(id, principal);
     }
 
     /**
@@ -61,66 +68,42 @@ public class UserController extends BaseController {
      */
     @Operation(summary = "Get user by email", description = "Get user by email")
     @GetMapping(path = "/{email}")
-    @JsonView(EntityLevelViews.UserWithoutProjectMembers.class)
-    public User getUserEmail(Principal principal, @PathVariable("email") String email) {
-        super.checkLoggedIn(principal);
-        return userService.getByEmail(email);
+    public UserWithoutProjectMembersResponseDTO getUserEmail(@PathVariable("email") String email, Principal principal) {
+        return facade.getUserEmail(email, principal);
     }
 
     @Operation(summary = "Get all users", description = "Get all users, only admins can do this")
     @GetMapping
-    @JsonView({EntityLevelViews.UserWithoutProjectMembers.class})
-    public List<User> getAll(Principal principal) {
-        if (!accessChecker.isUserAdmin(userService.get(principal.getName()))){
-            throw new SecurityException(ErrorConstants.EMPTY);
-        }
-        return userService.getAll();
+    public List<UserWithoutProjectMembersResponseDTO> getAllUsers(Principal principal) {
+        return facade.getAllUsers(principal);
     }
 
     @Operation(summary = "Register user", description = "Register user, only admins can do this")
     @PostMapping(path = "/register")
-    public ResponseEntity<Void> register(Principal principal, @Valid @RequestBody RegisterU ru,
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterUserRequestDTO request, Principal principal,
                                          BindingResult result) {
-        checkLoggedIn(principal);
-        if (!accessChecker.isUserAdmin(userService.get(principal.getName()))) {
-            throw new SecurityException(ErrorConstants.UNAUTHORIZED);
-        }
         if (result.hasErrors()) {
             List<String> errors = result.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.toList());
             throw new ControllerException(String.join(". ", errors));
         }
-        userService.register(ru.username, ru.email);
+        facade.registerUser(request,principal);
         return okNoContent();
     }
 
     @Operation(summary = "Edit your user", description = "Edit your user")
     @PatchMapping
-    @JsonView({EntityLevelViews.UserWithGithubToken.class})
-    public User editMyUser(Principal principal,
-                         @Valid @RequestBody EditU userRequest) {
-        if (userRequest.username != null){
-            if (userRequest.username.get().isEmpty() || userRequest.username.get().length() > User.USERNAME_LENGTH) {
-                throw new ControllerException(ErrorConstants.INVALID_USERNAME_SIZE);
-            }
-            if (!userRequest.username.get().matches("^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$")) {
-                throw new ControllerException(ErrorConstants.INVALID_USERNAME_FORMAT);
-            }
-        }
-        String userId = super.getUserId(principal);
-        User user = userService.get(userId);
-        return userService.editMyUser(user, user, userRequest.username, userRequest.color,
-                userRequest.capitalLetters, userRequest.changePassword, userRequest.githubToken, userRequest.enabled);
+    public UserWithoutProjectMembersResponseDTO editMyUser(@Valid @RequestBody EditUserRequestDTO request, Principal principal) {
+        return facade.editMyUser(request, principal);
     }
 
     @Operation(summary = "Edit user", description = "Edit user, only admins can do this")
     @PatchMapping(path = "/{id}")
     @JsonView({EntityLevelViews.UserWithoutProjectMembers.class})
-    public User editUser(Principal principal,
-                            @Valid @RequestBody EditU userRequest,
-                            @PathVariable("id") String id) {
-        if (userRequest.username != null){
+    public User editUser(@Valid @RequestBody EditUserRequestDTO request, @PathVariable("id") String id,
+                         Principal principal) {
+        if (request.username != null){
             if (userRequest.username.get().isEmpty() || userRequest.username.get().length() > User.USERNAME_LENGTH) {
                 throw new ControllerException(ErrorConstants.INVALID_USERNAME_SIZE);
             }
@@ -138,6 +121,7 @@ public class UserController extends BaseController {
             return userService.editMyUser(modifier, user, userRequest.username, userRequest.color,
                     userRequest.capitalLetters, userRequest.changePassword, userRequest.githubToken, userRequest.enabled);
         }
+        return facade.editOtherUser(request, principal);
     }
 
     @Operation(summary = "Check if autenticated user is admin", description = "Check if autenticated user is admin")
@@ -150,45 +134,6 @@ public class UserController extends BaseController {
         } else {
             throw new SecurityException(ErrorConstants.EMPTY);
         }
-    }
-
-    static class RegisterU {
-        @NotBlank
-        @Size(
-                min = User.MIN_USERNAME_LENGTH,
-                max = User.USERNAME_LENGTH,
-                message = ErrorConstants.INVALID_USERNAME_SIZE
-        )
-        @Pattern(
-                regexp = "^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$",
-                message = ErrorConstants.INVALID_USERNAME_FORMAT
-        )
-        public String username;
-
-        @NotBlank
-        @Email(message = ErrorConstants.INVALID_MAIL_FORMAT)
-        @Size(
-                min = User.MIN_EMAIL_LENGHT,
-                max = User.EMAIL_LENGTH,
-                message = ErrorConstants.INVALID_MAIL_SIZE
-        )
-        public String email;
-
-    }
-
-    static class EditU {
-
-        public Optional<String> username;
-
-        public Optional<String> color;
-
-        public Optional<String> capitalLetters;
-
-        public Optional<Boolean> changePassword;
-
-        public Optional<String> githubToken;
-
-        public Optional<Boolean> enabled;
     }
 
 }

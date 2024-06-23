@@ -5,18 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseCompleteResponseDTO {
+public class ProjectTaskResponseDTO {
 
-    private Long id;
+    private Collection<TaskResponseDTO> tasks;
 
-    private Integer startYear;
-
-    private String githubOrganization;
-
-    private SubjectResponseDTO subject;
+    private Long projectId;
 
 }

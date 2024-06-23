@@ -48,6 +48,20 @@ public interface EntityMapper {
     @Mapping(target = "course", source = "course")
     ProjectCompleteResponseDTO projectEntityToProjectCompleteDTO(Project project);
 
+    @Mapping(target = "childTasks", source = "childTasks")
+    @Mapping(target = "activeSprints", source = "activeSprints")
+    TaskResponseDTO taskEntityToDTO(Task task);
+
+    @Mapping(target = "value", source = "name")
+    @Mapping(target = "label", source = "name")
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "startDate", source = "startDate")
+    @Mapping(target = "endDate", source = "endDate")
+    @Mapping(target = "status", source = "status")
+    ProjectSprintsResponseDTO sprintEntityToProjectSprintsDTO(Sprint sprint);
+
+    UserWithoutProjectMembersResponseDTO userEntityToUserWithoutProjectMembers(User user);
+
     @Named("serializeRoles")
     default List<String> serializeRoles(Set<Role> roles) {
         if (roles == null) {

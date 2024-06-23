@@ -5,15 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.udg.trackdev.spring.controller.exceptions.ServiceException;
+import org.udg.trackdev.spring.dto.request.SprintRequestDTO;
 import org.udg.trackdev.spring.entity.Project;
 import org.udg.trackdev.spring.entity.Sprint;
 import org.udg.trackdev.spring.entity.SprintStatus;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.entity.sprintchanges.*;
-import org.udg.trackdev.spring.dto.request.SprintRequestDTO;
 import org.udg.trackdev.spring.repository.SprintRepository;
-import org.udg.trackdev.spring.utils.ErrorConstants;
 
 import java.util.ArrayList;
 import java.util.Collection;

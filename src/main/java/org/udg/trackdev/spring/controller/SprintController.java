@@ -1,24 +1,15 @@
 package org.udg.trackdev.spring.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
-import org.udg.trackdev.spring.controller.exceptions.ControllerException;
+import org.udg.trackdev.spring.dto.request.SprintRequestDTO;
 import org.udg.trackdev.spring.dto.response.SprintResponseDTO;
 import org.udg.trackdev.spring.entity.Sprint;
-import org.udg.trackdev.spring.entity.sprintchanges.SprintChange;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
 import org.udg.trackdev.spring.facade.SprintFacade;
-import org.udg.trackdev.spring.dto.request.SprintRequestDTO;
-import org.udg.trackdev.spring.service.AccessChecker;
-import org.udg.trackdev.spring.service.SprintChangeService;
 import org.udg.trackdev.spring.service.SprintService;
-import org.udg.trackdev.spring.utils.ErrorConstants;
 
 import javax.validation.Valid;
 import java.security.Principal;

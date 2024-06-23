@@ -1,9 +1,10 @@
-package org.udg.trackdev.spring.dto;
+package org.udg.trackdev.spring.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.udg.trackdev.spring.dto.GithubDTO;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class UserWithoutProjectMembersResponseDTO {
 
     private String id;
 
@@ -34,5 +35,7 @@ public class UserDTO {
     private boolean enabled;
 
     private GithubDTO githubInfo;
+
+    private List<ProjectResponseDTO> projects;
 
 }

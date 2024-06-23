@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
 import org.udg.trackdev.spring.entity.Comment;
 import org.udg.trackdev.spring.entity.PointsReview;
-import org.udg.trackdev.spring.entity.Sprint;
 import org.udg.trackdev.spring.entity.Task;
 import org.udg.trackdev.spring.entity.taskchanges.TaskChange;
 import org.udg.trackdev.spring.entity.views.EntityLevelViews;

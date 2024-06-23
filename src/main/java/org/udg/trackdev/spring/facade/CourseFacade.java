@@ -3,7 +3,6 @@ package org.udg.trackdev.spring.facade;
 import org.udg.trackdev.spring.dto.request.CreateProjectRequestDTO;
 import org.udg.trackdev.spring.dto.request.EditCourseRequestDTO;
 import org.udg.trackdev.spring.dto.response.CourseCompleteResponseDTO;
-import org.udg.trackdev.spring.dto.response.CourseResponseDTO;
 import org.udg.trackdev.spring.dto.response.ProjectResponseDTO;
 
 import java.security.Principal;

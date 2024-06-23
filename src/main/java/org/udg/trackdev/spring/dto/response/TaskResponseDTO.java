@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.udg.trackdev.spring.dto.TaskDTO;
 import org.udg.trackdev.spring.dto.UserDTO;
 import org.udg.trackdev.spring.entity.TaskStatus;
-import org.udg.trackdev.spring.entity.TaskType;
 
 import java.util.Collection;
 import java.util.Date;
@@ -20,7 +19,7 @@ public class TaskResponseDTO {
 
     private String name;
 
-    private TaskType type;
+    private String type;
 
     private Date createdAt;
 

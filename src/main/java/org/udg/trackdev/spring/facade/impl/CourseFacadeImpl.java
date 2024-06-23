@@ -5,10 +5,8 @@ import org.springframework.stereotype.Component;
 import org.udg.trackdev.spring.dto.request.CreateProjectRequestDTO;
 import org.udg.trackdev.spring.dto.request.EditCourseRequestDTO;
 import org.udg.trackdev.spring.dto.response.CourseCompleteResponseDTO;
-import org.udg.trackdev.spring.dto.response.CourseResponseDTO;
 import org.udg.trackdev.spring.dto.response.ProjectResponseDTO;
 import org.udg.trackdev.spring.entity.Course;
-import org.udg.trackdev.spring.entity.Project;
 import org.udg.trackdev.spring.facade.CourseFacade;
 import org.udg.trackdev.spring.mappers.EntityMapper;
 import org.udg.trackdev.spring.service.AccessChecker;
@@ -17,7 +15,6 @@ import org.udg.trackdev.spring.service.CourseService;
 import org.udg.trackdev.spring.service.ProjectService;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;

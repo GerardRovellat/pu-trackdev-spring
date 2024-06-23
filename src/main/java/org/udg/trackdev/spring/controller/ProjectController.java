@@ -1,36 +1,30 @@
 package org.udg.trackdev.spring.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
-import org.udg.trackdev.spring.dto.response.ProjectCompleteResponseDTO;
-import org.udg.trackdev.spring.dto.response.ProjectWithUserResponseDTO;
-import org.udg.trackdev.spring.entity.Project;
-import org.udg.trackdev.spring.entity.Sprint;
-import org.udg.trackdev.spring.entity.Task;
-import org.udg.trackdev.spring.entity.User;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
+import org.udg.trackdev.spring.dto.request.CreateSprintRequestDTO;
+import org.udg.trackdev.spring.dto.request.CreateTaskRequestDTO;
+import org.udg.trackdev.spring.dto.request.EditProjectRequestDTO;
+import org.udg.trackdev.spring.dto.response.*;
 import org.udg.trackdev.spring.facade.ProjectFacade;
 import org.udg.trackdev.spring.service.AccessChecker;
 import org.udg.trackdev.spring.service.ProjectService;
 import org.udg.trackdev.spring.service.UserService;
 import org.udg.trackdev.spring.utils.ErrorConstants;
+import org.udg.trackdev.spring.utils.ValidatorHelper;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.security.Principal;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "5. Projects")
@@ -49,6 +43,8 @@ public class ProjectController extends BaseController {
 
     private final ProjectFacade facade;
 
+    private final ValidatorHelper validatorHelper;
+
     @Operation(summary = "Get all projects", description = "Get all projects")
     @GetMapping
     public Collection<ProjectWithUserResponseDTO> getProjects(Principal principal) {
@@ -58,108 +54,65 @@ public class ProjectController extends BaseController {
     @Operation(summary = "Get specific project", description = "Get specific project")
     @GetMapping(path = "/{projectId}")
     public ProjectCompleteResponseDTO getProject(@PathVariable(name = "projectId") Long projectId, Principal principal) {
-        /**String userId = super.getUserId(principal);
-        Project project = service.get(projectId);
-        accessChecker.checkCanViewProject(project, userId);
-        userService.setCurrentProject(userService.get(userId), project);
-        return project;**/
         return facade.getProject(projectId, principal);
     }
 
     @Operation(summary = "Edit specific project", description = "Edit specific project")
     @PatchMapping(path = "/{projectId}")
-    @JsonView(EntityLevelViews.ProjectWithUser.class)
-    public Project editProject(Principal principal,
-                               @PathVariable(name = "projectId") Long projectId,
-                               @Valid @RequestBody EditProject projectRequest,
-                               BindingResult result) {
-        if (result.hasErrors()) {
-            List<String> errors = result.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
-            throw new ControllerException(String.join(". ", errors));
-        }
-        String userId = super.getUserId(principal);
-        return service.editProject(projectId, projectRequest.name, projectRequest.members, projectRequest.courseId, projectRequest.qualification, userId);
+    public ProjectWithUserResponseDTO editProject(@Valid @RequestBody EditProjectRequestDTO request,
+                               @PathVariable(name = "projectId") Long projectId, Principal principal, BindingResult validation) {
+        validatorHelper.validateRequest(validation);
+        return facade.editProject(projectId, request, principal);
     }
 
     @Operation(summary = "Delete specific project", description = "Delete specific project")
     @DeleteMapping(path = "/{projectId}")
-    @JsonView(EntityLevelViews.Basic.class)
-    public ResponseEntity<Void> deleteProject(Principal principal,
-                                        @PathVariable(name = "projectId") Long projectId) {
-        String userId = super.getUserId(principal);
-        service.deleteProject(projectId, userId);
+    public ResponseEntity<Void> deleteProject(@PathVariable(name = "projectId") Long projectId, Principal principal) {
+        facade.deleteProject(projectId, principal);
         return okNoContent();
     }
 
     @Operation(summary = "Get tasks of specific project", description = "Get tasks of specific project")
     @GetMapping(path = "/{projectId}/tasks")
-    @JsonView(EntityLevelViews.Basic.class)
-    public Map<String, Object> getProjectTasks(Principal principal,
-                                            @PathVariable(name = "projectId") Long projectId) {
-        Map<String, Object> response = new HashMap<>();
-        String userId = super.getUserId(principal);
-        Project project = service.get(projectId);
-        accessChecker.checkCanViewProject(project, userId);
-        Collection<Task> tasks = service.getProjectTasks(project);
-        response.put("tasks", tasks);
-        response.put("projectId", projectId);
-        return response;
+    public ProjectTaskResponseDTO getProjectTasks(@PathVariable(name = "projectId") Long projectId, Principal principal) {
+        return facade.getProjectTasks(projectId, principal);
+
     }
 
     @Operation(summary = "Create sprint of specific project", description = "Create sprint of specific project")
     @PostMapping(path = "/{projectId}/sprints")
-    @JsonView(EntityLevelViews.Basic.class)
-    public ResponseEntity<Void> createProjectSprint(Principal principal,
-                                       @PathVariable(name = "projectId") Long projectId,
-                                       @Valid @RequestBody CreateSprint sprintRequest,
-                                                    BindingResult result) {
+    public ResponseEntity<Void> createProjectSprint(@Valid @RequestBody CreateSprintRequestDTO request, @PathVariable(name = "projectId") Long projectId,
+                                                    Principal principal, BindingResult result) {
         if (result.hasErrors()) {
             throw new ControllerException(ErrorConstants.INVALID_SPRINT_NAME_LENGTH);
         }
-        String userId = super.getUserId(principal);
-        Project project = service.get(projectId);
-        accessChecker.checkCanViewProject(project, userId);
-        service.createSprint(project, sprintRequest.name, sprintRequest.startDate, sprintRequest.endDate, userId);
+        facade.createProjectSprint(request, projectId, principal);
         return okNoContent();
     }
 
     @Operation(summary = "Create US of specific project", description = "Create US of specific project")
     @PostMapping(path = "/{projectId}/tasks")
-    @JsonView(EntityLevelViews.Basic.class)
-    public Project createTask(Principal principal,
-                              @PathVariable(name = "projectId") Long projectId,
-                              @Valid @RequestBody  NewTask task) {
-        String userId = super.getUserId(principal);
-        User user = userService.get(userId);
-        Project project = service.get(projectId);
-        accessChecker.checkCanViewProject(project, userId);
-        return service.createProjectTask(project,task.name, user);
-
+    public ProjectResponseDTO createTask(@Valid @RequestBody CreateTaskRequestDTO request, @PathVariable(name = "projectId") Long projectId,
+                                         Principal principal) {
+        return facade.createProjectTask(request, projectId, principal);
     }
 
     @Operation(summary = "Get all project sprints of specific project", description = "Get all project sprints of specific project")
     @GetMapping(path = "/{projectId}/sprints")
-    public ResponseEntity<List<Map<String, String>>> getProjectSprints(Principal principal,
-                                            @PathVariable(name = "projectId") Long projectId) {
-        String userId = super.getUserId(principal);
-        Project project = service.get(projectId);
-        accessChecker.checkCanViewProject(project, userId);
-        List<Map<String, String>> customResponse = buildCustomResponse(service.getProjectSprints(project));
-        return ResponseEntity.ok().body(customResponse);
+    public List<ProjectSprintsResponseDTO> getProjectSprints(@PathVariable(name = "projectId") Long projectId,
+                                                       Principal principal) {
+        //List<Map<String, String>> customResponse = buildCustomResponse(service.getProjectSprints(project));
+        return facade.getProjectSprints(projectId, principal);
     }
 
     @Operation(summary = "Get users qualification of specific project", description = "Get users qualification of specific project")
     @GetMapping(path = "/{projectId}/qualification")
-    public ResponseEntity<Map<String, Map<String,String>>> getProjectRank(Principal principal,
-                                            @PathVariable(name = "projectId") Long projectId) {
-        User user = userService.get(super.getUserId(principal));
-        Project project = service.get(projectId);
-        accessChecker.isUserAdmin(user);
-        return ResponseEntity.ok().body(service.getProjectRanks(project));
+    public Map<String, ProjectRankDTO> getProjectRank(@PathVariable(name = "projectId") Long projectId,
+                                                                          Principal principal) {
+        return facade.getProjectRak(projectId, principal);
     }
 
+    /**
     private List<Map<String, String>> buildCustomResponse(Collection<Sprint> sprints) {
         List<Map<String, String>> customResponse = new ArrayList<>();
         for (Sprint sprint : sprints) {
@@ -174,29 +127,6 @@ public class ProjectController extends BaseController {
         }
         return customResponse;
     }
+     **/
 
-    static class EditProject {
-        @Size(
-                min = Project.MIN_NAME_LENGTH,
-                max = Project.NAME_LENGTH,
-                message = ErrorConstants.INVALID_PRJ_NAME_LENGTH
-        )
-        public String name;
-        public Collection<String> members;
-        public Long courseId;
-        @Min(value = Project.MIN_QUALIFICATION, message = ErrorConstants.INVALID_PRJ_QUALIFICATION)
-        @Max(value = Project.MAX_QUALIFICATION, message = ErrorConstants.INVALID_PRJ_QUALIFICATION)
-        public Double qualification;
-    }
-
-    static class CreateSprint {
-        @Size(min = Sprint.MIN_NAME_LENGTH, max = Sprint.NAME_LENGTH)
-        public String name;
-        public Date startDate;
-        public Date endDate;
-    }
-
-    static class NewTask{
-        public String name;
-    }
 }

@@ -1,7 +1,6 @@
 package org.udg.trackdev.spring.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 

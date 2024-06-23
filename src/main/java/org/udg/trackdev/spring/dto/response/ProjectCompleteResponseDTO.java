@@ -20,7 +20,7 @@ public class ProjectCompleteResponseDTO {
 
     private Double qualification;
 
-    private CourseResponseDTO course;
+    private CourseCompleteResponseDTO course;
 
     private Collection<UserDTO> members;
 

@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseCompleteResponseDTO {
+public class ProjectRankDTO {
 
-    private Long id;
+    private String name;
 
-    private Integer startYear;
+    private String acronym;
 
-    private String githubOrganization;
+    private String color;
 
-    private SubjectResponseDTO subject;
+    private String qualification;
 
 }

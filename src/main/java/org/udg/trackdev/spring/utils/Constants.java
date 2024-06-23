@@ -16,4 +16,14 @@ public final class Constants {
 
     public static final int I_PASSWORD_MINIUM_LENGTH = 8;
 
+    public static final int MIN_USERNAME_LENGTH = 1;
+
+    public static final int USERNAME_LENGTH = 50;
+
+    public static final int MIN_EMAIL_LENGHT = 4;
+
+    public static final int EMAIL_LENGTH = 128;
+
+    public static final int CAPITAL_LETTERS_LENGTH = 2;
+
 }

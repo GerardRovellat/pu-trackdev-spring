@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.udg.trackdev.spring.controller.exceptions.ServiceException;
+import org.udg.trackdev.spring.dto.response.ProjectRankDTO;
 import org.udg.trackdev.spring.entity.*;
 import org.udg.trackdev.spring.repository.GroupRepository;
 import org.udg.trackdev.spring.utils.ErrorConstants;
@@ -98,22 +99,23 @@ public class ProjectService extends BaseServiceLong<Project, GroupRepository> {
         repo.save(project);
     }
 
-    public Map<String, Map<String,String>> getProjectRanks(Project project) {
+    public Map<String, ProjectRankDTO> getProjectRanks(Project project) {
         if(project.getQualification() != null){
-            Map<String, Map<String,String>> ranks = new HashMap<>();
+            Map<String, ProjectRankDTO> ranks = new HashMap<>();
             Map<User, Integer> points = project.getTasks().stream()
                     .filter(task -> task.getAssignee() != null)
                     .collect(Collectors.groupingBy(Task::getAssignee, Collectors.summingInt(Task::getEstimationPoints)));
             Integer maxPoints = points.values().stream().max(Integer::compareTo).orElse(0);
             for(User user: points.keySet()) {
-                Map<String,String> info = new HashMap<>();
-                info.put("name",user.getUsername());
-                info.put("acronym",user.getCapitalLetters());
-                info.put("color",user.getColor());
-                info.put("qualification",String.valueOf(BigDecimal.valueOf(
-                                points.get(user).doubleValue() * project.getQualification() / maxPoints.doubleValue())
-                        .setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()));
-                ranks.put(user.getEmail(),info);
+                ProjectRankDTO rank = ProjectRankDTO.builder()
+                        .name(user.getUsername())
+                        .acronym(user.getCapitalLetters())
+                        .color(user.getColor())
+                        .qualification(String.valueOf(BigDecimal.valueOf(
+                                                points.get(user).doubleValue() * project.getQualification() / maxPoints.doubleValue())
+                                        .setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue()))
+                        .build();
+                ranks.put(user.getEmail(),rank);
             }
             return ranks;
         }

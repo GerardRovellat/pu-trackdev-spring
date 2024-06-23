@@ -29,7 +29,7 @@ public class SubjectController extends CrudController<Subject, SubjectService> {
 
     private final SubjectFacade facade;
 
-    private final ValidatorHelper validatorHelper = new ValidatorHelper();
+    private final ValidatorHelper validatorHelper;
 
     //TODO: Refactor this method
     /**@Operation(summary = "Get all subjects", description = "Get all subjects")
