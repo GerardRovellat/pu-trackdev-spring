@@ -14,19 +14,47 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.*;
 
+/**
+ * The type User.
+ */
 @Entity
 @Table(name = "users")
 public class User extends BaseEntityUUID {
 
-  public static final int MIN_USERNAME_LENGTH = 1;
-  public static final int USERNAME_LENGTH = 50;
-  public static final int MIN_EMAIL_LENGHT = 4;
-  public static final int EMAIL_LENGTH = 128;
-  public static final int CAPITAL_LETTERS_LENGTH = 2;
+    /**
+     * The constant MIN_USERNAME_LENGTH.
+     */
+    public static final int MIN_USERNAME_LENGTH = 1;
+    /**
+     * The constant USERNAME_LENGTH.
+     */
+    public static final int USERNAME_LENGTH = 50;
+    /**
+     * The constant MIN_EMAIL_LENGHT.
+     */
+    public static final int MIN_EMAIL_LENGHT = 4;
+    /**
+     * The constant EMAIL_LENGTH.
+     */
+    public static final int EMAIL_LENGTH = 128;
+    /**
+     * The constant CAPITAL_LETTERS_LENGTH.
+     */
+    public static final int CAPITAL_LETTERS_LENGTH = 2;
 
-  public User() {}
+    /**
+     * Instantiates a new User.
+     */
+    public User() {}
 
-  public User(String username, String email, String password) {
+    /**
+     * Instantiates a new User.
+     *
+     * @param username the username
+     * @param email    the email
+     * @param password the password
+     */
+    public User(String username, String email, String password) {
     this.username = username;
     this.email = email;
     this.password = password;
@@ -93,93 +121,242 @@ public class User extends BaseEntityUUID {
     return super.getId();
   }
 
-  @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
+    /**
+     * Gets email.
+     *
+     * @return the email
+     */
+    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public String getEmail() {
     return email;
   }
 
-  public void setEmail(String email) {
+    /**
+     * Sets email.
+     *
+     * @param email the email
+     */
+    public void setEmail(String email) {
     this.email = email;
   }
 
-  @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
+    /**
+     * Gets username.
+     *
+     * @return the username
+     */
+    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public String getUsername() {
     return username;
   }
 
-  public void setUsername(String username) {
+    /**
+     * Sets username.
+     *
+     * @param username the username
+     */
+    public void setUsername(String username) {
     this.username = username;
     this.capitalLetters = generateCapitalLetters(username);
   }
 
-  @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
+    /**
+     * Gets current project.
+     *
+     * @return the current project
+     */
+    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
   public Long getCurrentProject() { return currentProject; }
 
-  public void setCurrentProject(Long currentProject) { this.currentProject = currentProject; }
+    /**
+     * Sets current project.
+     *
+     * @param currentProject the current project
+     */
+    public void setCurrentProject(Long currentProject) { this.currentProject = currentProject; }
 
-  @JsonIgnore
+    /**
+     * Gets password.
+     *
+     * @return the password
+     */
+    @JsonIgnore
   public String getPassword() {
     return password;
   }
 
-  public void setPassword(String password) {
+    /**
+     * Sets password.
+     *
+     * @param password the password
+     */
+    public void setPassword(String password) {
     this.password = password;
   }
 
-  @JsonIgnore
+    /**
+     * Gets recovery code.
+     *
+     * @return the recovery code
+     */
+    @JsonIgnore
   public String getRecoveryCode() { return recoveryCode; }
 
-  public void setRecoveryCode(String recoveryCode) { this.recoveryCode = recoveryCode; }
+    /**
+     * Sets recovery code.
+     *
+     * @param recoveryCode the recovery code
+     */
+    public void setRecoveryCode(String recoveryCode) { this.recoveryCode = recoveryCode; }
 
-  @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class})
+    /**
+     * Gets roles.
+     *
+     * @return the roles
+     */
+    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class})
   @JsonSerialize(using= JsonRolesSerializer.class)
   public Set<Role> getRoles() { return roles; }
 
-  @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
+    /**
+     * Gets color.
+     *
+     * @return the color
+     */
+    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public String getColor() { return color; }
 
-  public String setColor(String color) { return this.color = color; }
+    /**
+     * Sets color.
+     *
+     * @param color the color
+     * @return the color
+     */
+    public String setColor(String color) { return this.color = color; }
 
-  @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
+    /**
+     * Gets capital letters.
+     *
+     * @return the capital letters
+     */
+    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public String getCapitalLetters() { return capitalLetters; }
 
-  @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.UserWithoutProjectMembers.class})
+    /**
+     * Gets projects.
+     *
+     * @return the projects
+     */
+    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.UserWithoutProjectMembers.class})
   public Collection<Project> getProjects() {
     return projects;
   }
 
-  @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
+    /**
+     * Gets github info.
+     *
+     * @return the github info
+     */
+    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public GithubInfo getGithubInfo() { return githubInfo; }
 
-  public List<PointsReview> getPointsReviewList() { return pointsReviewList; }
+    /**
+     * Gets points review list.
+     *
+     * @return the points review list
+     */
+    public List<PointsReview> getPointsReviewList() { return pointsReviewList; }
 
-  public void addPointsReview(PointsReview pointsReview) { this.pointsReviewList.add(pointsReview); }
+    /**
+     * Add points review.
+     *
+     * @param pointsReview the points review
+     */
+    public void addPointsReview(PointsReview pointsReview) { this.pointsReviewList.add(pointsReview); }
 
-  public String setGithubToken(String githubToken) { return githubInfo.setGithubToken(githubToken); }
+    /**
+     * Sets github token.
+     *
+     * @param githubToken the github token
+     * @return the github token
+     */
+    public String setGithubToken(String githubToken) { return githubInfo.setGithubToken(githubToken); }
 
-  public void setGithubName(String login) { githubInfo.setLogin(login); }
+    /**
+     * Sets github name.
+     *
+     * @param login the login
+     */
+    public void setGithubName(String login) { githubInfo.setLogin(login); }
 
-  public void setGithubAvatar(String githubAvatar) { githubInfo.setAvatar_url(githubAvatar); }
+    /**
+     * Sets github avatar.
+     *
+     * @param githubAvatar the github avatar
+     */
+    public void setGithubAvatar(String githubAvatar) { githubInfo.setAvatar_url(githubAvatar); }
 
-  public void setGithubHtmlUrl(String githubHtmlUrl) { githubInfo.setHtml_url(githubHtmlUrl); }
+    /**
+     * Sets github html url.
+     *
+     * @param githubHtmlUrl the github html url
+     */
+    public void setGithubHtmlUrl(String githubHtmlUrl) { githubInfo.setHtml_url(githubHtmlUrl); }
 
-  public String setCapitalLetters(String capitalLetters) { return this.capitalLetters = capitalLetters; }
+    /**
+     * Sets capital letters.
+     *
+     * @param capitalLetters the capital letters
+     * @return the capital letters
+     */
+    public String setCapitalLetters(String capitalLetters) { return this.capitalLetters = capitalLetters; }
 
-  @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
+    /**
+     * Gets change password.
+     *
+     * @return the change password
+     */
+    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
   public Boolean getChangePassword() { return changePassword; }
 
-  public void setChangePassword(Boolean changePassword) { this.changePassword = changePassword; }
+    /**
+     * Sets change password.
+     *
+     * @param changePassword the change password
+     */
+    public void setChangePassword(Boolean changePassword) { this.changePassword = changePassword; }
 
-  @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
+    /**
+     * Gets enabled.
+     *
+     * @return the enabled
+     */
+    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
   public Boolean getEnabled() { return enabled; }
 
-  public void setEnabled(Boolean enabled) { this.enabled = enabled; }
+    /**
+     * Sets enabled.
+     *
+     * @param enabled the enabled
+     */
+    public void setEnabled(Boolean enabled) { this.enabled = enabled; }
 
-  public void addRole(Role role) {
+    /**
+     * Add role.
+     *
+     * @param role the role
+     */
+    public void addRole(Role role) {
     roles.add(role);
   }
 
-  public boolean isUserType(UserType userType) {
+    /**
+     * Is user type boolean.
+     *
+     * @param userType the user type
+     * @return the boolean
+     */
+    public boolean isUserType(UserType userType) {
     boolean inRole = false;
     for(Role role: roles) {
       if(role.getUserType() == userType) {
@@ -190,20 +367,45 @@ public class User extends BaseEntityUUID {
     return inRole;
   }
 
-  @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.ProjectWithUser.class})
+    /**
+     * Get last login date.
+     *
+     * @return the date
+     */
+    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.ProjectWithUser.class})
   public Date getLastLogin(){ return lastLogin; }
 
-  public void setLastLogin(Date lastLogin) {
+    /**
+     * Sets last login.
+     *
+     * @param lastLogin the last login
+     */
+    public void setLastLogin(Date lastLogin) {
     this.lastLogin = lastLogin;
   }
 
-  public void addOwnCourse(Subject subject) { subjectsOwns.add(subject); }
+    /**
+     * Add own course.
+     *
+     * @param subject the subject
+     */
+    public void addOwnCourse(Subject subject) { subjectsOwns.add(subject); }
 
-  public void addToGroup(Project project) {
+    /**
+     * Add to group.
+     *
+     * @param project the project
+     */
+    public void addToGroup(Project project) {
     this.projects.add(project);
   }
 
-  public void removeFromGroup(Project project) {
+    /**
+     * Remove from group.
+     *
+     * @param project the project
+     */
+    public void removeFromGroup(Project project) {
     if(this.projects.contains(project)) {
       this.projects.remove(project);
     }

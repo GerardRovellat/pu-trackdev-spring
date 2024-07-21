@@ -2,8 +2,8 @@ package org.udg.trackdev.spring.facade.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.udg.trackdev.spring.dto.request.SprintRequestDTO;
-import org.udg.trackdev.spring.dto.response.SprintResponseDTO;
+import org.udg.trackdev.spring.dto.request.sprints.SprintRequestDTO;
+import org.udg.trackdev.spring.dto.response.sprints.SprintResponseDTO;
 import org.udg.trackdev.spring.facade.SprintFacade;
 import org.udg.trackdev.spring.mappers.EntityMapper;
 import org.udg.trackdev.spring.service.AccessChecker;
@@ -14,6 +14,9 @@ import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Sprint facade.
+ */
 @Component
 @RequiredArgsConstructor
 public class SprintFacadeImpl implements SprintFacade {

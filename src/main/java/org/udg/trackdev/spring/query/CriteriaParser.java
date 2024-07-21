@@ -6,6 +6,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * The type Criteria parser.
+ */
 public class CriteriaParser {
 
     private static Map<String, Operator> ops;
@@ -14,7 +17,17 @@ public class CriteriaParser {
             .join(SearchOperation.SIMPLE_OPERATION_SET) + ")(\\p{Punct}?)(\\w+?)(\\p{Punct}?)$");
 
     private enum Operator {
-        OR(1), AND(2);
+        /**
+         * Or operator.
+         */
+        OR(1),
+        /**
+         * And operator.
+         */
+        AND(2);
+        /**
+         * The Precedence.
+         */
         final int precedence;
 
         Operator(int p) {
@@ -36,6 +49,12 @@ public class CriteriaParser {
         return (ops.containsKey(prevOp) && ops.get(prevOp).precedence >= ops.get(currOp).precedence);
     }
 
+    /**
+     * Parse deque.
+     *
+     * @param searchParam the search param
+     * @return the deque
+     */
     public Deque<?> parse(String searchParam) {
 
         Deque<Object> output = new LinkedList<>();

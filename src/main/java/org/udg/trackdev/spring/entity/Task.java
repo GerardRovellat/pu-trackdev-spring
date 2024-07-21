@@ -4,13 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.lang.NonNull;
 import org.udg.trackdev.spring.entity.views.EntityLevelViews;
 import org.udg.trackdev.spring.serializer.JsonDateSerializer;
+import org.udg.trackdev.spring.utils.Constants;
 
 import javax.persistence.*;
 import java.util.*;
 
+/**
+ * The type Task.
+ */
 @Entity
 @Table(name = "tasks")
 @JsonIdentityInfo(
@@ -19,12 +24,8 @@ import java.util.*;
 )
 public class Task extends BaseEntityLong {
 
-    //-- ATTRIBUTES
-    public static final int MIN_NAME_LENGTH = 1;
-    public static final int NAME_LENGTH = 100;
-
     @NonNull
-    @Column(length = NAME_LENGTH)
+    @Column(length = Constants.MAX_TASK_NAME_LENGTH)
     private String name;
 
     @ManyToOne
@@ -73,8 +74,17 @@ public class Task extends BaseEntityLong {
 
     // -- CONSTRUCTORS
 
+    /**
+     * Instantiates a new Task.
+     */
     public Task() {}
 
+    /**
+     * Instantiates a new Task.
+     *
+     * @param name     the name
+     * @param reporter the reporter
+     */
     public Task(String name, User reporter) {
         this.name = name;
         this.createdAt = new Date();
@@ -86,123 +96,273 @@ public class Task extends BaseEntityLong {
 
     // -- GETTERS AND SETTERS
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     @NonNull
     @JsonView(EntityLevelViews.Basic.class)
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
     public void setName(@NonNull String name) {
         this.name = name;
     }
 
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
     public String getType() {
         return type.toString();
     }
 
+    /**
+     * Sets type.
+     *
+     * @param type the type
+     */
     @NonNull
     @JsonView(EntityLevelViews.Basic.class)
     public void setType(TaskType type) {
         this.type = type;
     }
 
+    /**
+     * Gets created at.
+     *
+     * @return the created at
+     */
     @JsonView(EntityLevelViews.Basic.class)
     @JsonSerialize(using = JsonDateSerializer.class)
     public Date getCreatedAt() { return createdAt; }
 
+    /**
+     * Gets reporter.
+     *
+     * @return the reporter
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public User getReporter() { return reporter; }
 
+    /**
+     * Gets description.
+     *
+     * @return the description
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public String getDescription() { return description; }
 
+    /**
+     * Sets description.
+     *
+     * @param description the description
+     */
     public void setDescription(String description) { this.description = description; }
 
+    /**
+     * Gets project.
+     *
+     * @return the project
+     */
     @JsonView({EntityLevelViews.TaskWithProjectMembers.class} )
     public Project getProject() {
         return project;
     }
 
+    /**
+     * Sets project.
+     *
+     * @param project the project
+     */
     public void setProject(Project project) {
         this.project = project;
     }
 
+    /**
+     * Gets assignee.
+     *
+     * @return the assignee
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public User getAssignee() { return assignee; }
 
+    /**
+     * Sets assignee.
+     *
+     * @param assignee the assignee
+     */
     public void setAssignee(User assignee) {
         this.assignee = assignee;
     }
 
+    /**
+     * Gets status.
+     *
+     * @return the status
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public TaskStatus getStatus() { return status; }
 
+    /**
+     * Gets status text.
+     *
+     * @return the status text
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public String getStatusText() { return status.toString(); }
 
+    /**
+     * Sets status.
+     *
+     * @param status the status
+     */
     public void setStatus(TaskStatus status) {
         checkCanMoveToStatus(status);
         this.status = status;
     }
 
+    /**
+     * Sets reporter.
+     *
+     * @param reporter the reporter
+     */
     public void setReporter(User reporter) {
         this.reporter = reporter;
     }
 
+    /**
+     * Gets estimation points.
+     *
+     * @return the estimation points
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public Integer getEstimationPoints() { return estimationPoints; }
 
+    /**
+     * Sets estimation points.
+     *
+     * @param estimation the estimation
+     */
     public void setEstimationPoints(Integer estimation) {
         this.estimationPoints = estimation;
     }
 
+    /**
+     * Gets rank.
+     *
+     * @return the rank
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public Integer getRank() { return this.rank; }
 
+    /**
+     * Sets rank.
+     *
+     * @param rank the rank
+     */
     public void setRank(Integer rank) {
         this.rank = rank;
     }
 
+    /**
+     * Gets child tasks.
+     *
+     * @return the child tasks
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public Collection<Task> getChildTasks() {
         return childTasks;
     }
 
+    /**
+     * Add child task.
+     *
+     * @param task the task
+     */
     public void addChildTask(Task task) { this.childTasks.add(task); }
 
+    /**
+     * Gets parent task.
+     *
+     * @return the parent task
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public Task getParentTask() {
         return parentTask;
     }
 
+    /**
+     * Sets parent task.
+     *
+     * @param parentTask the parent task
+     */
     public void setParentTask(Task parentTask) {
         this.parentTask = parentTask;
     }
 
+    /**
+     * Gets discussion.
+     *
+     * @return the discussion
+     */
     @JsonView(EntityLevelViews.TaskComplete.class)
     public Collection<Comment> getDiscussion() {
         return discussion;
     }
 
+    /**
+     * Gets points review list.
+     *
+     * @return the points review list
+     */
     public List<PointsReview> getPointsReviewList() {
         return pointsReviewList;
     }
 
+    /**
+     * Add points review.
+     *
+     * @param pointsReview the points review
+     */
     public  void addPointsReview(PointsReview pointsReview) {
         this.pointsReviewList.add(pointsReview);
     }
 
+    /**
+     * Add comment.
+     *
+     * @param comment the comment
+     */
     public void addComment(Comment comment) {
         this.discussion.add(comment);
         comment.setTask(this);
     }
 
 
+    /**
+     * Gets active sprints.
+     *
+     * @return the active sprints
+     */
     @JsonView({EntityLevelViews.TaskComplete.class, EntityLevelViews.Basic.class})
     public Collection<Sprint> getActiveSprints() {
         return activeSprints;
     }
 
+    /**
+     * Sets active sprints.
+     *
+     * @param activeSprints the active sprints
+     */
     public void setActiveSprints(Collection<Sprint> activeSprints) {
         this.activeSprints = activeSprints;
     }

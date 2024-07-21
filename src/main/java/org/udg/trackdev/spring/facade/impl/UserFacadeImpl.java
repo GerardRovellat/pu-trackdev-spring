@@ -3,10 +3,10 @@ package org.udg.trackdev.spring.facade.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
-import org.udg.trackdev.spring.dto.UserDTO;
-import org.udg.trackdev.spring.dto.request.EditUserRequestDTO;
-import org.udg.trackdev.spring.dto.request.RegisterUserRequestDTO;
-import org.udg.trackdev.spring.dto.response.UserWithoutProjectMembersResponseDTO;
+import org.udg.trackdev.spring.dto.response.users.UserDTO;
+import org.udg.trackdev.spring.dto.request.users.EditUserRequestDTO;
+import org.udg.trackdev.spring.dto.request.users.RegisterUserRequestDTO;
+import org.udg.trackdev.spring.dto.response.users.UserWithoutProjectMembersResponseDTO;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.UserFacade;
 import org.udg.trackdev.spring.mappers.EntityMapper;
@@ -18,9 +18,11 @@ import org.udg.trackdev.spring.utils.ErrorConstants;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The type User facade.
+ */
 @Component
 @RequiredArgsConstructor
 public class UserFacadeImpl implements UserFacade {
@@ -75,9 +77,40 @@ public class UserFacadeImpl implements UserFacade {
         }
         String userId = authService.getLoggedInUserId(principal);
         User user = userService.get(userId);
-        return mapper.userEntityToUserWithoutProjectMembers(userService.editMyUser(user, user, Optional.of(request.getUsername()), Optional.of(request.getColor()),
-                Optional.of(request.getCapitalLetters()), Optional.of(request.getChangePassword()),
-                Optional.of(request.getGithubToken()), Optional.of(request.getEnabled())));
+        return mapper.userEntityToUserWithoutProjectMembers(userService.editMyUser(user, user, request.getUsername(), request.getColor(),
+                request.getCapitalLetters(), request.getChangePassword(),
+                request.getGithubToken(), request.getEnabled()));
+    }
+
+    @Override
+    public UserWithoutProjectMembersResponseDTO editOtherUser(EditUserRequestDTO request, Principal principal, String id) {
+        if (request.getUsername() != null){
+            if (request.getUsername().isEmpty() || request.getUsername().length() > User.USERNAME_LENGTH) {
+                throw new ControllerException(ErrorConstants.INVALID_USERNAME_SIZE);
+            }
+            if (!request.getUsername().matches("^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$")) {
+                throw new ControllerException(ErrorConstants.INVALID_USERNAME_FORMAT);
+            }
+        }
+        User modifier = userService.get(authService.getLoggedInUserId(principal));
+        if (!accessChecker.isUserAdmin(modifier)){
+            throw new SecurityException(ErrorConstants.UNAUTHORIZED);
+        }
+        else {
+            User user = userService.get(id);
+            return mapper.userEntityToUserWithoutProjectMembers(userService.editMyUser(modifier, user, request.getUsername(), request.getColor(),
+                    request.getCapitalLetters(), request.getChangePassword(), request.getGithubToken(), request.getEnabled()));
+        }
+    }
+
+    @Override
+    public boolean imAdminUser(Principal principal) {
+        User user = userService.get(authService.getLoggedInUserId(principal));
+        if (accessChecker.isUserAdmin(user)) {
+            return true;
+        } else {
+            throw new SecurityException(ErrorConstants.EMPTY);
+        }
     }
 
 

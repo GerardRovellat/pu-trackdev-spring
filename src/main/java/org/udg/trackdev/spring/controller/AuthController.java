@@ -8,12 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.udg.trackdev.spring.dto.request.ChangePasswordRequestDTO;
-import org.udg.trackdev.spring.dto.request.LoginRequestDTO;
-import org.udg.trackdev.spring.dto.request.RecoveryPasswordRequestDTO;
-import org.udg.trackdev.spring.dto.response.LoginResponseDTO;
-import org.udg.trackdev.spring.entity.User;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
+import org.udg.trackdev.spring.dto.request.auth.ChangePasswordRequestDTO;
+import org.udg.trackdev.spring.dto.request.auth.LoginRequestDTO;
+import org.udg.trackdev.spring.dto.request.auth.RecoveryPasswordRequestDTO;
+import org.udg.trackdev.spring.dto.response.auth.LoginResponseDTO;
+import org.udg.trackdev.spring.dto.response.users.UserDTO;
 import org.udg.trackdev.spring.entity.views.PrivacyLevelViews;
 import org.udg.trackdev.spring.facade.AuthFacade;
 import org.udg.trackdev.spring.utils.ValidatorHelper;
@@ -24,6 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
 
+/**
+ * The type Auth controller.
+ */
 @Tag(name = "1. Authentication")
 @RestController
 @RequiredArgsConstructor
@@ -34,33 +36,57 @@ public class AuthController extends BaseController {
 
     private final ValidatorHelper validatorHelper;
 
+    /**
+     * Login login response dto.
+     *
+     * @param request      the request
+     * @param httpRequest  the http request
+     * @param httpResponse the http response
+     * @return the login response dto
+     */
     @Operation(summary = "Login user", description = "Login user with username and password")
     @PostMapping(path="/login")
     public LoginResponseDTO login(@Valid @RequestBody LoginRequestDTO request, HttpServletRequest httpRequest,
                                   HttpServletResponse httpResponse){
-
         return facade.login(httpRequest, httpResponse, request);
     }
 
+    /**
+     * Logout response entity.
+     *
+     * @param request  the request
+     * @param response the response
+     * @return the response entity
+     */
     @Operation(summary = "Logout user",
             description = "Logout user",
             security = {@SecurityRequirement(name = "bearerAuth")})
     @PostMapping(path="/logout")
-    @JsonView(PrivacyLevelViews.Private.class)
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         facade.logout(request, response);
         return okNoContent();
     }
 
+    /**
+     * Self user.
+     *
+     * @param principal the principal
+     * @return the user
+     */
     @Operation(summary = "Return the logged user",
             description = "Return the public information of the logged user",
             security = {@SecurityRequirement(name = "bearerAuth")})
     @GetMapping(path="/self")
-    @JsonView({EntityLevelViews.UserWithGithubToken.class})
-    public User self(Principal principal) {
+    public UserDTO self(Principal principal) {
         return facade.self(principal);
     }
 
+    /**
+     * Check response entity.
+     *
+     * @param principal the principal
+     * @return the response entity
+     */
     @Operation(summary = "Check if user is logged",
             description = "Check if the user is logged to the website",
             security = {@SecurityRequirement(name = "bearerAuth")})
@@ -70,6 +96,14 @@ public class AuthController extends BaseController {
         return okNoContent();
     }
 
+    /**
+     * Change password response entity.
+     *
+     * @param request    the request
+     * @param principal  the principal
+     * @param validation the validation
+     * @return the response entity
+     */
     @Operation(summary = "Change user password",
             description = "Change the password of the user for a new one",
             security = {@SecurityRequirement(name = "bearerAuth")})
@@ -81,6 +115,13 @@ public class AuthController extends BaseController {
         return okNoContent();
     }
 
+    /**
+     * Recovery code response entity.
+     *
+     * @param email the email
+     * @return the response entity
+     * @throws MessagingException the messaging exception
+     */
     @Operation(summary = "Get recovery code", description = "Get recovery code for user")
     @PostMapping(path="/recovery")
     public ResponseEntity<Void> recoveryCode(@RequestParam String email)
@@ -89,6 +130,13 @@ public class AuthController extends BaseController {
         return okNoContent();
     }
 
+    /**
+     * Check recovery code response entity.
+     *
+     * @param email the email
+     * @param code  the code
+     * @return the response entity
+     */
     @Operation(summary = "Check recovery code", description = "Check recovery code for user")
     @PostMapping(path="/recovery/{email}/check")
     public ResponseEntity<Void> checkRecoveryCode(@PathVariable("email") String email, @RequestParam String code) {
@@ -96,6 +144,14 @@ public class AuthController extends BaseController {
         return okNoContent();
     }
 
+    /**
+     * Recovery password response entity.
+     *
+     * @param request    the request
+     * @param email      the email
+     * @param validation the validation
+     * @return the response entity
+     */
     @Operation(summary = "Recovery password", description = "Recover password with recovery code")
     @PostMapping(path="/recovery/{email}")
     public ResponseEntity<Void> recoveryPassword(@Valid @RequestBody RecoveryPasswordRequestDTO request,

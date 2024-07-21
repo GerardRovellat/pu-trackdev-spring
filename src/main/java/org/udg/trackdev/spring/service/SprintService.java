@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.udg.trackdev.spring.dto.request.SprintRequestDTO;
+import org.udg.trackdev.spring.dto.request.sprints.SprintRequestDTO;
 import org.udg.trackdev.spring.entity.Project;
 import org.udg.trackdev.spring.entity.Sprint;
 import org.udg.trackdev.spring.entity.SprintStatus;
@@ -18,21 +18,43 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The type Sprint service.
+ */
 @Service
 @Slf4j
 public class SprintService extends BaseServiceLong<Sprint, SprintRepository> {
 
     private static final int SPRINT_STATUS_CHANGE_RATE = 1000 * 2; //1 second
 
+    /**
+     * The Access checker.
+     */
     @Autowired
     AccessChecker accessChecker;
 
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
 
+    /**
+     * The Sprint change service.
+     */
     @Autowired
     SprintChangeService sprintChangeService;
 
+    /**
+     * Create sprint.
+     *
+     * @param project   the project
+     * @param name      the name
+     * @param startDate the start date
+     * @param endDate   the end date
+     * @param userId    the user id
+     * @return the sprint
+     */
     @Transactional
     public Sprint create(Project project, String name, Date startDate, Date endDate, String userId) {
         User user = userService.get(userId);
@@ -44,6 +66,14 @@ public class SprintService extends BaseServiceLong<Sprint, SprintRepository> {
         return sprint;
     }
 
+    /**
+     * Edit sprint sprint.
+     *
+     * @param sprintId   the sprint id
+     * @param editSprint the edit sprint
+     * @param userId     the user id
+     * @return the sprint
+     */
     @Transactional
     public Sprint editSprint(Long sprintId, SprintRequestDTO editSprint, String userId) {
         Sprint sprint = get(sprintId);
@@ -84,6 +114,11 @@ public class SprintService extends BaseServiceLong<Sprint, SprintRepository> {
         return sprint;
     }
 
+    /**
+     * Delete sprint.
+     *
+     * @param sprintId the sprint id
+     */
     @Transactional
     public void deleteSprint(Long sprintId) {
         Sprint sprint = get(sprintId);
@@ -91,10 +126,19 @@ public class SprintService extends BaseServiceLong<Sprint, SprintRepository> {
     }
 
 
+    /**
+     * Gets spritns by ids.
+     *
+     * @param sprintIds the sprint ids
+     * @return the spritns by ids
+     */
     public Collection<Sprint> getSpritnsByIds(Collection<Long> sprintIds) {
         return repo.findAllById(sprintIds);
     }
 
+    /**
+     * Trigger sprint status change.
+     */
     @Transactional
     @Scheduled(cron = "0 0 0 * * *")
     public void triggerSprintStatusChange() {

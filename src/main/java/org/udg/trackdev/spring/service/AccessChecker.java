@@ -10,6 +10,9 @@ import org.udg.trackdev.spring.entity.Subject;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 
+/**
+ * The type Access checker.
+ */
 /*
  * Centralized service to control if current principal
  * has access to a concrete entity. Access can be
@@ -21,11 +24,19 @@ import org.udg.trackdev.spring.utils.ErrorConstants;
 @Component
 public class AccessChecker {
 
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
 
     // SUBJECTS
 
+    /**
+     * Check can create subject.
+     *
+     * @param user the user
+     */
     public void checkCanCreateSubject(User user) {
         boolean isProfessor = user.isUserType(UserType.ADMIN);
         if(!isProfessor) {
@@ -33,12 +44,24 @@ public class AccessChecker {
         }
     }
 
+    /**
+     * Check can manage subject.
+     *
+     * @param subject the subject
+     * @param userId  the user id
+     */
     public void checkCanManageSubject(Subject subject, String userId) {
         if(!isSubjectOwner(subject, userId)) {
             throw new ServiceException(ErrorConstants.UNAUTHORIZED);
         }
     }
 
+    /**
+     * Check can view subject.
+     *
+     * @param subject the subject
+     * @param userId  the user id
+     */
     public void checkCanViewSubject(Subject subject, String userId) {
         if(isSubjectOwner(subject, userId)) {
             return;
@@ -48,6 +71,11 @@ public class AccessChecker {
 
     // COURSES
 
+    /**
+     * Check can view all courses.
+     *
+     * @param userId the user id
+     */
     public void checkCanViewAllCourses(String userId) {
         if(userService.get(userId).isUserType(UserType.ADMIN)) {
             return;
@@ -55,10 +83,22 @@ public class AccessChecker {
         throw new ServiceException(ErrorConstants.UNAUTHORIZED);
     }
 
+    /**
+     * Check can manage course.
+     *
+     * @param course the course
+     * @param userId the user id
+     */
     public void checkCanManageCourse(Course course, String userId) {
         checkCanManageSubject(course.getSubject(), userId);
     }
 
+    /**
+     * Check can view course.
+     *
+     * @param course the course
+     * @param userId the user id
+     */
     public void checkCanViewCourse(Course course, String userId) {
         if(isSubjectOwner(course.getSubject(), userId)) {
             return;
@@ -67,6 +107,13 @@ public class AccessChecker {
     }
 
 
+    /**
+     * Can view course all projects boolean.
+     *
+     * @param course the course
+     * @param userId the user id
+     * @return the boolean
+     */
     public boolean canViewCourseAllProjects(Course course, String userId) {
         if(isSubjectOwner(course.getSubject(), userId)) {
             return true;
@@ -76,10 +123,22 @@ public class AccessChecker {
 
     // PROJECTS
 
+    /**
+     * Check can manage project.
+     *
+     * @param project the project
+     * @param userId  the user id
+     */
     public void checkCanManageProject(Project project, String userId) {
         checkCanManageCourse(project.getCourse(), userId);
     }
 
+    /**
+     * Check can view project.
+     *
+     * @param project the project
+     * @param userId  the user id
+     */
     public void checkCanViewProject(Project project, String userId) {
         if(project.isMember(userId)) {
             return;
@@ -94,6 +153,11 @@ public class AccessChecker {
         throw new ServiceException(ErrorConstants.UNAUTHORIZED);
     }
 
+    /**
+     * Check can view all tasks.
+     *
+     * @param userId the user id
+     */
     public void checkCanViewAllTasks(String userId) {
         if(userService.get(userId).isUserType(UserType.ADMIN)) {
             return;
@@ -101,6 +165,12 @@ public class AccessChecker {
         throw new ServiceException(ErrorConstants.UNAUTHORIZED);
     }
 
+    /**
+     * Check can view all projects boolean.
+     *
+     * @param userId the user id
+     * @return the boolean
+     */
     public boolean checkCanViewAllProjects(String userId) {
         if(userService.get(userId).isUserType(UserType.ADMIN)) {
             return true;
@@ -114,6 +184,12 @@ public class AccessChecker {
         return subject.getOwnerId().equals(userId);
     }
 
+    /**
+     * Is user admin boolean.
+     *
+     * @param user the user
+     * @return the boolean
+     */
     public boolean isUserAdmin(User user) {
         return user.isUserType(UserType.ADMIN);
     }

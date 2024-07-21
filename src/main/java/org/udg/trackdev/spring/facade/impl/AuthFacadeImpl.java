@@ -4,10 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.udg.trackdev.spring.configuration.CookieManager;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
-import org.udg.trackdev.spring.dto.request.ChangePasswordRequestDTO;
-import org.udg.trackdev.spring.dto.request.LoginRequestDTO;
-import org.udg.trackdev.spring.dto.request.RecoveryPasswordRequestDTO;
-import org.udg.trackdev.spring.dto.response.LoginResponseDTO;
+import org.udg.trackdev.spring.dto.request.auth.ChangePasswordRequestDTO;
+import org.udg.trackdev.spring.dto.request.auth.LoginRequestDTO;
+import org.udg.trackdev.spring.dto.request.auth.RecoveryPasswordRequestDTO;
+import org.udg.trackdev.spring.dto.response.auth.LoginResponseDTO;
+import org.udg.trackdev.spring.dto.response.users.UserDTO;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.AuthFacade;
 import org.udg.trackdev.spring.mappers.EntityMapper;
@@ -23,6 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.Base64;
 
+/**
+ * The type Auth facade.
+ */
 @Component
 @RequiredArgsConstructor
 public class AuthFacadeImpl implements AuthFacade {
@@ -44,7 +48,7 @@ public class AuthFacadeImpl implements AuthFacade {
         String cookieTokenValue = Base64.getEncoder().withoutPadding().encodeToString(token.getBytes());
         cookieManager.addSessionCookie(httpRequest, httpResponse, Constants.COOKIE_NAME, cookieTokenValue);
         userService.setLastLogin(loggedInUser);
-        return LoginResponseDTO.builder().userdata(mapper.userEntityToDTO(loggedInUser)).token(token).build();
+        return LoginResponseDTO.builder().userdata(mapper.userEntityToUserLoginDTO(loggedInUser)).token(token).build();
     }
 
     @Override
@@ -53,8 +57,8 @@ public class AuthFacadeImpl implements AuthFacade {
     }
 
     @Override
-    public User self(Principal principal) {
-        return userService.get(authService.getLoggedInUserId(principal));
+    public UserDTO self(Principal principal) {
+        return mapper.userEntityToDTO(userService.get(authService.getLoggedInUserId(principal)));
     }
 
     @Override

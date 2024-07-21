@@ -2,29 +2,49 @@ package org.udg.trackdev.spring.facade.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.udg.trackdev.spring.dto.request.CreateCourseRequestDTO;
-import org.udg.trackdev.spring.dto.request.SubjectRequestDTO;
-import org.udg.trackdev.spring.dto.response.SubjectCompleteResponseDTO;
+import org.udg.trackdev.spring.controller.exceptions.ControllerException;
+import org.udg.trackdev.spring.dto.request.subjects.CreateCourseRequestDTO;
+import org.udg.trackdev.spring.dto.request.subjects.SubjectRequestDTO;
+import org.udg.trackdev.spring.dto.response.subjects.SubjectCompleteResponseDTO;
 import org.udg.trackdev.spring.entity.Subject;
+import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.SubjectFacade;
 import org.udg.trackdev.spring.mappers.EntityMapper;
-import org.udg.trackdev.spring.service.AccessChecker;
-import org.udg.trackdev.spring.service.CourseService;
-import org.udg.trackdev.spring.service.SubjectService;
+import org.udg.trackdev.spring.service.*;
+import org.udg.trackdev.spring.utils.ErrorConstants;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * The type Subject facade.
+ */
 @Component
 @RequiredArgsConstructor
 public class SubjectFacadeImpl implements SubjectFacade {
 
     private final SubjectService subjectService;
 
+    private final UserService userService;
+
+    private final AuthService authService;
+
     private final CourseService courseService;
 
     private final AccessChecker accessChecker;
 
     private final EntityMapper mapper;
+
+    @Override
+    public List<SubjectCompleteResponseDTO> getAllSubjects(Principal principal) {
+        User user = userService.get(authService.getLoggedInUserId(principal));
+        if (accessChecker.isUserAdmin(user)) {
+            return subjectService.getAll().stream().map(mapper::subjectEntityToCompleteDTO).collect(Collectors.toList());
+        } else {
+            throw new ControllerException(ErrorConstants.UNAUTHORIZED);
+        }
+    }
 
     @Override
     public SubjectCompleteResponseDTO getSubject(Long id, Principal principal) {

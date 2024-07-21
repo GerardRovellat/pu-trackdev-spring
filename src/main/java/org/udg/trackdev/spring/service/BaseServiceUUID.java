@@ -10,11 +10,26 @@ import org.udg.trackdev.spring.utils.ErrorConstants;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type Base service uuid.
+ *
+ * @param <T>    the type parameter
+ * @param <Repo> the type parameter
+ */
 public class BaseServiceUUID<T extends BaseEntityUUID, Repo extends BaseRepositoryUUID<T>> implements IBaseService<T> {
 
+    /**
+     * The Repo.
+     */
     @Autowired
     Repo repo;
 
+    /**
+     * Get t.
+     *
+     * @param id the id
+     * @return the t
+     */
     public T get(String id) {
         Optional<T> oc = this.repo.findById(id);
         if (oc.isEmpty())
@@ -31,6 +46,11 @@ public class BaseServiceUUID<T extends BaseEntityUUID, Repo extends BaseReposito
         return repo.findAll();
     }
 
+    /**
+     * Repo repo.
+     *
+     * @return the repo
+     */
     protected Repo repo() { return repo; }
 
 }

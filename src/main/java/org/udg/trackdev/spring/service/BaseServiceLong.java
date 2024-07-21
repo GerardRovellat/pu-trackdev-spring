@@ -10,11 +10,26 @@ import org.udg.trackdev.spring.utils.ErrorConstants;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type Base service long.
+ *
+ * @param <T>    the type parameter
+ * @param <Repo> the type parameter
+ */
 public class BaseServiceLong<T extends BaseEntityLong, Repo extends BaseRepositoryLong<T>> implements IBaseService<T> {
 
+    /**
+     * The Repo.
+     */
     @Autowired
     Repo repo;
 
+    /**
+     * Get t.
+     *
+     * @param id the id
+     * @return the t
+     */
     public T get(Long id) {
         Optional<T> oc = this.repo.findById(id);
         if (oc.isEmpty())
@@ -31,6 +46,11 @@ public class BaseServiceLong<T extends BaseEntityLong, Repo extends BaseReposito
         return repo.findAll();
     }
 
+    /**
+     * Repo repo.
+     *
+     * @return the repo
+     */
     protected Repo repo() { return repo; }
 
 }

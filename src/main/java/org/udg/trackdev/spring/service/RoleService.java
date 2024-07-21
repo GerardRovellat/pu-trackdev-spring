@@ -11,12 +11,24 @@ import org.udg.trackdev.spring.utils.ErrorConstants;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * The type Role service.
+ */
 @Service
 public class RoleService {
 
+    /**
+     * The Role repository.
+     */
     @Autowired
     RoleRepository roleRepository;
 
+    /**
+     * Get role.
+     *
+     * @param type the type
+     * @return the role
+     */
     @Transactional
     public Role get(UserType type) {
         List<Role> roles = roleRepository.findByUserType(type);

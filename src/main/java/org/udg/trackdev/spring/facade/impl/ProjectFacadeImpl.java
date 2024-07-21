@@ -2,10 +2,12 @@ package org.udg.trackdev.spring.facade.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.udg.trackdev.spring.dto.request.CreateSprintRequestDTO;
-import org.udg.trackdev.spring.dto.request.CreateTaskRequestDTO;
-import org.udg.trackdev.spring.dto.request.EditProjectRequestDTO;
-import org.udg.trackdev.spring.dto.response.*;
+import org.udg.trackdev.spring.dto.response.tasks.TaskResponseDTO;
+import org.udg.trackdev.spring.dto.request.projects.CreateSprintRequestDTO;
+import org.udg.trackdev.spring.dto.request.projects.CreateTaskRequestDTO;
+import org.udg.trackdev.spring.dto.request.projects.EditProjectRequestDTO;
+import org.udg.trackdev.spring.dto.response.courses.ProjectResponseDTO;
+import org.udg.trackdev.spring.dto.response.projects.*;
 import org.udg.trackdev.spring.entity.Project;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.ProjectFacade;
@@ -21,6 +23,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * The type Project facade.
+ */
 @Component
 @RequiredArgsConstructor
 public class ProjectFacadeImpl implements ProjectFacade {

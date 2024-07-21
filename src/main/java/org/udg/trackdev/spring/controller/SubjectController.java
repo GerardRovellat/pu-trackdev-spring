@@ -8,44 +8,34 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
-import org.udg.trackdev.spring.dto.request.CreateCourseRequestDTO;
-import org.udg.trackdev.spring.dto.request.SubjectRequestDTO;
-import org.udg.trackdev.spring.dto.response.SubjectCompleteResponseDTO;
-import org.udg.trackdev.spring.entity.Subject;
+import org.udg.trackdev.spring.dto.request.subjects.CreateCourseRequestDTO;
+import org.udg.trackdev.spring.dto.request.subjects.SubjectRequestDTO;
+import org.udg.trackdev.spring.dto.response.subjects.SubjectCompleteResponseDTO;
 import org.udg.trackdev.spring.facade.SubjectFacade;
-import org.udg.trackdev.spring.service.SubjectService;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 import org.udg.trackdev.spring.utils.ValidatorHelper;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "3. Subjects")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/subjects")
-public class SubjectController extends CrudController<Subject, SubjectService> {
+public class SubjectController extends BaseController {
 
     private final SubjectFacade facade;
 
     private final ValidatorHelper validatorHelper;
 
     //TODO: Refactor this method
-    /**@Operation(summary = "Get all subjects", description = "Get all subjects")
+    @Operation(summary = "Get all subjects", description = "Get all subjects")
     @GetMapping
-    @JsonView(EntityLevelViews.SubjectComplete.class)
-    public List<Subject> search(Principal principal, @RequestParam(value = "search", required = false) String search) {
-        String userId = super.getUserId(principal);
-        User user = userService.get(userId);
-        if (user.isUserType(UserType.ADMIN)){
-            return super.search(search);
-        }
-        else {
-            String refinedSearch = super.scopedSearch("ownerId:" + userId, search);
-            return super.search(refinedSearch);
-        }
-    }**/
+    public List<SubjectCompleteResponseDTO> getAllSubjects(Principal principal) {
+        return facade.getAllSubjects(principal);
+    }
 
     @Operation(summary = "Get specific subject", description = "Get specific subject")
     @GetMapping(path = "/{id}")

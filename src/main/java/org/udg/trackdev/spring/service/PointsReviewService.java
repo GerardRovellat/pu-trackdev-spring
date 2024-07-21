@@ -16,12 +16,24 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The type Points review service.
+ */
 @Service
 public class PointsReviewService extends BaseServiceLong<PointsReview, PointsReviewRepository> {
 
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
 
+    /**
+     * Get points review list.
+     *
+     * @param userId the user id
+     * @return the list
+     */
     public List<PointsReview> getPointsReview(String userId){
         User user = userService.get(userId);
         List<PointsReview> pointsReviews = repo.findAll();
@@ -33,6 +45,15 @@ public class PointsReviewService extends BaseServiceLong<PointsReview, PointsRev
         }
     }
 
+    /**
+     * Add points review response entity.
+     *
+     * @param points  the points
+     * @param comment the comment
+     * @param user    the user
+     * @param task    the task
+     * @return the response entity
+     */
     @Transactional
     public ResponseEntity addPointsReview(Integer points, String comment, User user, Task task){
         if(task.getPointsReviewList().stream().filter(pointsReview1 -> pointsReview1.getUser().getId().equals(user.getId())).count() > 1){

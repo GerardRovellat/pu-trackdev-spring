@@ -1,7 +1,16 @@
 package org.udg.trackdev.spring.entity;
 
+/**
+ * The enum Task type.
+ */
 public enum TaskType {
+    /**
+     * The User story.
+     */
     USER_STORY("HISTORIA D'USUARI"),
+    /**
+     * Task task type.
+     */
     TASK("TASCA"),
     ;
 

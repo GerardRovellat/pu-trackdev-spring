@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.udg.trackdev.spring.controller.exceptions.ServiceException;
-import org.udg.trackdev.spring.dto.response.ProjectRankDTO;
+import org.udg.trackdev.spring.dto.response.projects.ProjectRankDTO;
 import org.udg.trackdev.spring.entity.*;
 import org.udg.trackdev.spring.repository.GroupRepository;
 import org.udg.trackdev.spring.utils.ErrorConstants;
@@ -13,21 +13,45 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The type Project service.
+ */
 @Service
 public class ProjectService extends BaseServiceLong<Project, GroupRepository> {
 
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
 
+    /**
+     * The Course service.
+     */
     @Autowired
     CourseService courseService;
 
+    /**
+     * The Sprint service.
+     */
     @Autowired
     SprintService sprintService;
 
+    /**
+     * The Access checker.
+     */
     @Autowired
     AccessChecker accessChecker;
 
+    /**
+     * Create project project.
+     *
+     * @param name           the name
+     * @param emails         the emails
+     * @param courseId       the course id
+     * @param loggedInUserId the logged in user id
+     * @return the project
+     */
     @Transactional
     public Project createProject(String name, Collection<String> emails, Long courseId,
                                  String loggedInUserId) {
@@ -44,6 +68,17 @@ public class ProjectService extends BaseServiceLong<Project, GroupRepository> {
         return project;
     }
 
+    /**
+     * Edit project project.
+     *
+     * @param projectId      the project id
+     * @param name           the name
+     * @param mails          the mails
+     * @param courseId       the course id
+     * @param qualification  the qualification
+     * @param loggedInUserId the logged in user id
+     * @return the project
+     */
     @Transactional
     public Project editProject(Long projectId, String name, Collection<String> mails, Long courseId, Double qualification
                                , String loggedInUserId) {
@@ -68,6 +103,14 @@ public class ProjectService extends BaseServiceLong<Project, GroupRepository> {
         return project;
     }
 
+    /**
+     * Create project task project.
+     *
+     * @param project  the project
+     * @param name     the name
+     * @param reporter the reporter
+     * @return the project
+     */
     @Transactional
     public Project createProjectTask(Project project, String name, User reporter){
         Task task = new Task(name, reporter);
@@ -77,6 +120,12 @@ public class ProjectService extends BaseServiceLong<Project, GroupRepository> {
         return project;
     }
 
+    /**
+     * Delete project.
+     *
+     * @param groupId the group id
+     * @param userId  the user id
+     */
     @Transactional
     public void deleteProject(Long groupId, String userId) {
         Project project = get(groupId);
@@ -84,14 +133,35 @@ public class ProjectService extends BaseServiceLong<Project, GroupRepository> {
         repo.delete(project);
     }
 
+    /**
+     * Gets project sprints.
+     *
+     * @param project the project
+     * @return the project sprints
+     */
     public Collection<Sprint> getProjectSprints(Project project) {
         return project.getSprints();
     }
 
+    /**
+     * Gets project tasks.
+     *
+     * @param project the project
+     * @return the project tasks
+     */
     public Collection<Task> getProjectTasks(Project project) {
         return project.getTasks();
     }
 
+    /**
+     * Create sprint.
+     *
+     * @param project   the project
+     * @param name      the name
+     * @param startDate the start date
+     * @param endDate   the end date
+     * @param userId    the user id
+     */
     public void createSprint(Project project, String name, Date startDate, Date endDate, String userId) {
         accessChecker.checkCanViewProject(project, userId);
         Sprint sprint = sprintService.create(project, name, startDate, endDate, userId);
@@ -99,6 +169,12 @@ public class ProjectService extends BaseServiceLong<Project, GroupRepository> {
         repo.save(project);
     }
 
+    /**
+     * Gets project ranks.
+     *
+     * @param project the project
+     * @return the project ranks
+     */
     public Map<String, ProjectRankDTO> getProjectRanks(Project project) {
         if(project.getQualification() != null){
             Map<String, ProjectRankDTO> ranks = new HashMap<>();

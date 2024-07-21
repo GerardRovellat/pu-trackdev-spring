@@ -10,16 +10,28 @@ import org.udg.trackdev.spring.entity.GithubInfo;
 import org.udg.trackdev.spring.repository.GithubInfoRepository;
 import org.udg.trackdev.spring.utils.GithubApiConstants;
 
+/**
+ * The type Github service.
+ */
 @Service
 public class GithubService extends BaseServiceUUID<GithubInfo, GithubInfoRepository>{
 
     private final RestTemplate restTemplate;
 
+    /**
+     * Instantiates a new Github service.
+     */
     public GithubService(){
         super();
         this.restTemplate = new RestTemplate();
     }
 
+    /**
+     * Get github information response entity.
+     *
+     * @param token the token
+     * @return the response entity
+     */
     public ResponseEntity<GithubInfo> getGithubInformation(String token){
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + token);

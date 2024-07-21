@@ -1,8 +1,20 @@
 package org.udg.trackdev.spring.entity;
 
+/**
+ * The enum Sprint status.
+ */
 public enum SprintStatus {
+    /**
+     * Draft sprint status.
+     */
     DRAFT("PLANIFICAT"),
+    /**
+     * Active sprint status.
+     */
     ACTIVE("ACTIU"),
+    /**
+     * Closed sprint status.
+     */
     CLOSED("TANCAT"),
     ;
 

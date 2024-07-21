@@ -9,6 +9,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
+/**
+ * The type Points review.
+ */
 @Entity
 @Table(name = "points_reviews")
 public class PointsReview extends BaseEntityLong {
@@ -27,8 +30,19 @@ public class PointsReview extends BaseEntityLong {
     @JoinColumn(name = "user_id")
     private User user;
 
+    /**
+     * Instantiates a new Points review.
+     */
     public PointsReview() {}
 
+    /**
+     * Instantiates a new Points review.
+     *
+     * @param points  the points
+     * @param comment the comment
+     * @param task    the task
+     * @param user    the user
+     */
     public PointsReview(Integer points, String comment, Task task, User user) {
         this.points = points;
         this.comment = comment;
@@ -36,22 +50,62 @@ public class PointsReview extends BaseEntityLong {
         this.user = user;
     }
 
+    /**
+     * Gets points.
+     *
+     * @return the points
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public Integer getPoints() { return points; }
 
+    /**
+     * Sets points.
+     *
+     * @param points the points
+     */
     public void setPoints(Integer points) { this.points = points; }
 
+    /**
+     * Gets comment.
+     *
+     * @return the comment
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public String getComment() { return comment; }
 
+    /**
+     * Sets comment.
+     *
+     * @param comment the comment
+     */
     public void setComment(String comment) { this.comment = comment; }
 
+    /**
+     * Gets task.
+     *
+     * @return the task
+     */
     public Task getTask() { return task; }
 
+    /**
+     * Sets task.
+     *
+     * @param task the task
+     */
     public void setTask(Task task) { this.task = task; }
 
+    /**
+     * Gets user.
+     *
+     * @return the user
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public User getUser() { return user; }
 
+    /**
+     * Sets user.
+     *
+     * @param user the user
+     */
     public void setUser(User user) { this.user = user; }
 }

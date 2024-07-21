@@ -20,6 +20,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type User service.
+ */
 @Service
 public class UserService extends BaseServiceUUID<User, UserRepository> {
 
@@ -35,9 +38,19 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
     @Autowired
     private AccessChecker accessChecker;
 
+    /**
+     * The Global.
+     */
     @Autowired
     Global global;
-    
+
+    /**
+     * Match password user.
+     *
+     * @param email    the email
+     * @param password the password
+     * @return the user
+     */
     public User matchPassword(String email, String password) {
         User user = this.getByEmail(email);
 
@@ -50,6 +63,13 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
             throw new ServiceException(ErrorConstants.LOGIN_KO);
     }
 
+    /**
+     * Match recovery code boolean.
+     *
+     * @param user the user
+     * @param code the code
+     * @return the boolean
+     */
     public boolean matchRecoveryCode(User user, String code) {
         if (global.getPasswordEncoder().matches(code, user.getRecoveryCode())){
             return true;
@@ -58,6 +78,13 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
         }
     }
 
+    /**
+     * Register user.
+     *
+     * @param username the username
+     * @param email    the email
+     * @return the user
+     */
     @Transactional
     public User register(String username, String email) {
         try{
@@ -89,6 +116,12 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
             throw new EntityNotFound(String.format(ErrorConstants.USER_MAIL_NOT_FOUND, id));
     }
 
+    /**
+     * Gets by username.
+     *
+     * @param username the username
+     * @return the by username
+     */
     public User getByUsername(String username) {
         Optional<User> user = repo.findByUsername(username);
         if(user.isEmpty()) {
@@ -97,6 +130,12 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
         return user.get();
     }
 
+    /**
+     * Gets by email.
+     *
+     * @param email the email
+     * @return the by email
+     */
     public User getByEmail(String email) {
         User user = repo.findByEmail(email);
         if(user == null) {
@@ -105,10 +144,25 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
         return user;
     }
 
+    /**
+     * Exists email boolean.
+     *
+     * @param email the email
+     * @return the boolean
+     */
     public Boolean existsEmail(String email) {
         return repo.existsByEmail(email);
     }
 
+    /**
+     * Add user internal user.
+     *
+     * @param username the username
+     * @param email    the email
+     * @param password the password
+     * @param roles    the roles
+     * @return the user
+     */
     @Transactional
     public User addUserInternal(String username, String email, String password, List<UserType> roles) {
         checkIfExists(email);
@@ -131,18 +185,35 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
             throw new ServiceException(ErrorConstants.USER_ALREADY_EXIST + email);
     }
 
+    /**
+     * Sets last login.
+     *
+     * @param user the user
+     */
     @Transactional
     public void setLastLogin(User user) {
         user.setLastLogin(new Date());
         repo.save(user);
     }
 
+    /**
+     * Sets current project.
+     *
+     * @param user    the user
+     * @param project the project
+     */
     @Transactional
     public void setCurrentProject(User user, Project project) {
         user.setCurrentProject(project.getId());
         repo.save(user);
     }
 
+    /**
+     * Change password.
+     *
+     * @param user        the user
+     * @param newpassword the newpassword
+     */
     @Transactional
     public void changePassword(User user, String newpassword) {
         user.setPassword(global.getPasswordEncoder().encode(newpassword));
@@ -151,17 +222,30 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
         repo.save(user);
     }
 
+    /**
+     * Edit my user user.
+     *
+     * @param modifier       the modifier
+     * @param user           the user
+     * @param username       the username
+     * @param color          the color
+     * @param capitalLetters the capital letters
+     * @param changePassword the change password
+     * @param githubToken    the github token
+     * @param enabled        the enabled
+     * @return the user
+     */
     @Transactional
-    public User editMyUser(User modifier, User user, Optional<String> username, Optional<String> color,
-                         Optional<String> capitalLetters, Optional<Boolean> changePassword,
-                         Optional<String> githubToken, Optional<Boolean> enabled) {
-        if(username != null && modifier.isUserType(UserType.ADMIN)) username.ifPresent(user::setUsername);
-        if(color != null) color.ifPresent(user::setColor);
-        if(capitalLetters != null) capitalLetters.ifPresent(user::setCapitalLetters);
-        if(changePassword != null) changePassword.ifPresent(user::setChangePassword);
-        if(enabled != null && modifier.isUserType(UserType.ADMIN)) enabled.ifPresent(user::setEnabled);
+    public User editMyUser(User modifier, User user, String username, String color,
+                         String capitalLetters, Boolean changePassword,
+                         String githubToken, Boolean enabled) {
+        if(username != null && modifier.isUserType(UserType.ADMIN)) user.setUsername(username);
+        if(color != null) user.setColor(color);
+        if(capitalLetters != null) user.setCapitalLetters(capitalLetters);
+        if(changePassword != null) user.setChangePassword(changePassword);
+        if(enabled != null && modifier.isUserType(UserType.ADMIN)) user.setEnabled(enabled);
         if(githubToken != null && !githubToken.isEmpty()) {
-            githubToken.ifPresent(user::setGithubToken);
+            user.setGithubToken(githubToken);
             ResponseEntity<GithubInfo> githubInfo = githubService.getGithubInformation(user.getGithubInfo().getGithub_token());
             if(githubInfo.getStatusCode().is2xxSuccessful()) {
                 GithubInfo responseBody = githubInfo.getBody();
@@ -193,6 +277,12 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
         return user;
     }
 
+    /**
+     * Generate recovery code string.
+     *
+     * @param user the user
+     * @return the string
+     */
     @Transactional
     public String generateRecoveryCode(User user) {
         String code = RandomStringUtils.randomAlphanumeric(8);
@@ -201,6 +291,11 @@ public class UserService extends BaseServiceUUID<User, UserRepository> {
         return code;
     }
 
+    /**
+     * Clean recovery code.
+     *
+     * @param user the user
+     */
     public void cleanRecoveryCode(User user) {
         user.setRecoveryCode(null);
         repo().save(user);

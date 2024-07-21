@@ -2,10 +2,10 @@ package org.udg.trackdev.spring.facade.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.udg.trackdev.spring.dto.request.CreateProjectRequestDTO;
-import org.udg.trackdev.spring.dto.request.EditCourseRequestDTO;
-import org.udg.trackdev.spring.dto.response.CourseCompleteResponseDTO;
-import org.udg.trackdev.spring.dto.response.ProjectResponseDTO;
+import org.udg.trackdev.spring.dto.request.courses.CreateProjectRequestDTO;
+import org.udg.trackdev.spring.dto.request.courses.EditCourseRequestDTO;
+import org.udg.trackdev.spring.dto.response.courses.CourseCompleteResponseDTO;
+import org.udg.trackdev.spring.dto.response.courses.ProjectResponseDTO;
 import org.udg.trackdev.spring.entity.Course;
 import org.udg.trackdev.spring.facade.CourseFacade;
 import org.udg.trackdev.spring.mappers.EntityMapper;
@@ -19,6 +19,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Course facade.
+ */
 @Component
 @RequiredArgsConstructor
 public class CourseFacadeImpl implements CourseFacade {

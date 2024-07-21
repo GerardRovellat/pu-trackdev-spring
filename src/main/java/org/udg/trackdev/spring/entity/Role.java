@@ -9,13 +9,24 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 
+/**
+ * The type Role.
+ */
 @Entity
 public class Role extends BaseEntityLong implements GrantedAuthority {
 
-  public Role() {
+    /**
+     * Instantiates a new Role.
+     */
+    public Role() {
   }
 
-  public Role(UserType UserType) {
+    /**
+     * Instantiates a new Role.
+     *
+     * @param UserType the user type
+     */
+    public Role(UserType UserType) {
     this.userType = UserType;
   }
 
@@ -28,7 +39,12 @@ public class Role extends BaseEntityLong implements GrantedAuthority {
     return super.getId();
   }
 
-  @JsonView(PrivacyLevelViews.Public.class)
+    /**
+     * Gets user type.
+     *
+     * @return the user type
+     */
+    @JsonView(PrivacyLevelViews.Public.class)
   public UserType getUserType() {
     return userType;
   }

@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.udg.trackdev.spring.controller.exceptions.ServiceException;
+import org.udg.trackdev.spring.dto.request.tasks.MergePatchTaskDTO;
 import org.udg.trackdev.spring.entity.*;
 import org.udg.trackdev.spring.entity.taskchanges.*;
-import org.udg.trackdev.spring.model.MergePatchTask;
 import org.udg.trackdev.spring.repository.TaskRepository;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 
@@ -68,91 +68,24 @@ public class TaskService extends BaseServiceLong<Task, TaskRepository> {
     }
 
     @Transactional
-    public Task editTask(Long id, MergePatchTask editTask, String userId) {
+    public Task editTask(Long id, MergePatchTaskDTO editTask, String userId) {
         Task task = get(id);
         User user = userService.get(userId);
         accessChecker.checkCanViewProject(task.getProject(), userId);
 
         List<TaskChange> changes = new ArrayList<>();
-        if(editTask.name != null) {
-            String oldName = task.getName();
-            String name = editTask.name.orElseThrow(
-                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
-            task.setName(name);
-            changes.add(new TaskNameChange(user.getEmail(), task.getId(), oldName, name));
-        }
-        if(editTask.description != null) {
-            task.setDescription(editTask.description.orElse(null));
-        }
-        if(editTask.reporter != null) {
-            User reporterUser = null;
-            if (editTask.reporter.isPresent()) {
-                reporterUser = userService.getByEmail(editTask.reporter.get());
-                if (!task.getProject().isMember(reporterUser)) {
-                    throw new ServiceException(ErrorConstants.USER_NOT_PRJ_MEMBER);
-                }
-                task.setReporter(reporterUser);
-            }
-        }
-        if(editTask.assignee != null) {
-            User assigneeUser = null;
-            String oldValue = task.getAssignee() != null ? task.getAssignee().getUsername() : null;
-            if(editTask.assignee.isPresent()) {
-                assigneeUser = userService.getByEmail(editTask.assignee.get());
-                if(!task.getProject().isMember(assigneeUser)) {
-                    throw new ServiceException(ErrorConstants.USER_NOT_PRJ_MEMBER);
-                }
-                task.setAssignee(assigneeUser);
-            } else {
-                task.setAssignee(null);
-            }
-            changes.add(new TaskAssigneeChange(user.getEmail(), task.getId(), oldValue, task.getAssignee().getUsername()));
-        }
-        if(editTask.estimationPoints != null) {
-            Integer oldPoints = task.getEstimationPoints();
-            Integer points = editTask.estimationPoints.orElse(null);
-            task.setEstimationPoints(points);
-            changes.add(new TaskEstimationPointsChange(user.getEmail(), task.getId(), oldPoints, points));
-        }
-        if(editTask.status != null) {
-            TaskStatus status = editTask.status.orElseThrow(
-                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
-            TaskStatus oldStatus = task.getStatus();
-            task.setStatus(status);
-            changes.add(new TaskStatusChange(user.getEmail(), task.getId(), oldStatus.toString(),  status.toString()));
-        }
-        if(editTask.rank != null) {
-            Integer newRank = editTask.rank.orElseThrow(
-                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
-            Integer currentRank = task.getRank();
-            if(!Objects.equals(newRank, currentRank)) {
-                //Collection<TaskChange> otherChanges = updateOtherTasksRank(user, newRank, currentRank);
-                changes.add(new TaskRankChange(user.getEmail(), task.getId(), task.getRank(), newRank));
-                task.setRank(newRank);
-                //changes.addAll(otherChanges);
-            }
-        }
-        if(editTask.activeSprints != null){
-            Collection<Long> sprintsIds = editTask.activeSprints.orElseThrow(
-                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
-            String oldValues = task.getActiveSprints().stream().map(Sprint::getName).collect(Collectors.joining(","));
-            Collection<Sprint> sprints = sprintService.getSpritnsByIds(sprintsIds);
-            String newValues = sprints.stream().map(Sprint::getName).collect(Collectors.joining(","));
-            task.getActiveSprints().stream().forEach(sprint -> sprint.removeTask(task));
-            task.setActiveSprints(sprints);
-            sprints.stream().forEach(sprint -> sprint.addTask(task, user));
-            changes.add(new TaskActiveSprintsChange(user.getEmail(), task.getId(), oldValues, newValues));
-        }
-        if (editTask.comment != null) {
-            Comment comment = editTask.comment.orElseThrow(
-                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
-            task.addComment(commentService.addComment(comment.getContent(), userService.get(userId), task));
-        }
-        if (editTask.pointsReview != null) {
-            PointsReview pointsReview = editTask.pointsReview.orElseThrow(
-                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
-            pointsReviewService.addPointsReview(pointsReview.getPoints(), pointsReview.getComment(), userService.get(userId), task);
-        }
+
+        editNameTreatment(task, user, editTask, changes);
+        editDescriptionTreatment(task, editTask, user, changes);
+        editReporterTreatment(task, editTask, user, changes);
+        editAssigneeTreatment(task, editTask, user, changes);
+        editEstimationPointsTreatment(task, editTask, user, changes);
+        editStatusTreatment(task, editTask, user, changes);
+        editRankTreatment(task, editTask, user, changes);
+        editActiveSprintsTreatment(task, editTask, user, changes);
+        editCommentTreatment(task, editTask, user, changes);
+        editPointsReviewTreatment(task, editTask, user, changes);
+
         repo.save(task);
         for(TaskChange change: changes) {
             taskChangeService.store(change);
@@ -235,4 +168,117 @@ public class TaskService extends BaseServiceLong<Task, TaskRepository> {
 
         return changes;
     }
+
+    private void editNameTreatment(Task task, User user, MergePatchTaskDTO editTask, List<TaskChange> changes){
+        if(editTask.getName()!= null) {
+            if (editTask.getName().get() != null) {
+                String oldName = task.getName();
+                task.setName(editTask.getName().get());
+                changes.add(new TaskNameChange(user.getEmail(), task.getId(), oldName, editTask.getName().get()));
+            }
+            else {
+                throw new ServiceException(ErrorConstants.CAN_NOT_BE_NULL);
+            }
+        }
+    }
+
+    private void editDescriptionTreatment(Task task, MergePatchTaskDTO editTask, User user, List<TaskChange> changes){
+        if(editTask.getDescription() != null) {
+            if (editTask.getDescription().get() != null) {
+                task.setDescription(editTask.getDescription().get());
+            }
+            task.setDescription(null);
+        }
+    }
+
+    private void editReporterTreatment(Task task, MergePatchTaskDTO editTask, User user, List<TaskChange> changes){
+        if(editTask.getReporter() != null) {
+            User reporterUser;
+            reporterUser = userService.getByEmail(editTask.getReporter().get());
+            if (!task.getProject().isMember(reporterUser)) {
+                throw new ServiceException(ErrorConstants.USER_NOT_PRJ_MEMBER);
+            }
+            task.setReporter(reporterUser);
+        }
+    }
+
+    private void editAssigneeTreatment(Task task, MergePatchTaskDTO editTask, User user, List<TaskChange> changes){
+        if(editTask.getAssignee() != null) {
+            User assigneeUser;
+            String oldValue = task.getAssignee() != null ? task.getAssignee().getUsername() : null;
+            if (editTask.getAssignee().get() != null) {
+                assigneeUser = userService.getByEmail(editTask.getAssignee().get());
+                if (!task.getProject().isMember(assigneeUser)) {
+                    throw new ServiceException(ErrorConstants.USER_NOT_PRJ_MEMBER);
+                }
+                task.setAssignee(assigneeUser);
+            } else {
+                task.setAssignee(null);
+            }
+            if (!Objects.equals(oldValue, editTask.getAssignee().get())) {
+                changes.add(new TaskAssigneeChange(user.getEmail(), task.getId(), oldValue, task.getAssignee().getUsername()));
+            }
+        }
+    }
+
+    private void editEstimationPointsTreatment(Task task, MergePatchTaskDTO editTask, User user, List<TaskChange> changes){
+        if(editTask.getEstimationPoints() != null) {
+            Integer oldPoints = task.getEstimationPoints();
+            Integer points = editTask.getEstimationPoints().get();
+            task.setEstimationPoints(points);
+            changes.add(new TaskEstimationPointsChange(user.getEmail(), task.getId(), oldPoints, points));
+        }
+    }
+
+    private void editStatusTreatment(Task task, MergePatchTaskDTO editTask, User user, List<TaskChange> changes){
+        if(editTask.getStatus() != null) {
+            TaskStatus status = editTask.getStatus().get();
+            TaskStatus oldStatus = task.getStatus();
+            task.setStatus(status);
+            changes.add(new TaskStatusChange(user.getEmail(), task.getId(), oldStatus.toString(),  status.toString()));
+        }
+    }
+
+    private void editRankTreatment(Task task, MergePatchTaskDTO editTask, User user, List<TaskChange> changes){
+        if(editTask.getRank() != null) {
+            Integer newRank = editTask.getRank().get();
+            Integer currentRank = task.getRank();
+            if(!Objects.equals(newRank, currentRank)) {
+                changes.addAll(updateOtherTasksRank(user, newRank, currentRank));
+                changes.add(new TaskRankChange(user.getEmail(), task.getId(), currentRank, newRank));
+                task.setRank(newRank);
+            }
+        }
+    }
+
+    private void editActiveSprintsTreatment(Task task, MergePatchTaskDTO editTask, User user, List<TaskChange> changes){
+        if(editTask.getActiveSprints() != null) {
+            Collection<Long> sprintsIds = editTask.getActiveSprints().orElseThrow(
+                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
+            String oldValues = task.getActiveSprints().stream().map(Sprint::getName).collect(Collectors.joining(","));
+            Collection<Sprint> sprints = sprintService.getSpritnsByIds(sprintsIds);
+            String newValues = sprints.stream().map(Sprint::getName).collect(Collectors.joining(","));
+            task.getActiveSprints().forEach(sprint -> sprint.removeTask(task));
+            task.setActiveSprints(sprints);
+            sprints.forEach(sprint -> sprint.addTask(task, user));
+            changes.add(new TaskActiveSprintsChange(user.getEmail(), task.getId(), oldValues, newValues));
+        }
+    }
+
+    private void editCommentTreatment(Task task, MergePatchTaskDTO editTask, User user, List<TaskChange> changes){
+        if(editTask.getComment() != null) {
+            Comment comment = editTask.getComment().orElseThrow(
+                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
+            task.addComment(commentService.addComment(comment.getContent(), user, task));
+        }
+    }
+
+    private void editPointsReviewTreatment(Task task, MergePatchTaskDTO editTask, User user, List<TaskChange> changes){
+        if(editTask.getPointsReview() != null) {
+            PointsReview pointsReview = editTask.getPointsReview().orElseThrow(
+                    () -> new ServiceException(ErrorConstants.CAN_NOT_BE_NULL));
+            pointsReviewService.addPointsReview(pointsReview.getPoints(), pointsReview.getComment(), user, task);
+        }
+    }
+
 }

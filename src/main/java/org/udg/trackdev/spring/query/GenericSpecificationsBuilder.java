@@ -8,18 +8,47 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
+/**
+ * The type Generic specifications builder.
+ *
+ * @param <U> the type parameter
+ */
 public class GenericSpecificationsBuilder<U> {
 
     private final List<SpecSearchCriteria> params;
 
+    /**
+     * Instantiates a new Generic specifications builder.
+     */
     public GenericSpecificationsBuilder() {
         this.params = new ArrayList<>();
     }
 
+    /**
+     * With generic specifications builder.
+     *
+     * @param key       the key
+     * @param operation the operation
+     * @param value     the value
+     * @param prefix    the prefix
+     * @param suffix    the suffix
+     * @return the generic specifications builder
+     */
     public final GenericSpecificationsBuilder<U> with(final String key, final String operation, final Object value, final String prefix, final String suffix) {
         return with(null, key, operation, value, prefix, suffix);
     }
 
+    /**
+     * With generic specifications builder.
+     *
+     * @param precedenceIndicator the precedence indicator
+     * @param key                 the key
+     * @param operation           the operation
+     * @param value               the value
+     * @param prefix              the prefix
+     * @param suffix              the suffix
+     * @return the generic specifications builder
+     */
     public final GenericSpecificationsBuilder<U> with(final String precedenceIndicator, final String key, final String operation, final Object value, final String prefix, final String suffix) {
         SearchOperation op = SearchOperation.getSimpleOperation(operation.charAt(0));
         if (op != null) {
@@ -41,6 +70,12 @@ public class GenericSpecificationsBuilder<U> {
         return this;
     }
 
+    /**
+     * Build specification.
+     *
+     * @param converter the converter
+     * @return the specification
+     */
     public Specification<U> build(Function<SpecSearchCriteria, Specification<U>> converter) {
 
         if (params.size() == 0) {
@@ -65,6 +100,13 @@ public class GenericSpecificationsBuilder<U> {
         return result;
     }
 
+    /**
+     * Build specification.
+     *
+     * @param postFixedExprStack the post fixed expr stack
+     * @param converter          the converter
+     * @return the specification
+     */
     public Specification<U> build(Deque<?> postFixedExprStack, Function<SpecSearchCriteria, Specification<U>> converter) {
 
         Deque<Specification<U>> specStack = new LinkedList<>();

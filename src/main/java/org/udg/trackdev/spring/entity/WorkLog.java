@@ -6,6 +6,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+/**
+ * The type Work log.
+ */
 @Entity
 @Table(name = "work_logs")
 public class WorkLog extends BaseEntityLong {

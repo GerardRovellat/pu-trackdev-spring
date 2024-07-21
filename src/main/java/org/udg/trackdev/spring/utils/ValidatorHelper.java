@@ -8,9 +8,17 @@ import org.udg.trackdev.spring.controller.exceptions.ControllerException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The type Validator helper.
+ */
 @Component
 public class ValidatorHelper {
 
+    /**
+     * Validate request.
+     *
+     * @param validation the validation
+     */
     public void validateRequest(BindingResult validation) {
         if (validation.hasErrors()) {
             List<String> errors = validation.getAllErrors().stream()

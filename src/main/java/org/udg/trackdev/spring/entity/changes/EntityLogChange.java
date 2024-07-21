@@ -11,11 +11,23 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
+/**
+ * The type Entity log change.
+ */
 @MappedSuperclass
 public abstract class EntityLogChange extends BaseEntityLong {
 
+    /**
+     * Instantiates a new Entity log change.
+     */
     public EntityLogChange() { }
 
+    /**
+     * Instantiates a new Entity log change.
+     *
+     * @param author   the author
+     * @param entityid the entityid
+     */
     public EntityLogChange(String author, Long entityid) {
         this.author = author;
         this.entityid = entityid;
@@ -37,16 +49,36 @@ public abstract class EntityLogChange extends BaseEntityLong {
     @Column(name = "type", insertable = false, updatable = false)
     private String type;
 
+    /**
+     * Gets author.
+     *
+     * @return the author
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public String getAuthor() { return this.author; }
 
+    /**
+     * Gets entity.
+     *
+     * @return the entity
+     */
     @JsonIgnore
     public Long getEntity() { return this.entityid; }
 
+    /**
+     * Gets changed at.
+     *
+     * @return the changed at
+     */
     @JsonView(EntityLevelViews.Basic.class)
     @JsonFormat(pattern = Global.SIMPLE_DATE_FORMAT)
     public LocalDateTime getChangedAt() { return this.changedAt; }
 
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
     @JsonView(EntityLevelViews.Basic.class)
     public abstract String getType();
 }

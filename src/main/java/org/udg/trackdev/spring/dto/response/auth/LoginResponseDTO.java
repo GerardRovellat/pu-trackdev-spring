@@ -1,0 +1,22 @@
+package org.udg.trackdev.spring.dto.response.auth;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.udg.trackdev.spring.dto.response.users.UserDTO;
+
+/**
+ * The type Login response dto.
+ */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoginResponseDTO {
+
+    private UserLoginDTO userdata;
+
+    private String token;
+
+}

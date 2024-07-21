@@ -10,11 +10,26 @@ import org.udg.trackdev.spring.service.IBaseService;
 
 import java.util.List;
 
+/**
+ * The type Crud controller.
+ *
+ * @param <T>       the type parameter
+ * @param <Service> the type parameter
+ */
 public class CrudController<T, Service extends IBaseService<T>> extends BaseController {
 
+    /**
+     * The Service.
+     */
     @Autowired
     protected Service service;
 
+    /**
+     * Search list.
+     *
+     * @param search the search
+     * @return the list
+     */
     public List<T> search(String search) {
         if (search == null)
             return service.getAll();
@@ -22,6 +37,13 @@ public class CrudController<T, Service extends IBaseService<T>> extends BaseCont
         return service.search(specification);
     }
 
+    /**
+     * Build specification from search specification.
+     *
+     * @param <K>    the type parameter
+     * @param search the search
+     * @return the specification
+     */
     protected <K> Specification<K> buildSpecificationFromSearch(String search) {
         Specification<K> specification;
         try {
@@ -34,6 +56,13 @@ public class CrudController<T, Service extends IBaseService<T>> extends BaseCont
         return specification;
     }
 
+    /**
+     * Scoped search string.
+     *
+     * @param reducedScopeSearch the reduced scope search
+     * @param requestSearch      the request search
+     * @return the string
+     */
     protected String scopedSearch(String reducedScopeSearch, String requestSearch) {
         return reducedScopeSearch + (requestSearch != null ? " and ( " + requestSearch + " )" : "");
     }

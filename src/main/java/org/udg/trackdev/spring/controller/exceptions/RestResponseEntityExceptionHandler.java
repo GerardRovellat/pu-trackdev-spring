@@ -21,18 +21,31 @@ import org.udg.trackdev.spring.service.Global;
 
 import java.util.Date;
 
+/**
+ * The type Rest response entity exception handler.
+ */
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final Logger logger = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
 
+    /**
+     * Instantiates a new Rest response entity exception handler.
+     */
     public RestResponseEntityExceptionHandler() {
         super();
     }
 
     // Other exceptions. Add your own exception handling here
 
+    /**
+     * Handle controller exceptions response entity.
+     *
+     * @param ex      the ex
+     * @param request the request
+     * @return the response entity
+     */
     @ExceptionHandler(value={ Exception.class })
     protected ResponseEntity<Object> handleControllerExceptions(Exception ex, WebRequest request) {
         if (ex instanceof ServiceException) {

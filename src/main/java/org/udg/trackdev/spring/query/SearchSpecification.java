@@ -9,15 +9,30 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 
+/**
+ * The type Search specification.
+ *
+ * @param <T> the type parameter
+ */
 public class SearchSpecification<T> implements Specification<T> {
 
     private SpecSearchCriteria criteria;
 
+    /**
+     * Instantiates a new Search specification.
+     *
+     * @param criteria the criteria
+     */
     public SearchSpecification(final SpecSearchCriteria criteria) {
         super();
         this.criteria = criteria;
     }
 
+    /**
+     * Gets criteria.
+     *
+     * @return the criteria
+     */
     public SpecSearchCriteria getCriteria() {
         return criteria;
     }

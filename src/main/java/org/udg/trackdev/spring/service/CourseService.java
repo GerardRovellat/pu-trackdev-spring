@@ -9,15 +9,27 @@ import org.udg.trackdev.spring.repository.CourseRepository;
 
 import java.util.List;
 
+/**
+ * The type Course service.
+ */
 @Service
 public class CourseService extends BaseServiceLong<Course, CourseRepository> {
 
+    /**
+     * The Subject service.
+     */
     @Autowired
     SubjectService subjectService;
 
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
 
+    /**
+     * The Access checker.
+     */
     @Autowired
     AccessChecker accessChecker;
 
@@ -25,6 +37,15 @@ public class CourseService extends BaseServiceLong<Course, CourseRepository> {
         return repo.findAll();
     }
 
+    /**
+     * Create course course.
+     *
+     * @param subjectId      the subject id
+     * @param startYear      the start year
+     * @param organization   the organization
+     * @param loggedInUserId the logged in user id
+     * @return the course
+     */
     @Transactional
     public Course createCourse(Long subjectId, Integer startYear, String organization, String loggedInUserId) {
         Subject subject = subjectService.getSubject(subjectId);
@@ -36,6 +57,16 @@ public class CourseService extends BaseServiceLong<Course, CourseRepository> {
         return course;
     }
 
+    /**
+     * Edit course course.
+     *
+     * @param courseId     the course id
+     * @param startYear    the start year
+     * @param subjectId    the subject id
+     * @param organization the organization
+     * @param userId       the user id
+     * @return the course
+     */
     @Transactional
     public Course editCourse(Long courseId, Integer startYear, Long subjectId, String organization, String userId){
         Course course = get(courseId);
@@ -48,6 +79,12 @@ public class CourseService extends BaseServiceLong<Course, CourseRepository> {
         return course;
     }
 
+    /**
+     * Delete course.
+     *
+     * @param courseId       the course id
+     * @param loggedInUserId the logged in user id
+     */
     public void deleteCourse(Long courseId, String loggedInUserId) {
         Course course = get(courseId);
         accessChecker.checkCanManageCourse(course, loggedInUserId);

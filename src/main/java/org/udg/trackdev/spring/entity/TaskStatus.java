@@ -1,11 +1,32 @@
 package org.udg.trackdev.spring.entity;
 
+/**
+ * The enum Task status.
+ */
 public enum TaskStatus {
+    /**
+     * Backlog task status.
+     */
     BACKLOG("BACKLOG"),
+    /**
+     * Todo task status.
+     */
     TODO("PRIORITZADA"),
+    /**
+     * The Inprogress.
+     */
     INPROGRESS("EN PROGRES"),
+    /**
+     * The Verify.
+     */
     VERIFY("EN VERIFICACIO"),
+    /**
+     * Done task status.
+     */
     DONE("FINALITZADA"),
+    /**
+     * Defined task status.
+     */
     DEFINED("DEFINIDA"),
     ;
 

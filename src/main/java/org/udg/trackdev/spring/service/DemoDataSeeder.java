@@ -5,20 +5,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.udg.trackdev.spring.configuration.UserType;
-import org.udg.trackdev.spring.dto.request.SprintRequestDTO;
+import org.udg.trackdev.spring.dto.request.sprints.SprintRequestDTO;
+import org.udg.trackdev.spring.dto.request.tasks.MergePatchTaskDTO;
 import org.udg.trackdev.spring.entity.*;
-import org.udg.trackdev.spring.model.MergePatchTask;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
+/**
+ * The type Demo data seeder.
+ */
 @Component
 public class DemoDataSeeder {
 
     private final Logger logger = LoggerFactory.getLogger(Global.class);
     private final List<Integer> possibleEstimationPoints = Arrays.asList(1, 2, 3, 5, 8, 13, 20, 40, 100);
 
+    /**
+     * The Global.
+     */
     @Autowired
     Global global;
 
@@ -43,6 +49,9 @@ public class DemoDataSeeder {
     @Autowired
     private CommentService commentService;
 
+    /**
+     * Seed demo data.
+     */
     public void seedDemoData() {
         logger.info("Starting populating database ...");
         // users
@@ -123,12 +132,12 @@ public class DemoDataSeeder {
         Sprint sprint3 = sprintService.create(project, "Sprint 3", Date.from(start3.atStartOfDay(ZoneId.systemDefault()).toInstant()), Date.from(end3.atStartOfDay(ZoneId.systemDefault()).toInstant()), sprintCreator3.getId());
         //Task1
         Task task1 = taskService.createTask(project.getId(), "Anàlisis i disseny de la base de dades", users.get(2).getId());
-        MergePatchTask editTask1 = new MergePatchTask();
-        editTask1.description = Optional.of("S'ha de fer una anàlisi i disseny de la base de dades pel desenvolupament del projecte final de grau. S'ha de fer un diagrama entitat-relació i un diagrama de classes.");
-        editTask1.assignee = Optional.of(users.get(2).getEmail());
-        editTask1.estimationPoints = Optional.of(6);
-        editTask1.status = Optional.of(TaskStatus.DONE);
-        editTask1.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId())));
+        MergePatchTaskDTO editTask1 = new MergePatchTaskDTO();
+        editTask1.setName(Optional.of("S'ha de fer una anàlisi i disseny de la base de dades pel desenvolupament del projecte final de grau. S'ha de fer un diagrama entitat-relació i un diagrama de classes."));
+        editTask1.setAssignee(Optional.of(users.get(2).getEmail()));
+        editTask1.setEstimationPoints(Optional.of(6));
+        editTask1.setStatus(Optional.of(TaskStatus.DONE));
+        editTask1.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId()))));
         taskService.editTask(task1.getId(), editTask1, users.get(2).getId());
         commentService.addComment( "Algú sap si necessitarem crear un xat?", users.get(2),task1);
         commentService.addComment( "No ho tinc clar, és un stopper? ", users.get(3),task1);
@@ -139,119 +148,119 @@ public class DemoDataSeeder {
         commentService.addComment( "Recordeu que una funcionalitat no completada no contarà per l'sprint", users.get(0),task1);
         Task subtask11 = taskService.createSubTask(task1.getId(), "Diagrama entitat-relació", users.get(2).getId());
         Task subtask12 = taskService.createSubTask(task1.getId(), "Diagrama classes", users.get(2).getId());
-        MergePatchTask editTaskSub11 = new MergePatchTask();
-        MergePatchTask editTaskSub12 = new MergePatchTask();
-        editTaskSub11.assignee = Optional.of(users.get(2).getEmail());
-        editTaskSub12.assignee = Optional.of(users.get(2).getEmail());
-        editTaskSub11.status = Optional.of(TaskStatus.DONE);
-        editTaskSub12.status = Optional.of(TaskStatus.DONE);
-        editTaskSub11.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId())));
-        editTaskSub12.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId())));
+        MergePatchTaskDTO editTaskSub11 = new MergePatchTaskDTO();
+        MergePatchTaskDTO editTaskSub12 = new MergePatchTaskDTO();
+        editTaskSub11.setAssignee(Optional.of(users.get(2).getEmail()));
+        editTaskSub12.setAssignee(Optional.of(users.get(2).getEmail()));
+        editTaskSub11.setStatus(Optional.of(TaskStatus.DONE));
+        editTaskSub12.setStatus(Optional.of(TaskStatus.DONE));
+        editTaskSub11.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId()))));
+        editTaskSub12.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId()))));
         taskService.editTask(subtask11.getId(), editTaskSub11, users.get(0).getId());
         taskService.editTask(subtask12.getId(), editTaskSub12, users.get(0).getId());
         //Task2
         Task task2 = taskService.createTask(project.getId(), "Implementació Swagger", users.get(3).getId());
-        MergePatchTask editTask2 = new MergePatchTask();
-        editTask2.description = Optional.of("S'ha de fer una implementació de Swagger per a la documentació de l'API REST del projecte final de grau.");
-        editTask2.assignee = Optional.of(users.get(3).getEmail());
-        editTask2.estimationPoints = Optional.of(10);
-        editTask2.status = Optional.of(TaskStatus.INPROGRESS);
-        editTask2.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint2.getId())));
+        MergePatchTaskDTO editTask2 = new MergePatchTaskDTO();
+        editTask2.setDescription(Optional.of("S'ha de fer una implementació de Swagger per a la documentació de l'API REST del projecte final de grau."));
+        editTask2.setAssignee(Optional.of(users.get(3).getEmail()));
+        editTask2.setEstimationPoints(Optional.of(10));
+        editTask2.setStatus(Optional.of(TaskStatus.INPROGRESS));
+        editTask2.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint2.getId()))));
         taskService.editTask(task2.getId(), editTask2, users.get(3).getId());
         //Task3
         Task task3 = taskService.createTask(project.getId(), "Documentació memoria", users.get(4).getId());
-        MergePatchTask editTask3 = new MergePatchTask();
-        editTask3.description = Optional.of("S'ha de fer una documentació de la memòria del projecte final de grau.");
-        editTask3.assignee = Optional.of(users.get(4).getEmail());
-        editTask3.estimationPoints = Optional.of(15);
+        MergePatchTaskDTO editTask3 = new MergePatchTaskDTO();
+        editTask3.setDescription(Optional.of("S'ha de fer una documentació de la memòria del projecte final de grau."));
+        editTask3.setAssignee(Optional.of(users.get(4).getEmail()));
+        editTask3.setEstimationPoints(Optional.of(15));
         taskService.editTask(task3.getId(), editTask3, users.get(4).getId());
         //Task4
         Task task4 = taskService.createTask(project.getId(), "Preparació defensa oral", users.get(5).getId());
-        MergePatchTask editTask4 = new MergePatchTask();
-        editTask4.description = Optional.of("S'ha de preparar la defensa oral del projecte final de grau.");
-        editTask4.assignee = Optional.of(users.get(5).getEmail());
-        editTask4.estimationPoints = Optional.of(10);
-        editTask4.status = Optional.of(TaskStatus.TODO);
-        editTask4.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint3.getId())));
+        MergePatchTaskDTO editTask4 = new MergePatchTaskDTO();
+        editTask4.setDescription(Optional.of("S'ha de preparar la defensa oral del projecte final de grau."));
+        editTask4.setAssignee(Optional.of(users.get(5).getEmail()));
+        editTask4.setEstimationPoints(Optional.of(10));
+        editTask4.setStatus(Optional.of(TaskStatus.TODO));
+        editTask4.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint3.getId()))));
         taskService.editTask(task4.getId(), editTask4, users.get(5).getId());
         //Task5
         Task task5 = taskService.createTask(project.getId(), "Implementació integració GitHub", users.get(6).getId());
-        MergePatchTask editTask5 = new MergePatchTask();
-        editTask5.description = Optional.of("S'ha de fer una implementació de la integració de GitHub per tal de recollir dades de la plataforma.");
-        editTask5.assignee = Optional.of(users.get(6).getEmail());
-        editTask5.estimationPoints = Optional.of(8);
-        editTask5.status = Optional.of(TaskStatus.VERIFY);
-        editTask5.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint2.getId())));
+        MergePatchTaskDTO editTask5 = new MergePatchTaskDTO();
+        editTask5.setDescription(Optional.of("S'ha de fer una implementació de la integració de GitHub per tal de recollir dades de la plataforma."));
+        editTask5.setAssignee(Optional.of(users.get(6).getEmail()));
+        editTask5.setEstimationPoints(Optional.of(8));
+        editTask5.setStatus(Optional.of(TaskStatus.VERIFY));
+        editTask5.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint2.getId()))));
         taskService.editTask(task5.getId(), editTask5, users.get(6).getId());
         //Task6
         Task task6 = taskService.createTask(project.getId(), "Implementació React router", users.get(2).getId());
-        MergePatchTask editTask6 = new MergePatchTask();
-        editTask6.description = Optional.of("S'ha de fer una implementació de React router per tal de poder navegar entre les diferents pàgines de l'aplicació.");
-        editTask6.assignee = Optional.of(users.get(2).getEmail());
-        editTask6.estimationPoints = Optional.of(5);
-        editTask6.status = Optional.of(TaskStatus.INPROGRESS);
-        editTask6.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint2.getId())));
+        MergePatchTaskDTO editTask6 = new MergePatchTaskDTO();
+        editTask6.setDescription(Optional.of("S'ha de fer una implementació de React router per tal de poder navegar entre les diferents pàgines de l'aplicació."));
+        editTask6.setAssignee(Optional.of(users.get(2).getEmail()));
+        editTask6.setEstimationPoints(Optional.of(5));
+        editTask6.setStatus(Optional.of(TaskStatus.INPROGRESS));
+        editTask6.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint2.getId()))));
         taskService.editTask(task6.getId(), editTask6, users.get(2).getId());
         //Task7
         Task task7 = taskService.createTask(project.getId(), "Sistema de avaluació projecte", users.get(1).getId());
-        MergePatchTask editTask7 = new MergePatchTask();
-        editTask7.description = Optional.of("S'ha de fer una implementació de React router per tal de poder navegar entre les diferents pàgines de l'aplicació.");
-        editTask7.assignee = Optional.of(users.get(1).getEmail());
-        editTask7.estimationPoints = Optional.of(9);
-        editTask7.status = Optional.of(TaskStatus.DONE);
-        editTask7.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId())));
+        MergePatchTaskDTO editTask7 = new MergePatchTaskDTO();
+        editTask7.setDescription(Optional.of("S'ha de fer una implementació de React router per tal de poder navegar entre les diferents pàgines de l'aplicació."));
+        editTask7.setAssignee(Optional.of(users.get(1).getEmail()));
+        editTask7.setEstimationPoints(Optional.of(9));
+        editTask7.setStatus(Optional.of(TaskStatus.DONE));
+        editTask7.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId()))));
         taskService.editTask(task7.getId(), editTask7, users.get(1).getId());
         //Task8
         Task task8 = taskService.createTask(project.getId(), "Infrastructura arquitectura Controller-Service-Repo", users.get(1).getId());
-        MergePatchTask editTask8 = new MergePatchTask();
-        editTask8.description = Optional.of("Ideació de la infrastructura de l'arquitectura Controller-Service-Repo per tal de poder implementar-la en el projecte final de grau.");
-        editTask8.assignee = Optional.of(users.get(3).getEmail());
-        editTask8.estimationPoints = Optional.of(10);
+        MergePatchTaskDTO editTask8 = new MergePatchTaskDTO();
+        editTask8.setDescription(Optional.of("Ideació de la infrastructura de l'arquitectura Controller-Service-Repo per tal de poder implementar-la en el projecte final de grau."));
+        editTask8.setAssignee(Optional.of(users.get(3).getEmail()));
+        editTask8.setEstimationPoints(Optional.of(10));
         taskService.editTask(task8.getId(), editTask8, users.get(1).getId());
         //Task9
         Task task9 = taskService.createTask(project.getId(), "Maquetació component taula de tasques", users.get(2).getId());
-        MergePatchTask editTask9 = new MergePatchTask();
-        editTask9.description = Optional.of("Maquetació del component taula de tasques per tal de poder implementar-la en el projecte final de grau.");
-        editTask9.assignee = Optional.of(users.get(2).getEmail());
-        editTask9.estimationPoints = Optional.of(5);
-        editTask9.status = Optional.of(TaskStatus.VERIFY);
-        editTask9.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint2.getId())));
+        MergePatchTaskDTO editTask9 = new MergePatchTaskDTO();
+        editTask9.setDescription(Optional.of("Maquetació del component taula de tasques per tal de poder implementar-la en el projecte final de grau."));
+        editTask9.setAssignee(Optional.of(users.get(2).getEmail()));
+        editTask9.setEstimationPoints(Optional.of(5));
+        editTask9.setStatus(Optional.of(TaskStatus.VERIFY));
+        editTask9.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint2.getId()))));
         taskService.editTask(task9.getId(), editTask9, users.get(2).getId());
         //Task10
         Task task10 = taskService.createTask(project.getId(), "Instal·lació SonarQube Server/SonarQube/SonarScanner CLI", users.get(4).getId());
-        MergePatchTask editTask10 = new MergePatchTask();
-        editTask10.description = Optional.of("Instal·lació del SonarQube Server/SonarQube/SonarScanner CLI per tal de poder implementar-la en el projecte final de grau.");
-        editTask10.assignee = Optional.of(users.get(1).getEmail());
-        editTask10.estimationPoints = Optional.of(10);
-        editTask10.status = Optional.of(TaskStatus.DONE);
-        editTask10.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId())));
+        MergePatchTaskDTO editTask10 = new MergePatchTaskDTO();
+        editTask10.setDescription(Optional.of("Instal·lació del SonarQube Server/SonarQube/SonarScanner CLI per tal de poder implementar-la en el projecte final de grau."));
+        editTask10.setAssignee(Optional.of(users.get(1).getEmail()));
+        editTask10.setEstimationPoints(Optional.of(10));
+        editTask10.setStatus(Optional.of(TaskStatus.DONE));
+        editTask10.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId()))));
         taskService.editTask(task10.getId(), editTask10, users.get(4).getId());
         //Task11
         Task task11 = taskService.createTask(project.getId(), "Desenvolupament Spring Security & JWT", users.get(5).getId());
-        MergePatchTask editTask11 = new MergePatchTask();
-        editTask11.description = Optional.of("Desenvolupament de Spring Security & JWT per tal de poder implementar-la en el projecte final de grau.");
-        editTask11.assignee = Optional.of(users.get(6).getEmail());
-        editTask11.estimationPoints = Optional.of(6);
-        editTask11.status = Optional.of(TaskStatus.DONE);
-        editTask11.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId())));
+        MergePatchTaskDTO editTask11 = new MergePatchTaskDTO();
+        editTask11.setDescription(Optional.of("Desenvolupament de Spring Security & JWT per tal de poder implementar-la en el projecte final de grau."));
+        editTask11.setAssignee(Optional.of(users.get(6).getEmail()));
+        editTask11.setEstimationPoints(Optional.of(6));
+        editTask11.setStatus(Optional.of(TaskStatus.DONE));
+        editTask11.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint1.getId()))));
         taskService.editTask(task11.getId(), editTask11, users.get(5).getId());
         //Task12
         Task task12 = taskService.createTask(project.getId(), "Implementació Spring Data JPA", users.get(6).getId());
-        MergePatchTask editTask12 = new MergePatchTask();
-        editTask12.description = Optional.of("Implementació de Spring Data JPA per tal de poder implementar-la en el projecte final de grau.");
-        editTask12.assignee = Optional.of(users.get(6).getEmail());
-        editTask12.estimationPoints = Optional.of(9);
-        editTask12.status = Optional.of(TaskStatus.INPROGRESS);
-        editTask12.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint2.getId())));
+        MergePatchTaskDTO editTask12 = new MergePatchTaskDTO();
+        editTask12.setDescription(Optional.of("Implementació de Spring Data JPA per tal de poder implementar-la en el projecte final de grau."));
+        editTask12.setAssignee(Optional.of(users.get(6).getEmail()));
+        editTask12.setEstimationPoints(Optional.of(9));
+        editTask12.setStatus(Optional.of(TaskStatus.INPROGRESS));
+        editTask12.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint2.getId()))));
         taskService.editTask(task12.getId(), editTask12, users.get(6).getId());
         //Task13
         Task task13 = taskService.createTask(project.getId(), "Preparació MVP defensa oral PFG ", users.get(2).getId());
-        MergePatchTask editTask13 = new MergePatchTask();
-        editTask13.description = Optional.of("Preparació del MVP de la defensa oral del projecte final de grau.");
-        editTask13.assignee = Optional.of(users.get(2).getEmail());
-        editTask13.estimationPoints = Optional.of(6);
-        editTask13.status = Optional.of(TaskStatus.TODO);
-        editTask13.activeSprints = Optional.of(new ArrayList<>(Collections.singletonList(sprint3.getId())));
+        MergePatchTaskDTO editTask13 = new MergePatchTaskDTO();
+        editTask13.setDescription(Optional.of("Preparació del MVP de la defensa oral del projecte final de grau."));
+        editTask13.setAssignee(Optional.of(users.get(2).getEmail()));
+        editTask13.setEstimationPoints(Optional.of(6));
+        editTask13.setStatus(Optional.of(TaskStatus.TODO));
+        editTask13.setActiveSprints(Optional.of(new ArrayList<>(Collections.singletonList(sprint3.getId()))));
         taskService.editTask(task13.getId(), editTask13, users.get(2).getId());
 
         userService.setCurrentProject(admin,project);
@@ -286,7 +295,7 @@ public class DemoDataSeeder {
             Task task = taskService.createTask(project.getId(), "Lorem ipsum dolor sit amet", reporter.getId());
 
             if(random.nextBoolean()) {
-                MergePatchTask editTask = buildBacklogEditTask(users, random);
+                MergePatchTaskDTO editTask = buildBacklogEditTask(users, random);
                 taskService.editTask(task.getId(), editTask, reporter.getId());
             }
             if(i == 0) {
@@ -307,15 +316,15 @@ public class DemoDataSeeder {
         Integer rank = 1;
         for(Task task : tasks) {
             // Add to sprint
-            MergePatchTask change = new MergePatchTask();
+            MergePatchTaskDTO change = new MergePatchTaskDTO();
             Collection<Long> sprints = new ArrayList<>();
             sprints.add(sprint.getId());
-            change.activeSprints = Optional.of(sprints);
-            change.rank = Optional.of(rank);
+            change.setActiveSprints(Optional.of(sprints));
+            change.setRank(Optional.of(rank));
             taskService.editTask(task.getId(), change, editor.getId());
 
             // Random change
-            MergePatchTask editTask = buildBacklogEditTask(users, random);
+            MergePatchTaskDTO editTask = buildBacklogEditTask(users, random);
             taskService.editTask(task.getId(), editTask, editor.getId());
 
             rank++;
@@ -325,8 +334,8 @@ public class DemoDataSeeder {
         if(close) {
             for(Task task : tasks) {
                 if(task.getStatus() != TaskStatus.DONE) {
-                    MergePatchTask change = new MergePatchTask();
-                    change.status = Optional.of(TaskStatus.DONE);
+                    MergePatchTaskDTO change = new MergePatchTaskDTO();
+                    change.setStatus(Optional.of(TaskStatus.DONE));
                     taskService.editTask(task.getId(), change, editor.getId());
                 }
             }
@@ -334,8 +343,8 @@ public class DemoDataSeeder {
         } else {
             for(Task task : tasks) {
                 if(random.nextBoolean()) {
-                    MergePatchTask change = new MergePatchTask();
-                    change.status = Optional.of(getRandomStatus(random));
+                    MergePatchTaskDTO change = new MergePatchTaskDTO();
+                    change.setStatus(Optional.of(getRandomStatus(random)));
                     taskService.editTask(task.getId(), change, editor.getId());
                 }
             }
@@ -364,13 +373,13 @@ public class DemoDataSeeder {
         return tasks;
     }
 
-    private MergePatchTask buildBacklogEditTask(List<User> users, Random random) {
+    private MergePatchTaskDTO buildBacklogEditTask(List<User> users, Random random) {
         Integer points = possibleEstimationPoints.get(random.nextInt(possibleEstimationPoints.size()));
         User assignee = users.get(random.nextInt(users.size()));
 
-        MergePatchTask editTask = new MergePatchTask();
-        editTask.assignee = Optional.of(assignee.getEmail());
-        editTask.estimationPoints = Optional.of(points);
+        MergePatchTaskDTO editTask = new MergePatchTaskDTO();
+        editTask.setAssignee(Optional.of(assignee.getEmail()));
+        editTask.setEstimationPoints(Optional.of(points));
         return editTask;
     }
 

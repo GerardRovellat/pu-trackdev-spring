@@ -12,15 +12,30 @@ import org.udg.trackdev.spring.utils.ErrorConstants;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type Subject service.
+ */
 @Service
 public class SubjectService extends BaseServiceLong<Subject, SubjectRepository> {
 
+    /**
+     * The User service.
+     */
     @Autowired
     UserService userService;
 
+    /**
+     * The Access checker.
+     */
     @Autowired
     AccessChecker accessChecker;
 
+    /**
+     * Gets subject.
+     *
+     * @param id the id
+     * @return the subject
+     */
     public Subject getSubject(Long id) {
         Optional<Subject> oc = this.repo.findById(id);
         if (oc.isEmpty())
@@ -29,6 +44,14 @@ public class SubjectService extends BaseServiceLong<Subject, SubjectRepository> 
     }
 
 
+    /**
+     * Create subject subject.
+     *
+     * @param name           the name
+     * @param acronym        the acronym
+     * @param loggedInUserId the logged in user id
+     * @return the subject
+     */
     @Transactional
     public Subject createSubject(String name, String acronym, String loggedInUserId) {
         User owner = userService.get(loggedInUserId);
@@ -39,6 +62,15 @@ public class SubjectService extends BaseServiceLong<Subject, SubjectRepository> 
         return subject;
     }
 
+    /**
+     * Edit subject details subject.
+     *
+     * @param id             the id
+     * @param name           the name
+     * @param acronym        the acronym
+     * @param loggedInUserId the logged in user id
+     * @return the subject
+     */
     public Subject editSubjectDetails(Long id, String name, String acronym, String loggedInUserId) {
         Subject subject = getSubject(id);
         accessChecker.checkCanManageSubject(subject, loggedInUserId);
@@ -48,12 +80,24 @@ public class SubjectService extends BaseServiceLong<Subject, SubjectRepository> 
         return subject;
     }
 
+    /**
+     * Delete subject.
+     *
+     * @param id             the id
+     * @param loggedInUserId the logged in user id
+     */
     public void deleteSubject(Long id, String loggedInUserId) {
         Subject subject = getSubject(id);
         accessChecker.checkCanManageSubject(subject, loggedInUserId);
         repo.delete(subject);
     }
 
+    /**
+     * Find courses owned list.
+     *
+     * @param uuid the uuid
+     * @return the list
+     */
     List<Subject> findCoursesOwned(String uuid) {
         return this.repo.findByOwner(uuid);
     }

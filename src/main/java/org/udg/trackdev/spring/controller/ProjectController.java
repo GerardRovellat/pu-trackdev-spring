@@ -4,19 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
-import org.udg.trackdev.spring.dto.request.CreateSprintRequestDTO;
-import org.udg.trackdev.spring.dto.request.CreateTaskRequestDTO;
-import org.udg.trackdev.spring.dto.request.EditProjectRequestDTO;
-import org.udg.trackdev.spring.dto.response.*;
+import org.udg.trackdev.spring.dto.request.projects.CreateSprintRequestDTO;
+import org.udg.trackdev.spring.dto.request.projects.CreateTaskRequestDTO;
+import org.udg.trackdev.spring.dto.request.projects.EditProjectRequestDTO;
+import org.udg.trackdev.spring.dto.response.courses.ProjectResponseDTO;
+import org.udg.trackdev.spring.dto.response.projects.*;
 import org.udg.trackdev.spring.facade.ProjectFacade;
-import org.udg.trackdev.spring.service.AccessChecker;
-import org.udg.trackdev.spring.service.ProjectService;
-import org.udg.trackdev.spring.service.UserService;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 import org.udg.trackdev.spring.utils.ValidatorHelper;
 
@@ -32,14 +29,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/projects")
 public class ProjectController extends BaseController {
-    @Autowired
-    ProjectService service;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    AccessChecker accessChecker;
 
     private final ProjectFacade facade;
 
@@ -100,7 +89,7 @@ public class ProjectController extends BaseController {
     @Operation(summary = "Get all project sprints of specific project", description = "Get all project sprints of specific project")
     @GetMapping(path = "/{projectId}/sprints")
     public List<ProjectSprintsResponseDTO> getProjectSprints(@PathVariable(name = "projectId") Long projectId,
-                                                       Principal principal) {
+                                                             Principal principal) {
         //List<Map<String, String>> customResponse = buildCustomResponse(service.getProjectSprints(project));
         return facade.getProjectSprints(projectId, principal);
     }
@@ -108,7 +97,7 @@ public class ProjectController extends BaseController {
     @Operation(summary = "Get users qualification of specific project", description = "Get users qualification of specific project")
     @GetMapping(path = "/{projectId}/qualification")
     public Map<String, ProjectRankDTO> getProjectRank(@PathVariable(name = "projectId") Long projectId,
-                                                                          Principal principal) {
+                                                      Principal principal) {
         return facade.getProjectRak(projectId, principal);
     }
 

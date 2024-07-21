@@ -13,18 +13,33 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.text.SimpleDateFormat;
 
+/**
+ * The type Global.
+ */
 @Service
 public class Global {
+    /**
+     * The constant SIMPLE_DATE_FORMAT.
+     */
     public static final String SIMPLE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
+    /**
+     * The constant SIMPLE_LOCALDATE_FORMAT.
+     */
     public static final String SIMPLE_LOCALDATE_FORMAT = "yyyy-MM-dd";
 
+    /**
+     * The constant dateFormat.
+     */
     public static final SimpleDateFormat dateFormat = new SimpleDateFormat(SIMPLE_DATE_FORMAT);
 
     private MinioClient minioClient;
 
     private final Logger logger = LoggerFactory.getLogger(Global.class);
 
+    /**
+     * The Demo data seeder.
+     */
     @Autowired
     DemoDataSeeder demoDataSeeder;
 
@@ -50,6 +65,9 @@ public class Global {
 
     private SCryptPasswordEncoder encoderScrypt;
 
+    /**
+     * Init.
+     */
     @PostConstruct
     void init() {
 
@@ -78,17 +96,37 @@ public class Global {
         demoDataSeeder.seedDemoData();
     }
 
+    /**
+     * Gets minio client.
+     *
+     * @return the minio client
+     */
     public MinioClient getMinioClient() {
         return minioClient;
     }
 
+    /**
+     * Gets minio bucket.
+     *
+     * @return the minio bucket
+     */
     public String getMinioBucket() {
         return minioBucket;
     }
 
+    /**
+     * Gets base url.
+     *
+     * @return the base url
+     */
     public String getBaseURL() {
         return BASE_URL;
     }
 
+    /**
+     * Gets password encoder.
+     *
+     * @return the password encoder
+     */
     public PasswordEncoder getPasswordEncoder() { return encoderScrypt; }
 }

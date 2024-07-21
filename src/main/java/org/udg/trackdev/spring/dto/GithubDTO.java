@@ -11,12 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GithubDTO {
 
-    private String github_token;
 
     private String login;
 
     private String avatar_url;
 
     private String html_url;
+
+    private String github_token;
+
+    private String id;
 
 }

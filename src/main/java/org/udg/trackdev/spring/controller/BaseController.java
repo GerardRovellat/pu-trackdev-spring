@@ -11,17 +11,33 @@ import java.security.Principal;
  */
 public class BaseController {
 
-  protected String getUserId(Principal principal) {
+    /**
+     * Gets user id.
+     *
+     * @param principal the principal
+     * @return the user id
+     */
+    protected String getUserId(Principal principal) {
     checkLoggedIn(principal);
     return principal.getName();
   }
 
-  void checkLoggedIn(Principal principal) {
+    /**
+     * Check logged in.
+     *
+     * @param principal the principal
+     */
+    void checkLoggedIn(Principal principal) {
     if(principal == null)
       throw new ControllerException(ErrorConstants.USER_NOT_LOGGED_IN);
   }
 
-  ResponseEntity<Void> okNoContent() {
+    /**
+     * Ok no content response entity.
+     *
+     * @return the response entity
+     */
+    ResponseEntity<Void> okNoContent() {
     return ResponseEntity.noContent().build();
   }
 
