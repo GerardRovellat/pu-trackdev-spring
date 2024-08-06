@@ -101,21 +101,4 @@ public class ProjectController extends BaseController {
         return facade.getProjectRak(projectId, principal);
     }
 
-    /**
-    private List<Map<String, String>> buildCustomResponse(Collection<Sprint> sprints) {
-        List<Map<String, String>> customResponse = new ArrayList<>();
-        for (Sprint sprint : sprints) {
-            Map<String, String> sprintMap = new HashMap<>();
-            sprintMap.put("value", sprint.getName());
-            sprintMap.put("label", sprint.getName());
-            sprintMap.put("id", sprint.getId().toString());
-            sprintMap.put("startDate", sprint.getStartDate().toString());
-            sprintMap.put("endDate", sprint.getEndDate().toString());
-            sprintMap.put("status", sprint.getStatusText());
-            customResponse.add(sprintMap);
-        }
-        return customResponse;
-    }
-     **/
-
 }

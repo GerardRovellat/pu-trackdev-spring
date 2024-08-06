@@ -1,10 +1,5 @@
 package org.udg.trackdev.spring.entity;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-import org.udg.trackdev.spring.serializer.JsonDateSerializer;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -20,21 +15,17 @@ public class Comment extends BaseEntityLong {
      */
     public static final int MAX_LENGTH = 1000;
 
-    @JsonView(EntityLevelViews.Basic.class)
     @Column(length = MAX_LENGTH)
     private String content;
 
     @ManyToOne
     @JoinColumn(name = "authorId")
-    @JsonView(EntityLevelViews.Basic.class)
     private User author;
 
     @ManyToOne
     @JoinColumn(name = "taskId")
     private Task task;
 
-    @JsonView(EntityLevelViews.Basic.class)
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date date;
 
     /**

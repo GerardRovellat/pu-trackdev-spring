@@ -1,8 +1,5 @@
 package org.udg.trackdev.spring.entity.taskchanges;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -50,7 +47,6 @@ public class TaskNameChange extends TaskChange {
      *
      * @return the old value
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public String getOldValue() { return this.oldValue; }
 
     /**
@@ -58,6 +54,5 @@ public class TaskNameChange extends TaskChange {
      *
      * @return the new value
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public String getNewValue() { return this.newValue; }
 }

@@ -2,9 +2,7 @@ package org.udg.trackdev.spring.entity.changes;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.udg.trackdev.spring.entity.BaseEntityLong;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
 import org.udg.trackdev.spring.service.Global;
 
 import javax.persistence.Column;
@@ -54,7 +52,6 @@ public abstract class EntityLogChange extends BaseEntityLong {
      *
      * @return the author
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public String getAuthor() { return this.author; }
 
     /**
@@ -70,7 +67,6 @@ public abstract class EntityLogChange extends BaseEntityLong {
      *
      * @return the changed at
      */
-    @JsonView(EntityLevelViews.Basic.class)
     @JsonFormat(pattern = Global.SIMPLE_DATE_FORMAT)
     public LocalDateTime getChangedAt() { return this.changedAt; }
 
@@ -79,6 +75,5 @@ public abstract class EntityLogChange extends BaseEntityLong {
      *
      * @return the type
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public abstract String getType();
 }

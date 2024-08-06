@@ -1,8 +1,6 @@
 package org.udg.trackdev.spring.entity;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.lang.NonNull;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -73,7 +71,6 @@ public class Subject extends BaseEntityLong {
      *
      * @return the name
      */
-    @JsonView({ EntityLevelViews.Basic.class, EntityLevelViews.Hierarchy.class })
     public String getName() {
         return name;
     }
@@ -90,7 +87,6 @@ public class Subject extends BaseEntityLong {
      *
      * @return the owner id
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public String getOwnerId() {
         return ownerId;
     }
@@ -100,7 +96,6 @@ public class Subject extends BaseEntityLong {
      *
      * @return the acronym
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public String getAcronym() {
         return acronym;
     }
@@ -128,7 +123,6 @@ public class Subject extends BaseEntityLong {
      *
      * @return the courses
      */
-    @JsonView(EntityLevelViews.SubjectComplete.class)
     public Collection<Course> getCourses() {
         return this.courses;
     }

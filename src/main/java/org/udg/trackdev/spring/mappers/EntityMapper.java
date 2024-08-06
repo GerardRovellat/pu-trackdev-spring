@@ -4,13 +4,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.udg.trackdev.spring.dto.CourseDTO;
-import org.udg.trackdev.spring.dto.GithubWithoutTokenDTO;
+import org.udg.trackdev.spring.dto.response.auth.SelfResponseDTO;
+import org.udg.trackdev.spring.dto.response.common.GithubWithTokenDTO;
 import org.udg.trackdev.spring.dto.SubjectResponseDTO;
 import org.udg.trackdev.spring.dto.TaskChangeDTO;
 import org.udg.trackdev.spring.dto.response.auth.UserLoginDTO;
-import org.udg.trackdev.spring.dto.response.tasks.CommentDTO;
-import org.udg.trackdev.spring.dto.response.tasks.PointsReviewDTO;
-import org.udg.trackdev.spring.dto.response.tasks.TaskResponseDTO;
 import org.udg.trackdev.spring.dto.response.courses.CourseCompleteResponseDTO;
 import org.udg.trackdev.spring.dto.response.courses.ProjectResponseDTO;
 import org.udg.trackdev.spring.dto.response.projects.ProjectCompleteResponseDTO;
@@ -18,6 +16,9 @@ import org.udg.trackdev.spring.dto.response.projects.ProjectSprintsResponseDTO;
 import org.udg.trackdev.spring.dto.response.projects.ProjectWithUserResponseDTO;
 import org.udg.trackdev.spring.dto.response.sprints.SprintResponseDTO;
 import org.udg.trackdev.spring.dto.response.subjects.SubjectCompleteResponseDTO;
+import org.udg.trackdev.spring.dto.response.tasks.CommentDTO;
+import org.udg.trackdev.spring.dto.response.tasks.PointsReviewDTO;
+import org.udg.trackdev.spring.dto.response.tasks.TaskResponseDTO;
 import org.udg.trackdev.spring.dto.response.users.UserDTO;
 import org.udg.trackdev.spring.dto.response.users.UserWithoutProjectMembersResponseDTO;
 import org.udg.trackdev.spring.entity.*;
@@ -90,13 +91,16 @@ public interface EntityMapper {
     @Mapping(target = "lastLogin", qualifiedByName = "serializeDate")
     UserLoginDTO userEntityToUserLoginDTO(User user);
 
+    @Mapping(target = "roles", qualifiedByName = "serializeRoles")
+    SelfResponseDTO userEntityToSelfDTO(User user);
+
     /**
      * Github entity to dto github dto.
      *
      * @param githubInfo the github info
      * @return the github dto
      */
-    GithubWithoutTokenDTO githubEntityToDTO(GithubInfo githubInfo);
+    GithubWithTokenDTO githubEntityToDTO(GithubInfo githubInfo);
 
     /**
      * Project entity to dto project response dto.

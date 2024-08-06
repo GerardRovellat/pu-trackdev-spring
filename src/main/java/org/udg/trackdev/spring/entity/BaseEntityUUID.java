@@ -1,8 +1,6 @@
 package org.udg.trackdev.spring.entity;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.GenericGenerator;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -30,7 +28,6 @@ public abstract class BaseEntityUUID {
      *
      * @return the id
      */
-    @JsonView({EntityLevelViews.Basic.class, EntityLevelViews.Hierarchy.class})
     public String getId() {
         return id;
     }

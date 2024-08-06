@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.dto.GithubWithoutTokenDTO;
-import org.udg.trackdev.spring.dto.response.courses.ProjectResponseDTO;
+import org.udg.trackdev.spring.dto.response.common.GithubWithTokenDTO;
 
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -36,6 +34,6 @@ public class UserLoginDTO {
 
     private boolean enabled;
 
-    private GithubWithoutTokenDTO githubInfo;
+    private GithubWithTokenDTO githubInfo;
 
 }

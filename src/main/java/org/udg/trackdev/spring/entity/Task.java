@@ -1,13 +1,9 @@
 package org.udg.trackdev.spring.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.lang.NonNull;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-import org.udg.trackdev.spring.serializer.JsonDateSerializer;
 import org.udg.trackdev.spring.utils.Constants;
 
 import javax.persistence.*;
@@ -102,7 +98,6 @@ public class Task extends BaseEntityLong {
      * @return the name
      */
     @NonNull
-    @JsonView(EntityLevelViews.Basic.class)
     public String getName() {
         return name;
     }
@@ -131,7 +126,6 @@ public class Task extends BaseEntityLong {
      * @param type the type
      */
     @NonNull
-    @JsonView(EntityLevelViews.Basic.class)
     public void setType(TaskType type) {
         this.type = type;
     }
@@ -141,8 +135,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the created at
      */
-    @JsonView(EntityLevelViews.Basic.class)
-    @JsonSerialize(using = JsonDateSerializer.class)
     public Date getCreatedAt() { return createdAt; }
 
     /**
@@ -150,7 +142,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the reporter
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public User getReporter() { return reporter; }
 
     /**
@@ -158,7 +149,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the description
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public String getDescription() { return description; }
 
     /**
@@ -173,7 +163,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the project
      */
-    @JsonView({EntityLevelViews.TaskWithProjectMembers.class} )
     public Project getProject() {
         return project;
     }
@@ -192,7 +181,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the assignee
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public User getAssignee() { return assignee; }
 
     /**
@@ -209,7 +197,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the status
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public TaskStatus getStatus() { return status; }
 
     /**
@@ -217,7 +204,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the status text
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public String getStatusText() { return status.toString(); }
 
     /**
@@ -244,7 +230,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the estimation points
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public Integer getEstimationPoints() { return estimationPoints; }
 
     /**
@@ -261,7 +246,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the rank
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public Integer getRank() { return this.rank; }
 
     /**
@@ -278,7 +262,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the child tasks
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public Collection<Task> getChildTasks() {
         return childTasks;
     }
@@ -295,7 +278,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the parent task
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public Task getParentTask() {
         return parentTask;
     }
@@ -314,7 +296,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the discussion
      */
-    @JsonView(EntityLevelViews.TaskComplete.class)
     public Collection<Comment> getDiscussion() {
         return discussion;
     }
@@ -353,7 +334,6 @@ public class Task extends BaseEntityLong {
      *
      * @return the active sprints
      */
-    @JsonView({EntityLevelViews.TaskComplete.class, EntityLevelViews.Basic.class})
     public Collection<Sprint> getActiveSprints() {
         return activeSprints;
     }

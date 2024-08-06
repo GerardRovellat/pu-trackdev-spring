@@ -3,9 +3,9 @@ package org.udg.trackdev.spring.facade.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
-import org.udg.trackdev.spring.dto.response.users.UserDTO;
 import org.udg.trackdev.spring.dto.request.users.EditUserRequestDTO;
 import org.udg.trackdev.spring.dto.request.users.RegisterUserRequestDTO;
+import org.udg.trackdev.spring.dto.response.users.UserDTO;
 import org.udg.trackdev.spring.dto.response.users.UserWithoutProjectMembersResponseDTO;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.UserFacade;
@@ -36,9 +36,9 @@ public class UserFacadeImpl implements UserFacade {
     private final EntityMapper mapper;
 
     @Override
-    public UserDTO getUser(String id, Principal principal) {
+    public UserWithoutProjectMembersResponseDTO getUser(String id, Principal principal) {
         authService.checkLoggedIn(principal);
-        return mapper.userEntityToDTO(userService.get(id));
+        return mapper.userEntityToUserWithoutProjectMembers(userService.get(id));
     }
 
     @Override

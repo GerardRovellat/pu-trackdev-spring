@@ -11,7 +11,6 @@ import org.udg.trackdev.spring.dto.response.tasks.CommentDTO;
 import org.udg.trackdev.spring.dto.response.tasks.PointsReviewDTO;
 import org.udg.trackdev.spring.dto.response.tasks.TaskResponseDTO;
 import org.udg.trackdev.spring.dto.response.tasks.TaskWithPointsReviewDTO;
-import org.udg.trackdev.spring.entity.Task;
 import org.udg.trackdev.spring.facade.TaskFacade;
 import org.udg.trackdev.spring.mappers.EntityMapper;
 import org.udg.trackdev.spring.service.*;

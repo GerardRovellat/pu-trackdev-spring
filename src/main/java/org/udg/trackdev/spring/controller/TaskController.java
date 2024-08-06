@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +14,6 @@ import org.udg.trackdev.spring.dto.response.tasks.CommentDTO;
 import org.udg.trackdev.spring.dto.response.tasks.TaskResponseDTO;
 import org.udg.trackdev.spring.dto.response.tasks.TaskWithPointsReviewDTO;
 import org.udg.trackdev.spring.facade.TaskFacade;
-import org.udg.trackdev.spring.service.AccessChecker;
-import org.udg.trackdev.spring.service.PointsReviewService;
-import org.udg.trackdev.spring.service.TaskChangeService;
 
 import javax.validation.Valid;
 import java.security.Principal;

@@ -9,7 +9,6 @@ import org.udg.trackdev.spring.controller.exceptions.ServiceException;
 import org.udg.trackdev.spring.entity.Email;
 import org.udg.trackdev.spring.repository.EmailRepository;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 

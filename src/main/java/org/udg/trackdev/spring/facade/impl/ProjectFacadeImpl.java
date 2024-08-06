@@ -2,12 +2,12 @@ package org.udg.trackdev.spring.facade.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.udg.trackdev.spring.dto.response.tasks.TaskResponseDTO;
 import org.udg.trackdev.spring.dto.request.projects.CreateSprintRequestDTO;
 import org.udg.trackdev.spring.dto.request.projects.CreateTaskRequestDTO;
 import org.udg.trackdev.spring.dto.request.projects.EditProjectRequestDTO;
 import org.udg.trackdev.spring.dto.response.courses.ProjectResponseDTO;
 import org.udg.trackdev.spring.dto.response.projects.*;
+import org.udg.trackdev.spring.dto.response.tasks.TaskResponseDTO;
 import org.udg.trackdev.spring.entity.Project;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.ProjectFacade;

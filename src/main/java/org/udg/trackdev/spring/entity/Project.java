@@ -1,12 +1,8 @@
 package org.udg.trackdev.spring.entity;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-import org.udg.trackdev.spring.serializer.JsonHierarchyViewSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -90,7 +86,6 @@ public class Project extends BaseEntityLong {
      *
      * @return the name
      */
-    @JsonView({EntityLevelViews.Basic.class})
     public String getName() { return this.name; }
 
     /**
@@ -105,7 +100,6 @@ public class Project extends BaseEntityLong {
      *
      * @return the members
      */
-    @JsonView({EntityLevelViews.ProjectWithUser.class, EntityLevelViews.TaskWithProjectMembers.class})
     public Set<User> getMembers() { return this.members; }
 
     /**
@@ -113,8 +107,6 @@ public class Project extends BaseEntityLong {
      *
      * @return the course
      */
-    @JsonView( { EntityLevelViews.Basic.class, EntityLevelViews.Hierarchy.class })
-    @JsonSerialize(using = JsonHierarchyViewSerializer.class)
     public Course getCourse() {
         return this.course;
     }
@@ -133,7 +125,6 @@ public class Project extends BaseEntityLong {
      *
      * @return the tasks
      */
-    @JsonView({EntityLevelViews.ProjectComplete.class})
     public Collection<Task> getTasks() {
         Collection<Task> mainTasks = new ArrayList<>();
         this.tasks.stream().filter(task -> task.getParentTask() == null).forEach(mainTasks::add);
@@ -145,7 +136,6 @@ public class Project extends BaseEntityLong {
      *
      * @return the sprints
      */
-    @JsonView({EntityLevelViews.ProjectComplete.class})
     public Collection<Sprint> getSprints() {
         return this.sprints;
     }
@@ -155,7 +145,6 @@ public class Project extends BaseEntityLong {
      *
      * @return the qualification
      */
-    @JsonView({EntityLevelViews.Basic.class})
     public Double getQualification() { return this.qualification; }
 
     /**

@@ -4,6 +4,7 @@ import org.udg.trackdev.spring.dto.request.auth.ChangePasswordRequestDTO;
 import org.udg.trackdev.spring.dto.request.auth.LoginRequestDTO;
 import org.udg.trackdev.spring.dto.request.auth.RecoveryPasswordRequestDTO;
 import org.udg.trackdev.spring.dto.response.auth.LoginResponseDTO;
+import org.udg.trackdev.spring.dto.response.auth.SelfResponseDTO;
 import org.udg.trackdev.spring.dto.response.users.UserDTO;
 
 import javax.mail.MessagingException;
@@ -40,7 +41,7 @@ public interface AuthFacade {
      * @param principal the principal
      * @return the user
      */
-    UserDTO self(Principal principal);
+    SelfResponseDTO self(Principal principal);
 
     /**
      * Check.

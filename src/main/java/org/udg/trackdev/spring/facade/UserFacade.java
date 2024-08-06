@@ -1,8 +1,8 @@
 package org.udg.trackdev.spring.facade;
 
-import org.udg.trackdev.spring.dto.response.users.UserDTO;
 import org.udg.trackdev.spring.dto.request.users.EditUserRequestDTO;
 import org.udg.trackdev.spring.dto.request.users.RegisterUserRequestDTO;
+import org.udg.trackdev.spring.dto.response.users.UserDTO;
 import org.udg.trackdev.spring.dto.response.users.UserWithoutProjectMembersResponseDTO;
 
 import java.security.Principal;
@@ -20,7 +20,7 @@ public interface UserFacade {
      * @param principal the principal
      * @return the user
      */
-    UserDTO getUser(String id, Principal principal);
+    UserWithoutProjectMembersResponseDTO getUser(String id, Principal principal);
 
     /**
      * Gets user email.

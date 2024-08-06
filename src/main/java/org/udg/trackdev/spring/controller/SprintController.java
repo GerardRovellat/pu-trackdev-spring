@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/sprints")
-public class SprintController {
+public class SprintController extends BaseController {
 
     private final SprintFacade facade;
 

@@ -1,12 +1,9 @@
 package org.udg.trackdev.spring.dto.response.tasks;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.entity.PointsReview;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
 
 import java.util.List;
 

@@ -1,8 +1,6 @@
 package org.udg.trackdev.spring.entity.sprintchanges;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import org.udg.trackdev.spring.entity.SprintStatus;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -49,7 +47,6 @@ public class SprintStatusChange extends SprintChange {
      *
      * @return the status
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public SprintStatus getStatus() {
         return this.status;
     }

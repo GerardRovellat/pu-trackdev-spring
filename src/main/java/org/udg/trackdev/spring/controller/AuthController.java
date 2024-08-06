@@ -1,6 +1,5 @@
 package org.udg.trackdev.spring.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,8 +11,8 @@ import org.udg.trackdev.spring.dto.request.auth.ChangePasswordRequestDTO;
 import org.udg.trackdev.spring.dto.request.auth.LoginRequestDTO;
 import org.udg.trackdev.spring.dto.request.auth.RecoveryPasswordRequestDTO;
 import org.udg.trackdev.spring.dto.response.auth.LoginResponseDTO;
+import org.udg.trackdev.spring.dto.response.auth.SelfResponseDTO;
 import org.udg.trackdev.spring.dto.response.users.UserDTO;
-import org.udg.trackdev.spring.entity.views.PrivacyLevelViews;
 import org.udg.trackdev.spring.facade.AuthFacade;
 import org.udg.trackdev.spring.utils.ValidatorHelper;
 
@@ -77,7 +76,7 @@ public class AuthController extends BaseController {
             description = "Return the public information of the logged user",
             security = {@SecurityRequirement(name = "bearerAuth")})
     @GetMapping(path="/self")
-    public UserDTO self(Principal principal) {
+    public SelfResponseDTO self(Principal principal) {
         return facade.self(principal);
     }
 
@@ -124,8 +123,7 @@ public class AuthController extends BaseController {
      */
     @Operation(summary = "Get recovery code", description = "Get recovery code for user")
     @PostMapping(path="/recovery")
-    public ResponseEntity<Void> recoveryCode(@RequestParam String email)
-            throws MessagingException {
+    public ResponseEntity<Void> recoveryCode(@RequestParam String email) throws MessagingException {
         facade.recoveryCode(email);
         return okNoContent();
     }

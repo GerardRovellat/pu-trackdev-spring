@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
-import org.udg.trackdev.spring.dto.response.users.UserDTO;
 import org.udg.trackdev.spring.dto.request.users.EditUserRequestDTO;
 import org.udg.trackdev.spring.dto.request.users.RegisterUserRequestDTO;
+import org.udg.trackdev.spring.dto.response.users.UserDTO;
 import org.udg.trackdev.spring.dto.response.users.UserWithoutProjectMembersResponseDTO;
 import org.udg.trackdev.spring.facade.UserFacade;
 import org.udg.trackdev.spring.utils.ErrorConstants;
@@ -42,7 +42,7 @@ public class UserController extends BaseController {
      */
     @Operation(summary = "Get user by id", description = "Get user by id")
     @GetMapping(path = "/uuid/{id}")
-    public UserDTO getPublic(@PathVariable("id") String id, Principal principal) {
+    public UserWithoutProjectMembersResponseDTO getPublic(@PathVariable("id") String id, Principal principal) {
         return facade.getUser(id, principal);
     }
 

@@ -1,13 +1,8 @@
 package org.udg.trackdev.spring.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.udg.trackdev.spring.configuration.UserType;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-import org.udg.trackdev.spring.entity.views.PrivacyLevelViews;
-import org.udg.trackdev.spring.serializer.JsonDateSerializer;
-import org.udg.trackdev.spring.serializer.JsonRolesSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -74,8 +69,6 @@ public class User extends BaseEntityUUID {
   @NotNull
   private String password;
 
-  @JsonView(EntityLevelViews.Basic.class)
-  @JsonSerialize(using = JsonDateSerializer.class)
   private Date lastLogin;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
@@ -116,7 +109,6 @@ public class User extends BaseEntityUUID {
 
  // -- GETTERS AND SETTERS
 
-  @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public String getId() {
     return super.getId();
   }
@@ -126,7 +118,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the email
      */
-    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public String getEmail() {
     return email;
   }
@@ -145,7 +136,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the username
      */
-    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public String getUsername() {
     return username;
   }
@@ -165,7 +155,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the current project
      */
-    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
   public Long getCurrentProject() { return currentProject; }
 
     /**
@@ -214,8 +203,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the roles
      */
-    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class})
-  @JsonSerialize(using= JsonRolesSerializer.class)
   public Set<Role> getRoles() { return roles; }
 
     /**
@@ -223,7 +210,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the color
      */
-    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public String getColor() { return color; }
 
     /**
@@ -239,7 +225,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the capital letters
      */
-    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public String getCapitalLetters() { return capitalLetters; }
 
     /**
@@ -247,7 +232,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the projects
      */
-    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.UserWithoutProjectMembers.class})
   public Collection<Project> getProjects() {
     return projects;
   }
@@ -257,7 +241,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the github info
      */
-    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class, EntityLevelViews.TaskWithProjectMembers.class})
   public GithubInfo getGithubInfo() { return githubInfo; }
 
     /**
@@ -316,7 +299,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the change password
      */
-    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
   public Boolean getChangePassword() { return changePassword; }
 
     /**
@@ -331,7 +313,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the enabled
      */
-    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
   public Boolean getEnabled() { return enabled; }
 
     /**
@@ -372,7 +353,6 @@ public class User extends BaseEntityUUID {
      *
      * @return the date
      */
-    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.ProjectWithUser.class})
   public Date getLastLogin(){ return lastLogin; }
 
     /**
@@ -410,16 +390,6 @@ public class User extends BaseEntityUUID {
       this.projects.remove(project);
     }
   }
-
-  /**
-  public void enrollToCourse(Course course) { this.course.add(course); }
-
-  public void removeFromCourse(Course course) { this.course.remove(course); }
-
-
-  @JsonIgnore
-  public Collection<Course> getEnrolledCourse() { return this.course; }
-   **/
 
   private String randomColorGenerator(){
     int red = this.random.nextInt(256);

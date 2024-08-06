@@ -1,8 +1,5 @@
 package org.udg.trackdev.spring.entity.sprintchanges;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -46,7 +43,6 @@ public class SprintNameChange extends SprintChange {
      *
      * @return the name
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public String getName() {
         return this.name;
     }

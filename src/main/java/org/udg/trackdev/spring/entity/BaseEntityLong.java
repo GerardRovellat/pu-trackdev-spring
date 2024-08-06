@@ -1,8 +1,5 @@
 package org.udg.trackdev.spring.entity;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,6 +19,5 @@ public abstract class BaseEntityLong {
      *
      * @return the id
      */
-    @JsonView({ EntityLevelViews.Basic.class, EntityLevelViews.Hierarchy.class})
     public Long getId() { return id; }
 }

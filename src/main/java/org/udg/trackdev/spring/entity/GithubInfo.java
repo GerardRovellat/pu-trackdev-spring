@@ -1,9 +1,6 @@
 package org.udg.trackdev.spring.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonView;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-import org.udg.trackdev.spring.entity.views.PrivacyLevelViews;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -38,7 +35,6 @@ public class GithubInfo extends BaseEntityUUID{
      *
      * @return the github token
      */
-    @JsonView({PrivacyLevelViews.Private.class, EntityLevelViews.UserWithGithubToken.class})
     public String getGithub_token() { return github_token; }
 
     /**
@@ -54,7 +50,6 @@ public class GithubInfo extends BaseEntityUUID{
      *
      * @return the login
      */
-    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
     public String getLogin() { return login; }
 
     /**
@@ -70,7 +65,6 @@ public class GithubInfo extends BaseEntityUUID{
      *
      * @return the avatar url
      */
-    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
     public String getAvatar_url() { return avatar_url; }
 
     /**
@@ -86,7 +80,6 @@ public class GithubInfo extends BaseEntityUUID{
      *
      * @return the html url
      */
-    @JsonView({PrivacyLevelViews.Public.class, EntityLevelViews.Basic.class})
     public String getHtml_url() { return html_url; }
 
     /**

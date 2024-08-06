@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.dto.GithubDTO;
+import org.udg.trackdev.spring.dto.response.common.GithubWithoutTokenDTO;
 import org.udg.trackdev.spring.dto.response.courses.ProjectResponseDTO;
 
 import java.util.List;
@@ -36,7 +36,7 @@ public class UserWithoutProjectMembersResponseDTO {
 
     private boolean enabled;
 
-    private GithubDTO githubInfo;
+    private GithubWithoutTokenDTO githubInfo;
 
     private List<ProjectResponseDTO> projects;
 

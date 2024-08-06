@@ -1,8 +1,5 @@
 package org.udg.trackdev.spring.entity;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -55,7 +52,6 @@ public class PointsReview extends BaseEntityLong {
      *
      * @return the points
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public Integer getPoints() { return points; }
 
     /**
@@ -70,7 +66,6 @@ public class PointsReview extends BaseEntityLong {
      *
      * @return the comment
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public String getComment() { return comment; }
 
     /**
@@ -99,7 +94,6 @@ public class PointsReview extends BaseEntityLong {
      *
      * @return the user
      */
-    @JsonView(EntityLevelViews.Basic.class)
     public User getUser() { return user; }
 
     /**

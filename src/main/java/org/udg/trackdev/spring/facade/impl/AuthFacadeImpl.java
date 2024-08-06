@@ -8,6 +8,7 @@ import org.udg.trackdev.spring.dto.request.auth.ChangePasswordRequestDTO;
 import org.udg.trackdev.spring.dto.request.auth.LoginRequestDTO;
 import org.udg.trackdev.spring.dto.request.auth.RecoveryPasswordRequestDTO;
 import org.udg.trackdev.spring.dto.response.auth.LoginResponseDTO;
+import org.udg.trackdev.spring.dto.response.auth.SelfResponseDTO;
 import org.udg.trackdev.spring.dto.response.users.UserDTO;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.AuthFacade;
@@ -57,8 +58,8 @@ public class AuthFacadeImpl implements AuthFacade {
     }
 
     @Override
-    public UserDTO self(Principal principal) {
-        return mapper.userEntityToDTO(userService.get(authService.getLoggedInUserId(principal)));
+    public SelfResponseDTO self(Principal principal) {
+        return mapper.userEntityToSelfDTO(userService.get(authService.getLoggedInUserId(principal)));
     }
 
     @Override

@@ -1,9 +1,6 @@
 package org.udg.trackdev.spring.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
 import lombok.*;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -59,7 +56,6 @@ public class Course extends BaseEntityLong {
      *
      * @return the start year
      */
-    @JsonView({ EntityLevelViews.Basic.class, EntityLevelViews.Hierarchy.class })
     public Integer getStartYear() { return startYear; }
 
     /**
@@ -67,7 +63,6 @@ public class Course extends BaseEntityLong {
      *
      * @return the subject
      */
-    @JsonView({ EntityLevelViews.CourseComplete.class, EntityLevelViews.Hierarchy.class })
     public Subject getSubject() { return this.subject; }
 
     /**
@@ -75,7 +70,6 @@ public class Course extends BaseEntityLong {
      *
      * @return the projects
      */
-    @JsonIgnore
     public Collection<Project> getProjects() { return this.projects; }
 
     /**
@@ -90,7 +84,6 @@ public class Course extends BaseEntityLong {
      *
      * @return the github organization
      */
-    @JsonView({ EntityLevelViews.Basic.class, EntityLevelViews.Hierarchy.class })
     public String getGithubOrganization() { return this.githubOrganization; }
 
 }

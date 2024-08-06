@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.dto.response.users.UserDTO;
 
 /**
  * The type Login response dto.

@@ -1,11 +1,7 @@
 package org.udg.trackdev.spring.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.lang.NonNull;
-import org.udg.trackdev.spring.entity.views.EntityLevelViews;
-import org.udg.trackdev.spring.serializer.JsonDateSerializer;
 import org.udg.trackdev.spring.service.Global;
 
 import javax.persistence.*;
@@ -34,12 +30,8 @@ public class Sprint extends BaseEntityLong {
     @NonNull
     private String name;
 
-    @JsonView(EntityLevelViews.Basic.class)
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date startDate;
 
-    @JsonView(EntityLevelViews.Basic.class)
-    @JsonSerialize(using = JsonDateSerializer.class)
     private Date endDate;
 
     @Column(name = "`status`")
@@ -77,7 +69,6 @@ public class Sprint extends BaseEntityLong {
      * @return the name
      */
     @NonNull
-    @JsonView({EntityLevelViews.Basic.class, EntityLevelViews.TaskComplete.class})
     public String getName() {
         return name;
     }
@@ -96,7 +87,6 @@ public class Sprint extends BaseEntityLong {
      *
      * @return the start date
      */
-    @JsonView({EntityLevelViews.Basic.class, EntityLevelViews.TaskComplete.class})
     @JsonFormat(pattern = Global.SIMPLE_LOCALDATE_FORMAT)
     public Date getStartDate() {
         return startDate;
@@ -116,7 +106,6 @@ public class Sprint extends BaseEntityLong {
      *
      * @return the end date
      */
-    @JsonView({EntityLevelViews.Basic.class, EntityLevelViews.TaskComplete.class})
     @JsonFormat(pattern = Global.SIMPLE_LOCALDATE_FORMAT)
     public Date getEndDate() {
         return endDate;
@@ -137,7 +126,6 @@ public class Sprint extends BaseEntityLong {
      *
      * @return the status
      */
-    @JsonView({EntityLevelViews.Basic.class, EntityLevelViews.TaskComplete.class})
     public SprintStatus getStatus() { return this.status; }
 
     /**
@@ -145,7 +133,6 @@ public class Sprint extends BaseEntityLong {
      *
      * @return the status text
      */
-    @JsonView({EntityLevelViews.Basic.class, EntityLevelViews.TaskComplete.class})
     public String getStatusText() { return this.status.toString(); }
 
     /**
@@ -169,7 +156,6 @@ public class Sprint extends BaseEntityLong {
      *
      * @return the active tasks
      */
-    @JsonView(EntityLevelViews.SprintComplete.class)
     public Collection<Task> getActiveTasks() {
         return this.activeTasks;
     }
@@ -188,7 +174,6 @@ public class Sprint extends BaseEntityLong {
      *
      * @return the project
      */
-    @JsonView(EntityLevelViews.SprintComplete.class)
     public Project getProject() {
         return this.project;
     }
