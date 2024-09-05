@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.udg.trackdev.spring.controller.exceptions.ServiceException;
+import org.udg.trackdev.spring.dto.response.GithubPullRequestDTO;
 import org.udg.trackdev.spring.entity.PullRequest;
 import org.udg.trackdev.spring.entity.Task;
 import org.udg.trackdev.spring.entity.User;

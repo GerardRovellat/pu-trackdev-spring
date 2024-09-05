@@ -1,4 +1,4 @@
-package org.udg.trackdev.spring.dto.response.common;
+package org.udg.trackdev.spring.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GithubWithoutTokenDTO {
+public class GithubPullRequestDTO {
 
-    private String login;
+    private int number;
 
-    private String avatar_url;
+    private String title;
+
+    private String state;
 
     private String html_url;
+
+    private GithubWithoutTokenDTO user;
 
 }

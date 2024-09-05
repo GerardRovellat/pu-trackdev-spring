@@ -1,19 +1,20 @@
-package org.udg.trackdev.spring.dto.response.courses;
+package org.udg.trackdev.spring.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.dto.CourseDTO;
+
+import java.util.Collection;
 
 /**
- * The type Project response dto.
+ * The type Project with user response dto.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectResponseDTO {
+public class ProjectWithUserResponseDTO {
 
     private Long id;
 
@@ -22,5 +23,7 @@ public class ProjectResponseDTO {
     private CourseDTO course;
 
     private Double qualification;
+
+    private Collection<UserDTO> members;
 
 }

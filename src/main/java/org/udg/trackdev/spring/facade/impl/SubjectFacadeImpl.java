@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
 import org.udg.trackdev.spring.dto.request.subjects.CreateCourseRequestDTO;
 import org.udg.trackdev.spring.dto.request.subjects.SubjectRequestDTO;
-import org.udg.trackdev.spring.dto.response.subjects.SubjectCompleteResponseDTO;
+import org.udg.trackdev.spring.dto.response.SubjectCompleteResponseDTO;
 import org.udg.trackdev.spring.entity.Subject;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.SubjectFacade;

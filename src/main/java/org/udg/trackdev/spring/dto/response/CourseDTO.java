@@ -1,4 +1,4 @@
-package org.udg.trackdev.spring.dto;
+package org.udg.trackdev.spring.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +20,6 @@ public class CourseDTO {
 
     private String githubOrganization;
 
-    private SubjectProjectResponseDTO subject;
+    private SubjectResponseDTO subject;
 
 }

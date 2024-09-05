@@ -3,8 +3,7 @@ package org.udg.trackdev.spring.facade;
 import org.udg.trackdev.spring.dto.request.projects.CreateSprintRequestDTO;
 import org.udg.trackdev.spring.dto.request.projects.CreateTaskRequestDTO;
 import org.udg.trackdev.spring.dto.request.projects.EditProjectRequestDTO;
-import org.udg.trackdev.spring.dto.response.courses.ProjectResponseDTO;
-import org.udg.trackdev.spring.dto.response.projects.*;
+import org.udg.trackdev.spring.dto.response.*;
 
 import java.security.Principal;
 import java.util.Collection;

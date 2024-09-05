@@ -1,7 +1,7 @@
 package org.udg.trackdev.spring.facade;
 
 import org.udg.trackdev.spring.dto.request.sprints.SprintRequestDTO;
-import org.udg.trackdev.spring.dto.response.sprints.SprintResponseDTO;
+import org.udg.trackdev.spring.dto.response.SprintResponseDTO;
 
 import java.security.Principal;
 import java.util.List;

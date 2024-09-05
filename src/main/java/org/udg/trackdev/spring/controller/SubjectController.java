@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
 import org.udg.trackdev.spring.dto.request.subjects.CreateCourseRequestDTO;
 import org.udg.trackdev.spring.dto.request.subjects.SubjectRequestDTO;
-import org.udg.trackdev.spring.dto.response.subjects.SubjectCompleteResponseDTO;
+import org.udg.trackdev.spring.dto.response.SubjectCompleteResponseDTO;
 import org.udg.trackdev.spring.facade.SubjectFacade;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 import org.udg.trackdev.spring.utils.ValidatorHelper;

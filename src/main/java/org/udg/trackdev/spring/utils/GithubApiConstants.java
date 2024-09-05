@@ -15,4 +15,6 @@ public final class GithubApiConstants {
      */
     public static final String GITHUB_API_USER_URL = GITHUB_API_URL + "/user";
 
+    public static final String GITHUB_API_PR_URL = GITHUB_API_URL + "/repos/%s/%s/pulls?state=all";
+
 }

@@ -1,14 +1,20 @@
 package org.udg.trackdev.spring.service;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.udg.trackdev.spring.dto.response.GithubPullRequestDTO;
 import org.udg.trackdev.spring.entity.GithubInfo;
+import org.udg.trackdev.spring.entity.Project;
+import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.repository.GithubInfoRepository;
 import org.udg.trackdev.spring.utils.GithubApiConstants;
+
+import java.util.List;
 
 /**
  * The type Github service.
@@ -53,6 +59,24 @@ public class GithubService extends BaseServiceUUID<GithubInfo, GithubInfoReposit
             }
         }
 
+    }
+
+    public List<GithubPullRequestDTO> getPullRequest(Project project, User user){
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + user.getGithubInfo().getGithub_token());
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        // TODO: Change the hardcoded repository name (trackdev2-spring) to the project name
+        String url = String.format(GithubApiConstants.GITHUB_API_PR_URL,project.getCourse().getGithubOrganization(),project.getName());
+        try {
+            return restTemplate.exchange(
+                    url,
+                    org.springframework.http.HttpMethod.GET,
+                    requestEntity,
+                    new ParameterizedTypeReference<List<GithubPullRequestDTO>>() {}
+            ).getBody();
+        } catch (HttpClientErrorException e) {
+            return null;
+        }
     }
 
 

@@ -11,8 +11,7 @@ import org.udg.trackdev.spring.controller.exceptions.ControllerException;
 import org.udg.trackdev.spring.dto.request.projects.CreateSprintRequestDTO;
 import org.udg.trackdev.spring.dto.request.projects.CreateTaskRequestDTO;
 import org.udg.trackdev.spring.dto.request.projects.EditProjectRequestDTO;
-import org.udg.trackdev.spring.dto.response.courses.ProjectResponseDTO;
-import org.udg.trackdev.spring.dto.response.projects.*;
+import org.udg.trackdev.spring.dto.response.*;
 import org.udg.trackdev.spring.facade.ProjectFacade;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 import org.udg.trackdev.spring.utils.ValidatorHelper;
@@ -90,7 +89,6 @@ public class ProjectController extends BaseController {
     @GetMapping(path = "/{projectId}/sprints")
     public List<ProjectSprintsResponseDTO> getProjectSprints(@PathVariable(name = "projectId") Long projectId,
                                                              Principal principal) {
-        //List<Map<String, String>> customResponse = buildCustomResponse(service.getProjectSprints(project));
         return facade.getProjectSprints(projectId, principal);
     }
 

@@ -4,5 +4,5 @@ import org.springframework.stereotype.Component;
 import org.udg.trackdev.spring.entity.Project;
 
 @Component
-public interface GroupRepository extends BaseRepositoryLong<Project> {
+public interface ProjectRepository extends BaseRepositoryLong<Project> {
 }

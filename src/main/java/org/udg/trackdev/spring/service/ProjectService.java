@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.udg.trackdev.spring.controller.exceptions.ServiceException;
-import org.udg.trackdev.spring.dto.response.projects.ProjectRankDTO;
+import org.udg.trackdev.spring.dto.response.ProjectRankDTO;
 import org.udg.trackdev.spring.entity.*;
-import org.udg.trackdev.spring.repository.GroupRepository;
+import org.udg.trackdev.spring.repository.ProjectRepository;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 
 import java.math.BigDecimal;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * The type Project service.
  */
 @Service
-public class ProjectService extends BaseServiceLong<Project, GroupRepository> {
+public class ProjectService extends BaseServiceLong<Project, ProjectRepository> {
 
     /**
      * The User service.

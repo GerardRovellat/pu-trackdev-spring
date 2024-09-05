@@ -2,7 +2,7 @@ package org.udg.trackdev.spring.facade;
 
 import org.udg.trackdev.spring.dto.request.subjects.CreateCourseRequestDTO;
 import org.udg.trackdev.spring.dto.request.subjects.SubjectRequestDTO;
-import org.udg.trackdev.spring.dto.response.subjects.SubjectCompleteResponseDTO;
+import org.udg.trackdev.spring.dto.response.SubjectCompleteResponseDTO;
 
 import java.security.Principal;
 import java.util.List;

@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.dto.request.sprints.SprintRequestDTO;
-import org.udg.trackdev.spring.dto.response.sprints.SprintResponseDTO;
+import org.udg.trackdev.spring.dto.response.SprintResponseDTO;
 import org.udg.trackdev.spring.facade.SprintFacade;
 
 import javax.validation.Valid;

@@ -43,6 +43,8 @@ public class Task extends BaseEntityLong {
 
     private Integer estimationPoints;
 
+    private String pullRequest;
+
     @Column(name = "`status`")
     private TaskStatus status;
 

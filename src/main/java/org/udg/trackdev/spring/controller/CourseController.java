@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
 import org.udg.trackdev.spring.dto.request.courses.CreateProjectRequestDTO;
 import org.udg.trackdev.spring.dto.request.courses.EditCourseRequestDTO;
-import org.udg.trackdev.spring.dto.response.courses.CourseCompleteResponseDTO;
-import org.udg.trackdev.spring.dto.response.courses.ProjectResponseDTO;
+import org.udg.trackdev.spring.dto.response.CourseCompleteResponseDTO;
+import org.udg.trackdev.spring.dto.response.ProjectResponseDTO;
 import org.udg.trackdev.spring.facade.CourseFacade;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 

@@ -2,8 +2,7 @@ package org.udg.trackdev.spring.facade;
 
 import org.udg.trackdev.spring.dto.request.users.EditUserRequestDTO;
 import org.udg.trackdev.spring.dto.request.users.RegisterUserRequestDTO;
-import org.udg.trackdev.spring.dto.response.users.UserDTO;
-import org.udg.trackdev.spring.dto.response.users.UserWithoutProjectMembersResponseDTO;
+import org.udg.trackdev.spring.dto.response.UserWithoutProjectMembersResponseDTO;
 
 import java.security.Principal;
 import java.util.List;

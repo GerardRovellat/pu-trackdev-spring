@@ -1,4 +1,4 @@
-package org.udg.trackdev.spring.dto.response.common;
+package org.udg.trackdev.spring.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

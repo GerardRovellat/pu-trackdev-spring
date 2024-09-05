@@ -7,12 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.udg.trackdev.spring.dto.TaskChangeDTO;
+import org.udg.trackdev.spring.dto.response.*;
 import org.udg.trackdev.spring.dto.request.tasks.MergePatchTaskDTO;
 import org.udg.trackdev.spring.dto.request.tasks.NewChildTaskDTO;
-import org.udg.trackdev.spring.dto.response.tasks.CommentDTO;
-import org.udg.trackdev.spring.dto.response.tasks.TaskResponseDTO;
-import org.udg.trackdev.spring.dto.response.tasks.TaskWithPointsReviewDTO;
 import org.udg.trackdev.spring.facade.TaskFacade;
 
 import javax.validation.Valid;
@@ -169,6 +166,11 @@ public class TaskController extends BaseController {
     @GetMapping("/types")
     public Map<String,String> getListOfTypes() {
         return facade.getListOfTypes();
+    }
+
+    @GetMapping("/pullrequests")
+    public List<GithubPullRequestDTO> getPullRequests(@RequestParam Long projectId, Principal principal) {
+        return facade.getPullRequest(projectId, principal);
     }
 
 }

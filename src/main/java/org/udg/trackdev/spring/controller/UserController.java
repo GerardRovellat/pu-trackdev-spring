@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
 import org.udg.trackdev.spring.dto.request.users.EditUserRequestDTO;
 import org.udg.trackdev.spring.dto.request.users.RegisterUserRequestDTO;
-import org.udg.trackdev.spring.dto.response.users.UserDTO;
-import org.udg.trackdev.spring.dto.response.users.UserWithoutProjectMembersResponseDTO;
+import org.udg.trackdev.spring.dto.response.UserWithoutProjectMembersResponseDTO;
 import org.udg.trackdev.spring.facade.UserFacade;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 

@@ -1,10 +1,9 @@
-package org.udg.trackdev.spring.dto.response.projects;
+package org.udg.trackdev.spring.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.dto.response.tasks.TaskResponseDTO;
 
 import java.util.Collection;
 

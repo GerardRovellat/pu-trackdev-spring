@@ -4,13 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.udg.trackdev.spring.controller.exceptions.ControllerException;
-import org.udg.trackdev.spring.dto.TaskChangeDTO;
+import org.udg.trackdev.spring.dto.response.*;
 import org.udg.trackdev.spring.dto.request.tasks.MergePatchTaskDTO;
 import org.udg.trackdev.spring.dto.request.tasks.NewChildTaskDTO;
-import org.udg.trackdev.spring.dto.response.tasks.CommentDTO;
-import org.udg.trackdev.spring.dto.response.tasks.PointsReviewDTO;
-import org.udg.trackdev.spring.dto.response.tasks.TaskResponseDTO;
-import org.udg.trackdev.spring.dto.response.tasks.TaskWithPointsReviewDTO;
+import org.udg.trackdev.spring.entity.Course;
+import org.udg.trackdev.spring.entity.Project;
+import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.TaskFacade;
 import org.udg.trackdev.spring.mappers.EntityMapper;
 import org.udg.trackdev.spring.service.*;
@@ -37,6 +36,12 @@ public class TaskFacadeImpl implements TaskFacade {
     private final TaskChangeService taskChangeService;
 
     private final EntityMapper mapper;
+
+    private final ProjectService projectService;
+
+    private final UserService userService;
+
+    private final GithubService githubService;
 
 
     @Override
@@ -106,6 +111,14 @@ public class TaskFacadeImpl implements TaskFacade {
     @Override
     public Map<String, String> getListOfTypes() {
         return taskService.getListOfTypes();
+    }
+
+    @Override
+    public List<GithubPullRequestDTO> getPullRequest(Long projectId, Principal principal) {
+        accessChecker.checkCanViewProject(projectService.get(projectId),authService.getLoggedInUserId(principal));
+        User user = userService.get(authService.getLoggedInUserId(principal));
+        Project project = projectService.get(projectId);
+        return  githubService.getPullRequest(project, user);
     }
 
 
