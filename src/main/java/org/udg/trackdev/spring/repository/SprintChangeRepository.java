@@ -1,7 +1,7 @@
 package org.udg.trackdev.spring.repository;
 
 import org.springframework.stereotype.Repository;
-import org.udg.trackdev.spring.entity.sprintchanges.SprintChange;
+import org.udg.trackdev.spring.entity.changes.sprintchanges.SprintChange;
 
 @Repository
 public interface SprintChangeRepository extends BaseRepositoryLong<SprintChange> {

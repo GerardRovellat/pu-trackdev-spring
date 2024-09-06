@@ -1,4 +1,4 @@
-package org.udg.trackdev.spring.entity.taskchanges;
+package org.udg.trackdev.spring.entity.changes.taskchanges;
 
 import org.udg.trackdev.spring.entity.changes.EntityLogChange;
 

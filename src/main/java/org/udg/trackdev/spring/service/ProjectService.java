@@ -216,7 +216,7 @@ public class ProjectService extends BaseServiceLong<Project, ProjectRepository> 
     private void editMembers(Collection<String> mails, Project project) {
         for(String mail: mails) {
             User user = userService.getByEmail(mail);
-            if(!project.isMember(user)) {
+            if(project.isMember(user)) {
                 addMember(project.getCourse(), project, user);
             }
         }

@@ -1,6 +1,8 @@
 package org.udg.trackdev.spring.entity;
 
+import lombok.*;
 import org.springframework.lang.NonNull;
+import org.udg.trackdev.spring.utils.Constants;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -8,30 +10,17 @@ import java.util.Collection;
 /**
  * The type Subject.
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "subjects")
 public class Subject extends BaseEntityLong {
 
-    /**
-     * The constant MIN_NAME_LENGTH.
-     */
-    public static final int MIN_NAME_LENGTH = 1;
-    /**
-     * The constant NAME_LENGTH.
-     */
-    public static final int NAME_LENGTH = 50;
-    /**
-     * The constant MIN_ACRONYM_LENGTH.
-     */
-    public static final int MIN_ACRONYM_LENGTH = 2;
-
-    /**
-     * The constant MAX_ACRONYM_LENGTH.
-     */
-    public static final int MAX_ACRONYM_LENGTH = 5;
-
     @NonNull
-    @Column(length = NAME_LENGTH)
+    @Column(length = Constants.MAX_NAME_LENGTH)
     private String name;
 
     @NonNull
@@ -39,7 +28,7 @@ public class Subject extends BaseEntityLong {
     @JoinColumn(name = "ownerId")
     private User owner;
 
-    @Column(name = "ownerId", insertable = false, updatable = false, length = BaseEntityUUID.UUID_LENGTH)
+    @Column(name = "ownerId", insertable = false, updatable = false, length = Constants.UUID_LENGTH)
     private String ownerId;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "subject")
@@ -47,11 +36,6 @@ public class Subject extends BaseEntityLong {
 
     @NonNull
     private String acronym;
-
-    /**
-     * Instantiates a new Subject.
-     */
-    public Subject() {}
 
     /**
      * Instantiates a new Subject.
@@ -65,68 +49,6 @@ public class Subject extends BaseEntityLong {
         this.acronym = acronym;
         this.owner = owner;
     }
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets name.
-     *
-     * @param name the name
-     */
-    public void setName(String name) { this.name = name; }
-
-    /**
-     * Gets owner id.
-     *
-     * @return the owner id
-     */
-    public String getOwnerId() {
-        return ownerId;
-    }
-
-    /**
-     * Gets acronym.
-     *
-     * @return the acronym
-     */
-    public String getAcronym() {
-        return acronym;
-    }
-
-    /**
-     * Sets owner.
-     *
-     * @param owner the owner
-     */
-    public void setOwner(@NonNull User owner) {
-        this.owner = owner;
-    }
-
-    /**
-     * Sets acronym.
-     *
-     * @param acronym the acronym
-     */
-    public void setAcronym(String acronym) {
-        this.acronym = acronym;
-    }
-
-    /**
-     * Gets courses.
-     *
-     * @return the courses
-     */
-    public Collection<Course> getCourses() {
-        return this.courses;
-    }
-
 
     /**
      * Add course.

@@ -13,7 +13,7 @@ public class PointsReviewDTO {
 
     private Integer points;
 
-    private String review;
+    private String comment;
 
     private UserDTO user;
 

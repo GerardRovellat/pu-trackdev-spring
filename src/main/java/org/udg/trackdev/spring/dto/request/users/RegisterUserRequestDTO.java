@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.entity.User;
+import org.udg.trackdev.spring.utils.Constants;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 
 import javax.validation.constraints.Email;
@@ -25,7 +25,7 @@ public class RegisterUserRequestDTO {
      * The Username.
      */
     @NotBlank
-    @Size(min = User.MIN_USERNAME_LENGTH, max = User.USERNAME_LENGTH, message = ErrorConstants.INVALID_USERNAME_SIZE)
+    @Size(min = Constants.MIN_USERNAME_LENGTH, max = Constants.MAX_USERNAME_LENGTH, message = ErrorConstants.INVALID_USERNAME_SIZE)
     @Pattern(regexp = "^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$", message = ErrorConstants.INVALID_USERNAME_FORMAT)
     public String username;
 
@@ -34,7 +34,7 @@ public class RegisterUserRequestDTO {
      */
     @NotBlank
     @Email(message = ErrorConstants.INVALID_MAIL_FORMAT)
-    @Size(min = User.MIN_EMAIL_LENGHT, max = User.EMAIL_LENGTH, message = ErrorConstants.INVALID_MAIL_SIZE)
+    @Size(max = Constants.MAX_EMAIL_LENGTH, message = ErrorConstants.INVALID_MAIL_SIZE)
     public String email;
 
 }

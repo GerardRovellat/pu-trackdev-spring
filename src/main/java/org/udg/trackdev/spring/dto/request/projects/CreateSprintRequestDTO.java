@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.udg.trackdev.spring.entity.Sprint;
+import org.udg.trackdev.spring.utils.Constants;
 
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -18,7 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class CreateSprintRequestDTO {
 
-    @Size(min = Sprint.MIN_NAME_LENGTH, max = Sprint.NAME_LENGTH)
+    @Size(min = Constants.MIN_NAME_LENGTH, max = Constants.MAX_NAME_LENGTH)
     private String name;
 
     private Date startDate;

@@ -1,5 +1,6 @@
 package org.udg.trackdev.spring.entity;
 
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.udg.trackdev.spring.configuration.UserType;
 
@@ -10,23 +11,13 @@ import javax.validation.constraints.NotNull;
 /**
  * The type Role.
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role extends BaseEntityLong implements GrantedAuthority {
-
-    /**
-     * Instantiates a new Role.
-     */
-    public Role() {
-  }
-
-    /**
-     * Instantiates a new Role.
-     *
-     * @param UserType the user type
-     */
-    public Role(UserType UserType) {
-    this.userType = UserType;
-  }
 
   @NotNull
   @Column(unique = true)

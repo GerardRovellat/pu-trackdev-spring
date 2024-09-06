@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.entity.SprintStatus;
+import org.udg.trackdev.spring.entity.enums.SprintStatus;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

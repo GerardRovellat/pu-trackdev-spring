@@ -1,4 +1,4 @@
-package org.udg.trackdev.spring.entity;
+package org.udg.trackdev.spring.entity.enums;
 
 /**
  * The enum Task status.

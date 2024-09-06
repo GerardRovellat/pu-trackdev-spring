@@ -1,4 +1,4 @@
-package org.udg.trackdev.spring.entity.sprintchanges;
+package org.udg.trackdev.spring.entity.changes.sprintchanges;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

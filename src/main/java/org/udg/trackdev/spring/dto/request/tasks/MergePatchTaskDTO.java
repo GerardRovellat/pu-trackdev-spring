@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.udg.trackdev.spring.entity.Comment;
 import org.udg.trackdev.spring.entity.PointsReview;
-import org.udg.trackdev.spring.entity.TaskStatus;
+import org.udg.trackdev.spring.entity.enums.TaskStatus;
 
 import java.util.Collection;
 import java.util.Optional;

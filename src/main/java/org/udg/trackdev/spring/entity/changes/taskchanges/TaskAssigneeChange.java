@@ -1,4 +1,4 @@
-package org.udg.trackdev.spring.entity.taskchanges;
+package org.udg.trackdev.spring.entity.changes.taskchanges;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

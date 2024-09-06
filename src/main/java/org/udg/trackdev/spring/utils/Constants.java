@@ -6,6 +6,11 @@ package org.udg.trackdev.spring.utils;
 public final class Constants {
 
     /**
+     * The constant UUID_LENGTH.
+     */
+    public static final int UUID_LENGTH = 36;
+
+    /**
      * The constant COURSE_MIN_START_YEAR.
      */
     public static final int COURSE_MIN_START_YEAR = 1900;
@@ -48,17 +53,31 @@ public final class Constants {
     /**
      * The constant USERNAME_LENGTH.
      */
-    public static final int USERNAME_LENGTH = 50;
-
-    /**
-     * The constant MIN_EMAIL_LENGHT.
-     */
-    public static final int MIN_EMAIL_LENGHT = 4;
+    public static final int MAX_USERNAME_LENGTH = 50;
 
     /**
      * The constant EMAIL_LENGTH.
      */
-    public static final int EMAIL_LENGTH = 128;
+    public static final int MAX_EMAIL_LENGTH = 128;
+
+    /**
+     * The constant MIN_NAME_LENGTH.
+     */
+    public static final int MIN_NAME_LENGTH = 1;
+    /**
+     * The constant NAME_LENGTH.
+     */
+    public static final int MAX_NAME_LENGTH = 50;
+
+    /**
+     * The constant MIN_ACRONYM_LENGTH.
+     */
+    public static final int MIN_ACRONYM_LENGTH = 2;
+
+    /**
+     * The constant MAX_ACRONYM_LENGTH.
+     */
+    public static final int MAX_ACRONYM_LENGTH = 5;
 
     /**
      * The constant CAPITAL_LETTERS_LENGTH.
@@ -68,5 +87,13 @@ public final class Constants {
     public static final int MIN_TASK_NAME_LENGTH = 1;
 
     public static final int MAX_TASK_NAME_LENGTH = 200;
+
+    public static final int MIN_QUALIFICATION = 0;
+
+    public static final int MAX_QUALIFICATION = 10;
+
+    public static final int MIN_POINTS = 0;
+
+    public static final int CONTENT_MAX_LENGTH = 1000;
 
 }

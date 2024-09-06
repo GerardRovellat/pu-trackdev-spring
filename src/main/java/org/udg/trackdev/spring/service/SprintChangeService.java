@@ -1,7 +1,7 @@
 package org.udg.trackdev.spring.service;
 
 import org.springframework.stereotype.Service;
-import org.udg.trackdev.spring.entity.sprintchanges.SprintChange;
+import org.udg.trackdev.spring.entity.changes.sprintchanges.SprintChange;
 import org.udg.trackdev.spring.repository.SprintChangeRepository;
 
 /**

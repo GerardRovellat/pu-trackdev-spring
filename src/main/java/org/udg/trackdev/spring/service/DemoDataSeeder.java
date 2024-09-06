@@ -8,6 +8,8 @@ import org.udg.trackdev.spring.configuration.UserType;
 import org.udg.trackdev.spring.dto.request.sprints.SprintRequestDTO;
 import org.udg.trackdev.spring.dto.request.tasks.MergePatchTaskDTO;
 import org.udg.trackdev.spring.entity.*;
+import org.udg.trackdev.spring.entity.enums.SprintStatus;
+import org.udg.trackdev.spring.entity.enums.TaskStatus;
 
 import java.time.LocalDate;
 import java.time.ZoneId;

@@ -22,7 +22,7 @@ import org.udg.trackdev.spring.dto.response.TaskResponseDTO;
 import org.udg.trackdev.spring.dto.response.UserDTO;
 import org.udg.trackdev.spring.dto.response.UserWithoutProjectMembersResponseDTO;
 import org.udg.trackdev.spring.entity.*;
-import org.udg.trackdev.spring.entity.taskchanges.*;
+import org.udg.trackdev.spring.entity.changes.taskchanges.*;
 import org.udg.trackdev.spring.service.Global;
 
 import java.util.Date;

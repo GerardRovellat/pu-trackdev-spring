@@ -1,4 +1,4 @@
-package org.udg.trackdev.spring.entity.sprintchanges;
+package org.udg.trackdev.spring.entity.changes.sprintchanges;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.udg.trackdev.spring.service.Global;

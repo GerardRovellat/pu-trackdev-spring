@@ -1,11 +1,12 @@
 package org.udg.trackdev.spring.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import org.apache.tomcat.util.bcel.classfile.Constant;
+import org.udg.trackdev.spring.utils.Constants;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,11 +16,13 @@ import java.util.Set;
 /**
  * The type Project.
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "PROJECTS")
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class Project extends BaseEntityLong {
 
    //-- CONSTANTS
@@ -60,15 +63,11 @@ public class Project extends BaseEntityLong {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Sprint> sprints = new ArrayList<>();
 
-    @Max(10)
+    @Min(Constants.MIN_QUALIFICATION)
+    @Max(Constants.MAX_QUALIFICATION)
     private Double qualification;
 
     //--- CONSTRUCTOR
-
-    /**
-     * Instantiates a new Project.
-     */
-    public Project() {}
 
     /**
      * Instantiates a new Project.
@@ -82,45 +81,6 @@ public class Project extends BaseEntityLong {
     //--- GETTERS AND SETTERS
 
     /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    public String getName() { return this.name; }
-
-    /**
-     * Sets name.
-     *
-     * @param name the name
-     */
-    public void setName(String name) { this.name = name; }
-
-    /**
-     * Gets members.
-     *
-     * @return the members
-     */
-    public Set<User> getMembers() { return this.members; }
-
-    /**
-     * Gets course.
-     *
-     * @return the course
-     */
-    public Course getCourse() {
-        return this.course;
-    }
-
-    /**
-     * Sets course.
-     *
-     * @param course the course
-     */
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
-    /**
      * Gets tasks.
      *
      * @return the tasks
@@ -130,29 +90,6 @@ public class Project extends BaseEntityLong {
         this.tasks.stream().filter(task -> task.getParentTask() == null).forEach(mainTasks::add);
         return mainTasks;
     }
-
-    /**
-     * Gets sprints.
-     *
-     * @return the sprints
-     */
-    public Collection<Sprint> getSprints() {
-        return this.sprints;
-    }
-
-    /**
-     * Gets qualification.
-     *
-     * @return the qualification
-     */
-    public Double getQualification() { return this.qualification; }
-
-    /**
-     * Sets qualification.
-     *
-     * @param qualification the qualification
-     */
-    public void setQualification(Double qualification) { this.qualification = qualification; }
 
     //--- METHODS
 
@@ -170,7 +107,7 @@ public class Project extends BaseEntityLong {
      * @return the boolean
      */
     public boolean isMember(User user) {
-        return this.members.contains(user);
+        return !this.members.contains(user);
     }
 
     /**

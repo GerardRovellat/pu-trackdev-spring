@@ -1,7 +1,10 @@
 package org.udg.trackdev.spring.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 import org.springframework.lang.NonNull;
+import org.udg.trackdev.spring.entity.enums.SprintStatus;
+import org.udg.trackdev.spring.entity.enums.TaskStatus;
 import org.udg.trackdev.spring.service.Global;
 
 import javax.persistence.*;
@@ -12,20 +15,16 @@ import java.util.Date;
 /**
  * The type Sprint.
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "sprints")
 public class Sprint extends BaseEntityLong {
 
     //-- ATTRIBUTES
-
-    /**
-     * The constant MIN_NAME_LENGTH.
-     */
-    public static final int MIN_NAME_LENGTH = 1;
-    /**
-     * The constant NAME_LENGTH.
-     */
-    public static final int NAME_LENGTH = 50;
 
     @NonNull
     private String name;
@@ -44,13 +43,6 @@ public class Sprint extends BaseEntityLong {
     @JoinColumn(name = "projectId")
     private Project project;
 
-    //--- CONSTRUCTOR
-
-    /**
-     * Instantiates a new Sprint.
-     */
-    public Sprint() {}
-
     /**
      * Instantiates a new Sprint.
      *
@@ -59,27 +51,6 @@ public class Sprint extends BaseEntityLong {
     public Sprint(String name) {
         this.name = name;
         this.status = SprintStatus.DRAFT;
-    }
-
-    //--- GETTERS AND SETTERS
-
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
-    @NonNull
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets name.
-     *
-     * @param name the name
-     */
-    public void setName(@NonNull String name) {
-        this.name = name;
     }
 
     /**
@@ -93,15 +64,6 @@ public class Sprint extends BaseEntityLong {
     }
 
     /**
-     * Sets start date.
-     *
-     * @param startDate the start date
-     */
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    /**
      * Gets end date.
      *
      * @return the end date
@@ -112,28 +74,13 @@ public class Sprint extends BaseEntityLong {
     }
 
     /**
-     * Sets end date.
-     *
-     * @param endDate the end date
-     */
-    public void setEndDate(Date endDate) {
-        Date oldValue = this.endDate;
-        this.endDate = endDate;
-    }
-
-    /**
-     * Gets status.
-     *
-     * @return the status
-     */
-    public SprintStatus getStatus() { return this.status; }
-
-    /**
      * Gets status text.
      *
      * @return the status text
      */
-    public String getStatusText() { return this.status.toString(); }
+    public String getStatusText() {
+        return this.status.toString();
+    }
 
     /**
      * Sets status.
@@ -141,50 +88,14 @@ public class Sprint extends BaseEntityLong {
      * @param status the status
      */
     public void setStatus(SprintStatus status) {
-        if(status == SprintStatus.ACTIVE) {
-            for(Task task : this.activeTasks) {
-                if(task.getStatus() == TaskStatus.BACKLOG) {
+        if (status == SprintStatus.ACTIVE) {
+            for (Task task : this.activeTasks) {
+                if (task.getStatus() == TaskStatus.BACKLOG) {
                     task.setStatus(TaskStatus.TODO);
                 }
             }
         }
         this.status = status;
-    }
-
-    /**
-     * Gets active tasks.
-     *
-     * @return the active tasks
-     */
-    public Collection<Task> getActiveTasks() {
-        return this.activeTasks;
-    }
-
-    /**
-     * Sets active tasks.
-     *
-     * @param tasks the tasks
-     */
-    public void setActiveTasks(Collection<Task> tasks) {
-        this.activeTasks = tasks;
-    }
-
-    /**
-     * Gets project.
-     *
-     * @return the project
-     */
-    public Project getProject() {
-        return this.project;
-    }
-
-    /**
-     * Sets project.
-     *
-     * @param project the project
-     */
-    public void setProject(Project project) {
-        this.project = project;
     }
 
     //--- METHODS
@@ -197,7 +108,7 @@ public class Sprint extends BaseEntityLong {
      */
     public void addTask(Task task, User modifier) {
         this.activeTasks.add(task);
-        if(this.status == SprintStatus.ACTIVE && task.getStatus() == TaskStatus.BACKLOG) {
+        if (this.status == SprintStatus.ACTIVE && task.getStatus() == TaskStatus.BACKLOG) {
             task.setStatus(TaskStatus.TODO);
         }
     }
@@ -212,8 +123,7 @@ public class Sprint extends BaseEntityLong {
     }
 
     private boolean areAllTasksClosed() {
-        boolean allClosed = this.activeTasks.stream().allMatch(
+        return this.activeTasks.stream().allMatch(
                 t -> t.getStatus() == TaskStatus.DONE);
-        return allClosed;
     }
 }

@@ -6,7 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.udg.trackdev.spring.controller.exceptions.ServiceException;
 import org.udg.trackdev.spring.dto.request.tasks.MergePatchTaskDTO;
 import org.udg.trackdev.spring.entity.*;
-import org.udg.trackdev.spring.entity.taskchanges.*;
+import org.udg.trackdev.spring.entity.changes.taskchanges.*;
+import org.udg.trackdev.spring.entity.enums.TaskStatus;
+import org.udg.trackdev.spring.entity.enums.TaskType;
 import org.udg.trackdev.spring.repository.TaskRepository;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 
@@ -195,7 +197,7 @@ public class TaskService extends BaseServiceLong<Task, TaskRepository> {
         if(editTask.getReporter() != null) {
             User reporterUser;
             reporterUser = userService.getByEmail(editTask.getReporter().get());
-            if (!task.getProject().isMember(reporterUser)) {
+            if (task.getProject().isMember(reporterUser)) {
                 throw new ServiceException(ErrorConstants.USER_NOT_PRJ_MEMBER);
             }
             task.setReporter(reporterUser);
@@ -208,7 +210,7 @@ public class TaskService extends BaseServiceLong<Task, TaskRepository> {
             String oldValue = task.getAssignee() != null ? task.getAssignee().getUsername() : null;
             if (editTask.getAssignee().get() != null) {
                 assigneeUser = userService.getByEmail(editTask.getAssignee().get());
-                if (!task.getProject().isMember(assigneeUser)) {
+                if (task.getProject().isMember(assigneeUser)) {
                     throw new ServiceException(ErrorConstants.USER_NOT_PRJ_MEMBER);
                 }
                 task.setAssignee(assigneeUser);

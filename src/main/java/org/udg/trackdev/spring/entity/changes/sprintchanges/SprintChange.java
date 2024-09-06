@@ -1,4 +1,4 @@
-package org.udg.trackdev.spring.entity.sprintchanges;
+package org.udg.trackdev.spring.entity.changes.sprintchanges;
 
 import org.udg.trackdev.spring.entity.changes.EntityLogChange;
 

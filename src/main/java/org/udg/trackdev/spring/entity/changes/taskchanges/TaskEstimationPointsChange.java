@@ -1,6 +1,4 @@
-package org.udg.trackdev.spring.entity.taskchanges;
-
-import com.fasterxml.jackson.annotation.JsonView;
+package org.udg.trackdev.spring.entity.changes.taskchanges;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

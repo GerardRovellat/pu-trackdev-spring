@@ -67,7 +67,7 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public UserWithoutProjectMembersResponseDTO editMyUser(EditUserRequestDTO request, Principal principal) {
         if (request.getUsername() != null){
-            if (request.getUsername().isEmpty() || request.getUsername().length() > Constants.USERNAME_LENGTH) {
+            if (request.getUsername().isEmpty() || request.getUsername().length() > Constants.MAX_USERNAME_LENGTH) {
                 throw new ControllerException(ErrorConstants.INVALID_USERNAME_SIZE);
             }
             if (!request.getUsername().matches("^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$")) {
@@ -84,7 +84,7 @@ public class UserFacadeImpl implements UserFacade {
     @Override
     public UserWithoutProjectMembersResponseDTO editOtherUser(EditUserRequestDTO request, Principal principal, String id) {
         if (request.getUsername() != null){
-            if (request.getUsername().isEmpty() || request.getUsername().length() > User.USERNAME_LENGTH) {
+            if (request.getUsername().isEmpty() || request.getUsername().length() > Constants.MAX_USERNAME_LENGTH) {
                 throw new ControllerException(ErrorConstants.INVALID_USERNAME_SIZE);
             }
             if (!request.getUsername().matches("^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$")) {
