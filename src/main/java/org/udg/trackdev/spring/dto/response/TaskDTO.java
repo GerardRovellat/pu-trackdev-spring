@@ -18,6 +18,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class TaskDTO {
 
+    private Long id;
+
     private String name;
 
     private String type;
@@ -37,6 +39,8 @@ public class TaskDTO {
     private Integer estimationPoints;
 
     private Integer rank;
+
+    private Collection<TaskDTO> childTasks;
 
     private Collection<SprintResponseDTO> activeSprints;
 

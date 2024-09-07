@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.udg.trackdev.spring.controller.exceptions.ServiceException;
 import org.udg.trackdev.spring.dto.response.ProjectRankDTO;
 import org.udg.trackdev.spring.entity.*;
+import org.udg.trackdev.spring.entity.enums.TaskType;
 import org.udg.trackdev.spring.repository.ProjectRepository;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 
@@ -114,6 +115,7 @@ public class ProjectService extends BaseServiceLong<Project, ProjectRepository> 
     @Transactional
     public Project createProjectTask(Project project, String name, User reporter){
         Task task = new Task(name, reporter);
+        task.setType(TaskType.USER_STORY);
         project.addTask(task);
         task.setProject(project);
         repo.save(project);

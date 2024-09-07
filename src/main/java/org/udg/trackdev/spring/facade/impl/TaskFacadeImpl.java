@@ -81,11 +81,11 @@ public class TaskFacadeImpl implements TaskFacade {
     }
 
     @Override
-    public Long createTask(Long id, NewChildTaskDTO request, Principal principal, BindingResult validation) {
+    public Long createSubtask(Long id, NewChildTaskDTO request, Principal principal, BindingResult validation) {
         if (validation.hasErrors()) {
             throw new ControllerException(ErrorConstants.INVALID_TASK_NAME_LENGTH);
         }
-        return taskService.createTask(id, request.getName(), authService.getLoggedInUserId(principal)).getId();
+        return taskService.createSubTask(id, request.getName(), authService.getLoggedInUserId(principal)).getId();
     }
 
     @Override

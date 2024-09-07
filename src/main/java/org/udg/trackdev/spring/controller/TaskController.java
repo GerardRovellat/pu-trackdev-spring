@@ -108,7 +108,7 @@ public class TaskController extends BaseController {
     @PostMapping(path = "/{id}/subtasks")
     public Long createSubtask(@PathVariable(name = "id") Long id, Principal principal, @Valid @RequestBody NewChildTaskDTO request,
                                       BindingResult result) {
-        return facade.createTask(id, request, principal, result);
+        return facade.createSubtask(id, request, principal, result);
     }
 
     /**

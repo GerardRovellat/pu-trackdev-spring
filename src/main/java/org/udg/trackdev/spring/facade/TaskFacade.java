@@ -21,7 +21,7 @@ public interface TaskFacade {
 
     List<TaskChangeDTO> getHistory(Long id, Principal principal);
 
-    Long createTask(Long id, NewChildTaskDTO request, Principal principal, BindingResult validation);
+    Long createSubtask(Long id, NewChildTaskDTO request, Principal principal, BindingResult validation);
 
     void deleteTask(Long id, Principal principal);
 

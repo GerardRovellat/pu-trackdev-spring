@@ -3,28 +3,12 @@ package org.udg.trackdev.spring.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import org.udg.trackdev.spring.dto.response.CourseDTO;
-import org.udg.trackdev.spring.dto.response.SelfResponseDTO;
-import org.udg.trackdev.spring.dto.response.GithubWithTokenDTO;
-import org.udg.trackdev.spring.dto.response.SubjectResponseDTO;
-import org.udg.trackdev.spring.dto.response.TaskChangeDTO;
-import org.udg.trackdev.spring.dto.response.UserLoginDTO;
-import org.udg.trackdev.spring.dto.response.CourseCompleteResponseDTO;
-import org.udg.trackdev.spring.dto.response.ProjectResponseDTO;
-import org.udg.trackdev.spring.dto.response.ProjectCompleteResponseDTO;
-import org.udg.trackdev.spring.dto.response.ProjectSprintsResponseDTO;
-import org.udg.trackdev.spring.dto.response.ProjectWithUserResponseDTO;
-import org.udg.trackdev.spring.dto.response.SprintResponseDTO;
-import org.udg.trackdev.spring.dto.response.SubjectCompleteResponseDTO;
-import org.udg.trackdev.spring.dto.response.CommentDTO;
-import org.udg.trackdev.spring.dto.response.PointsReviewDTO;
-import org.udg.trackdev.spring.dto.response.TaskResponseDTO;
-import org.udg.trackdev.spring.dto.response.UserDTO;
-import org.udg.trackdev.spring.dto.response.UserWithoutProjectMembersResponseDTO;
+import org.udg.trackdev.spring.dto.response.*;
 import org.udg.trackdev.spring.entity.*;
 import org.udg.trackdev.spring.entity.changes.taskchanges.*;
 import org.udg.trackdev.spring.service.Global;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -142,6 +126,8 @@ public interface EntityMapper {
     @Mapping(target = "childTasks", source = "childTasks")
     @Mapping(target = "activeSprints", source = "activeSprints")
     TaskResponseDTO taskEntityToDTO(Task task);
+
+    Collection<TaskDTO> taskCollectionToDTO(Collection<Task> tasks);
 
     /**
      * Sprint entity to project sprints dto project sprints response dto.

@@ -186,10 +186,11 @@ public class TaskService extends BaseServiceLong<Task, TaskRepository> {
 
     private void editDescriptionTreatment(Task task, MergePatchTaskDTO editTask, User user, List<TaskChange> changes){
         if(editTask.getDescription() != null) {
-            if (editTask.getDescription().get() != null) {
+            if (editTask.getDescription().isPresent()) {
                 task.setDescription(editTask.getDescription().get());
+            } else {
+                task.setDescription(null);
             }
-            task.setDescription(null);
         }
     }
 
