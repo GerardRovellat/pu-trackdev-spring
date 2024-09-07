@@ -151,8 +151,8 @@ public interface EntityMapper {
      */
     @Mapping(target = "value", source = "name")
     @Mapping(target = "label", source = "name")
-    @Mapping(target = "startDate", source = "startDate")
-    @Mapping(target = "endDate", source = "endDate")
+    @Mapping(target = "startDate", source = "startDate", qualifiedByName = "serializeDate")
+    @Mapping(target = "endDate", source = "endDate", qualifiedByName = "serializeDate")
     @Mapping(target = "status", source = "status")
     ProjectSprintsResponseDTO sprintEntityToProjectSprintsDTO(Sprint sprint);
 

@@ -18,6 +18,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class TaskResponseDTO {
 
+    private Long id;
+
     private String name;
 
     private String type;
