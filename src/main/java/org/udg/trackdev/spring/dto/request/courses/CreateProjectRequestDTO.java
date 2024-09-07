@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.entity.Project;
+import org.udg.trackdev.spring.utils.Constants;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -20,7 +20,7 @@ import java.util.Collection;
 public class CreateProjectRequestDTO {
 
     @NotBlank
-    @Size(min = Project.MIN_NAME_LENGTH, max = Project.NAME_LENGTH)
+    @Size(min = Constants.MIN_NAME_LENGTH, max = Constants.MAX_NAME_LENGTH)
     private String name;
 
     private Collection<String> members;

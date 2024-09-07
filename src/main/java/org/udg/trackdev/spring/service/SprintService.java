@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.udg.trackdev.spring.dto.request.sprints.SprintRequestDTO;
 import org.udg.trackdev.spring.entity.Project;
 import org.udg.trackdev.spring.entity.Sprint;
+import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.entity.changes.sprintchanges.*;
 import org.udg.trackdev.spring.entity.enums.SprintStatus;
-import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.repository.SprintRepository;
 
 import java.util.ArrayList;

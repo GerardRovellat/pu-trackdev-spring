@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.entity.Subject;
 import org.udg.trackdev.spring.utils.Constants;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 

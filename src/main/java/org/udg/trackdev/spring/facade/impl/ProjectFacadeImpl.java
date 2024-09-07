@@ -6,7 +6,6 @@ import org.udg.trackdev.spring.dto.request.projects.CreateSprintRequestDTO;
 import org.udg.trackdev.spring.dto.request.projects.CreateTaskRequestDTO;
 import org.udg.trackdev.spring.dto.request.projects.EditProjectRequestDTO;
 import org.udg.trackdev.spring.dto.response.*;
-import org.udg.trackdev.spring.dto.response.TaskResponseDTO;
 import org.udg.trackdev.spring.entity.Project;
 import org.udg.trackdev.spring.entity.User;
 import org.udg.trackdev.spring.facade.ProjectFacade;

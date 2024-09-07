@@ -1,7 +1,6 @@
 package org.udg.trackdev.spring.entity;
 
 import lombok.*;
-import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.udg.trackdev.spring.utils.Constants;
 
 import javax.persistence.*;
@@ -25,29 +24,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class Project extends BaseEntityLong {
 
-   //-- CONSTANTS
-
-    /**
-     * The constant MIN_NAME_LENGTH.
-     */
-    public static final int MIN_NAME_LENGTH = 1;
-    /**
-     * The constant NAME_LENGTH.
-     */
-    public static final int NAME_LENGTH = 100;
-    /**
-     * The constant MIN_QUALIFICATION.
-     */
-    public static final int MIN_QUALIFICATION = 0;
-    /**
-     * The constant MAX_QUALIFICATION.
-     */
-    public static final int MAX_QUALIFICATION = 10;
-
-    //-- ATTRIBUTES
-
     @NotNull
-    @Column(length = NAME_LENGTH)
+    @Column(length = Constants.MAX_NAME_LENGTH)
     private String name;
 
     @ManyToOne

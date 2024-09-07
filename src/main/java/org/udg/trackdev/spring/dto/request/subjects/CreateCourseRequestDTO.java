@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.util.bcel.classfile.Constant;
-import org.udg.trackdev.spring.entity.Course;
 import org.udg.trackdev.spring.utils.Constants;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 

@@ -7,9 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.udg.trackdev.spring.dto.response.*;
 import org.udg.trackdev.spring.dto.request.tasks.MergePatchTaskDTO;
 import org.udg.trackdev.spring.dto.request.tasks.NewChildTaskDTO;
+import org.udg.trackdev.spring.dto.response.*;
 import org.udg.trackdev.spring.facade.TaskFacade;
 
 import javax.validation.Valid;

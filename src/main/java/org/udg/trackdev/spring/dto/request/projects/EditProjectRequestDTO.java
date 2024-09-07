@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.udg.trackdev.spring.entity.Project;
+import org.udg.trackdev.spring.utils.Constants;
 import org.udg.trackdev.spring.utils.ErrorConstants;
 
 import javax.validation.constraints.Max;
@@ -21,15 +21,15 @@ import java.util.Collection;
 @AllArgsConstructor
 public class EditProjectRequestDTO {
 
-    @Size(min = Project.MIN_NAME_LENGTH, max = Project.NAME_LENGTH, message = ErrorConstants.INVALID_PRJ_NAME_LENGTH)
+    @Size(min = Constants.MIN_NAME_LENGTH, max = Constants.MAX_NAME_LENGTH, message = ErrorConstants.INVALID_PRJ_NAME_LENGTH)
     private String name;
 
     private Collection<String> members;
 
     private Long courseId;
 
-    @Min(value = Project.MIN_QUALIFICATION, message = ErrorConstants.INVALID_PRJ_QUALIFICATION)
-    @Max(value = Project.MAX_QUALIFICATION, message = ErrorConstants.INVALID_PRJ_QUALIFICATION)
+    @Min(value = Constants.MIN_QUALIFICATION, message = ErrorConstants.INVALID_PRJ_QUALIFICATION)
+    @Max(value = Constants.MAX_QUALIFICATION, message = ErrorConstants.INVALID_PRJ_QUALIFICATION)
     private Double qualification;
 
 }
